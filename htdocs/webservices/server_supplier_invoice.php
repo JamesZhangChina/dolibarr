@@ -22,11 +22,10 @@
 
 if (! defined("NOCSRFCHECK"))    define("NOCSRFCHECK",'1');
 
-require_once '../master.inc.php';
+require '../master.inc.php';
 require_once NUSOAP_PATH.'/nusoap.php';        // Include SOAP
 require_once DOL_DOCUMENT_ROOT.'/core/lib/ws.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-
 require_once DOL_DOCUMENT_ROOT.'/fourn/class/fournisseur.facture.class.php';
 
 
@@ -224,7 +223,7 @@ $server->register(
  * @param	string		$ref_ext			Ref_ext
  * @return	array							Array result
  */
-function getSupplierInvoice($authentication,$id='',$ref='',$ref_ext='')
+function getSupplierInvoice($authentication, $id = '', $ref = '', $ref_ext = '')
 {
 	global $db,$conf,$langs;
 
@@ -334,7 +333,7 @@ function getSupplierInvoice($authentication,$id='',$ref='',$ref_ext='')
  * @return	array							Array result
  *
  */
-function getSupplierInvoicesForThirdParty($authentication,$idthirdparty)
+function getSupplierInvoicesForThirdParty($authentication, $idthirdparty)
 {
 	global $db,$conf,$langs;
 

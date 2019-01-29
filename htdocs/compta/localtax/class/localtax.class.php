@@ -29,19 +29,46 @@ require_once DOL_DOCUMENT_ROOT .'/core/class/commonobject.class.php';
  */
 class Localtax extends CommonObject
 {
-	public $element='localtax';			//!< Id that identify managed objects
-	public $table_element='localtax';	//!< Name of table without prefix where object is stored
+	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='localtax';
+
+	/**
+	 * @var string Name of table without prefix where object is stored
+	 */
+	public $table_element='localtax';
+
+	/**
+	 * @var string String with name of icon for myobject. Must be the part after the 'object_' into object_myobject.png
+	 */
 	public $picto='payment';
 
-	var $ltt;
-	var $tms;
-	var $datep;
-	var $datev;
-	var $amount;
-	var $label;
-	var $fk_bank;
-	var $fk_user_creat;
-	var $fk_user_modif;
+	public $ltt;
+	public $tms;
+	public $datep;
+	public $datev;
+	public $amount;
+
+	/**
+     * @var string local tax
+     */
+    public $label;
+
+    /**
+     * @var int ID
+     */
+	public $fk_bank;
+
+	/**
+     * @var int ID
+     */
+	public $fk_user_creat;
+
+	/**
+     * @var int ID
+     */
+	public $fk_user_modif;
 
     /**
 	 *	Constructor
@@ -136,7 +163,7 @@ class Localtax extends CommonObject
      *	@param		int		$notrigger		0=no, 1=yes (no update trigger)
      *	@return		int						<0 if KO, >0 if OK
      */
-    function update(User $user, $notrigger=0)
+    function update(User $user, $notrigger = 0)
     {
     	global $conf, $langs;
 
@@ -331,6 +358,7 @@ class Localtax extends CommonObject
         return $solde;
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *	Total de la localtax des factures emises par la societe.
      *
@@ -339,6 +367,7 @@ class Localtax extends CommonObject
      */
     function localtax_sum_collectee($year = 0)
     {
+        // phpcs:enable
         $sql = "SELECT sum(f.localtax) as amount";
         $sql .= " FROM ".MAIN_DB_PREFIX."facture as f WHERE f.paye = 1";
         if ($year)
@@ -369,6 +398,7 @@ class Localtax extends CommonObject
         }
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *	localtax payed
      *
@@ -377,6 +407,7 @@ class Localtax extends CommonObject
      */
     function localtax_sum_payee($year = 0)
     {
+        // phpcs:enable
 
         $sql = "SELECT sum(f.total_localtax) as total_localtax";
         $sql .= " FROM ".MAIN_DB_PREFIX."facture_fourn as f";
@@ -409,6 +440,7 @@ class Localtax extends CommonObject
     }
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *	localtax payed
      *  Total de la localtax payed
@@ -418,6 +450,7 @@ class Localtax extends CommonObject
      */
     function localtax_sum_reglee($year = 0)
     {
+        // phpcs:enable
 
         $sql = "SELECT sum(f.amount) as amount";
         $sql .= " FROM ".MAIN_DB_PREFIX."localtax as f";
@@ -563,6 +596,7 @@ class Localtax extends CommonObject
         }
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *	Update the link betwen localtax payment and the line into llx_bank
      *
@@ -571,6 +605,7 @@ class Localtax extends CommonObject
      */
 	function update_fk_bank($id)
 	{
+        // phpcs:enable
 		$sql = 'UPDATE '.MAIN_DB_PREFIX.'localtax SET fk_bank = '.$id;
 		$sql.= ' WHERE rowid = '.$this->id;
 		$result = $this->db->query($sql);
@@ -593,7 +628,7 @@ class Localtax extends CommonObject
 	 *	@param		string	$option			Sur quoi pointe le lien
 	 *	@return		string					Chaine avec URL
 	 */
-	function getNomUrl($withpicto=0, $option='')
+	function getNomUrl($withpicto = 0, $option = '')
 	{
 		global $langs;
 
@@ -617,23 +652,24 @@ class Localtax extends CommonObject
 	 * @param	int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 * @return  string				Libelle
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
 		return $this->LibStatut($this->statut,$mode);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Renvoi le libelle d'un statut donne
 	 *
 	 * @param   int		$status     Statut
 	 * @param   int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
-	 * @return	string  		    Libelle du statut
+	 * @return	string              Libelle du statut
 	 */
-	function LibStatut($status,$mode=0)
-	{
-		global $langs;	// TODO Renvoyer le libelle anglais et faire traduction a affichage
+    function LibStatut($status, $mode = 0)
+    {
+        // phpcs:enable
+        global $langs;  // TODO Renvoyer le libelle anglais et faire traduction a affichage
 
-		return '';
-	}
-
+        return '';
+    }
 }

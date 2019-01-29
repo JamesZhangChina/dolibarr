@@ -167,7 +167,6 @@ if (GETPOST('actionadd','alpha') || GETPOST('actionmodify','alpha'))
             {
                 $obj = $db->fetch_object($result);
                 $newid=($obj->newid + 1);
-
             } else {
                 dol_print_error($db);
             }
@@ -322,10 +321,16 @@ if ($action == 'confirm_delete' && $confirm == 'yes')       // delete
 
     if ($website->id > 0)
     {
-	    $sql = "DELETE from ".MAIN_DB_PREFIX."website_page WHERE fk_website ='".$rowid."'";
-	    $result = $db->query($sql);
+    	$sql = "DELETE from ".MAIN_DB_PREFIX."website_account WHERE fk_website ='".$rowid."'";
+    	$result = $db->query($sql);
 
-	    $sql = "DELETE from ".MAIN_DB_PREFIX."website WHERE rowid ='".$rowid."'";
+    	$sql = "DELETE from ".MAIN_DB_PREFIX."website_page WHERE fk_website ='".$rowid."'";
+    	$result = $db->query($sql);
+
+    	$sql = "DELETE from ".MAIN_DB_PREFIX."website_extrafields WHERE fk_object ='".$rowid."'";
+    	$result = $db->query($sql);
+
+    	$sql = "DELETE from ".MAIN_DB_PREFIX."website WHERE rowid ='".$rowid."'";
 	    $result = $db->query($sql);
 	    if (! $result)
 	    {
@@ -640,9 +645,7 @@ if ($id)
 
 dol_fiche_end();
 
-//print '<br>';
-
-
+// End of page
 llxFooter();
 $db->close();
 
@@ -656,7 +659,7 @@ $db->close();
  *  @param		string	$context		'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we dont want it to be rendered
  *	@return		void
  */
-function fieldListWebsites($fieldlist, $obj='', $tabname='', $context='')
+function fieldListWebsites($fieldlist, $obj = '', $tabname = '', $context = '')
 {
 	global $conf,$langs,$db;
 	global $form;

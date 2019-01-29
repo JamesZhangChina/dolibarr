@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2008-2012	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2011-2012	Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2011-2012	Regis Houssin		<regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ function paypaladmin_prepare_head()
  * @param	string	$ref		Ref of object
  * @return	string				Url string
  */
-function showPaypalPaymentUrl($type,$ref)
+function showPaypalPaymentUrl($type, $ref)
 {
 	global $conf, $langs;
 
@@ -88,7 +88,7 @@ function showPaypalPaymentUrl($type,$ref)
  * @param	string	$freetag	Free tag
  * @return	string				Url string
  */
-function getPaypalPaymentUrl($mode,$type,$ref='',$amount='9.99',$freetag='your_free_tag')
+function getPaypalPaymentUrl($mode, $type, $ref = '', $amount = '9.99', $freetag = 'your_free_tag')
 {
 	global $conf;
 
@@ -194,7 +194,7 @@ function getPaypalPaymentUrl($mode,$type,$ref='',$amount='9.99',$freetag='your_f
  * @param   string	$tag				Full tag
  * @return	string						No return (a redirect is done) if OK, or Error message if KO
  */
-function print_paypal_redirect($paymentAmount,$currencyCodeType,$paymentType,$returnURL,$cancelURL,$tag)
+function print_paypal_redirect($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $tag)
 {
     //declaring of global variables
     global $conf, $langs;
@@ -287,7 +287,6 @@ function print_paypal_redirect($paymentAmount,$currencyCodeType,$paymentType,$re
 
         return $mesg;
     }
-
 }
 
 /**
@@ -331,7 +330,7 @@ function print_paypal_redirect($paymentAmount,$currencyCodeType,$paymentType,$re
  * @param	string			$desc				Description
  * @return	array								Array
  */
-function callSetExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $tag, $solutionType, $landingPage, $shipToName, $shipToStreet, $shipToCity, $shipToState, $shipToCountryCode, $shipToZip, $shipToStreet2, $phoneNum, $email='', $desc='')
+function callSetExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $tag, $solutionType, $landingPage, $shipToName, $shipToStreet, $shipToCity, $shipToState, $shipToCountryCode, $shipToZip, $shipToStreet2, $phoneNum, $email = '', $desc = '')
 {
     //------------------------------------------------------------------------------------------------------------------------------------
     // Construct the parameter string that describes the SetExpressCheckout API call in the shortcut implementation
@@ -401,7 +400,7 @@ function callSetExpressCheckout($paymentAmount, $currencyCodeType, $paymentType,
 	    $urlwithroot=$urlwithouturlroot.DOL_URL_ROOT;		// This is to use external domain name found into config file
 	    //$urlwithroot=DOL_MAIN_URL_ROOT;					// This is to use same domain name than current
 
-	    $urllogo=$urlwithroot."/viewimage.php?modulepart=mycompany&file=".$mysoc->logo;
+	    $urllogo=$urlwithroot."/viewimage.php?modulepart=mycompany&file=".urlencode('logos/'.$mysoc->logo);
 	    $nvpstr = $nvpstr . "&LOGOIMG=" . urlencode($urllogo);
     }
     if (! empty($conf->global->PAYPAL_BRANDNAME))
@@ -584,7 +583,7 @@ function DirectPayment($paymentType, $paymentAmount, $creditCardType, $creditCar
  * @param	string	$nvpStr 		is nvp string.
  * @return	array					returns an associtive array containing the response from the server.
  */
-function hash_call($methodName,$nvpStr)
+function hash_call($methodName, $nvpStr)
 {
     //declaring of global variables
     global $conf, $langs;

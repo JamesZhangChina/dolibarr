@@ -29,7 +29,12 @@ class ProjectStats extends Stats
 	public $socid;
 	public $year;
 
-	function __construct($db)
+    /**
+     * Constructor
+     *
+     * @param   DoliDB $db     Database handler
+     */
+    function __construct($db)
 	{
 		global $conf, $user;
 
@@ -172,7 +177,7 @@ class ProjectStats extends Stats
 		if (! empty($this->status))
 			$sqlwhere[] = " t.fk_opp_status IN (" . $this->status . ")";
 
-		if (! $user->rights->projet->all->lire) $sqlwhere[] = " AND p.rowid IN (".$projectsListId.")";     // public and assigned to, or restricted to company for external users
+		if (! $user->rights->projet->all->lire) $sqlwhere[] = " t.rowid IN (".$projectsListId.")";     // public and assigned to, or restricted to company for external users
 
 		if (count($sqlwhere) > 0) {
 			$sqlwhere_str = ' WHERE ' . implode(' AND ', $sqlwhere);
@@ -188,7 +193,7 @@ class ProjectStats extends Stats
 	 * @param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 * @return 	array 				Array of values
 	 */
-	function getNbByMonth($year, $format=0)
+	function getNbByMonth($year, $format = 0)
 	{
 		global $user;
 
@@ -217,7 +222,7 @@ class ProjectStats extends Stats
 	 * @param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 * @return 	array 				Array with amount by month
 	 */
-	function getAmountByMonth($year, $format=0)
+	function getAmountByMonth($year, $format = 0)
 	{
 		global $user;
 
@@ -248,7 +253,7 @@ class ProjectStats extends Stats
 	 * @param   int     $wonlostfilter  Add a filter on status won/lost
 	 * @return 	array					Array of values
 	 */
-	function getWeightedAmountByMonthWithPrevYear($endyear,$startyear,$cachedelay=0,$wonlostfilter=1)
+	function getWeightedAmountByMonthWithPrevYear($endyear, $startyear, $cachedelay = 0, $wonlostfilter = 1)
 	{
 		global $conf,$user,$langs;
 
@@ -341,7 +346,7 @@ class ProjectStats extends Stats
 	 * @param  int $wonlostfilter      Add a filter on status won/lost
 	 * @return array                   Array with amount by month
 	 */
-	function getWeightedAmountByMonth($year, $wonlostfilter=1)
+	function getWeightedAmountByMonth($year, $wonlostfilter = 1)
 	{
 		global $user;
 
@@ -451,7 +456,7 @@ class ProjectStats extends Stats
 	 * @param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 * @return 	array 				Array with amount by month
 	 */
-	function getTransformRateByMonth($year, $format=0)
+	function getTransformRateByMonth($year, $format = 0)
 	{
 		global $user;
 
@@ -493,7 +498,6 @@ class ProjectStats extends Stats
 			} else {
 				$res[$key]=array($total_row[0],0);
 			}
-
 		}
 		// var_dump($res);print '<br>';
 		return $res;

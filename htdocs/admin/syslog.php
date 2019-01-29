@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2005-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2007      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2013	   Juanjo Menent        <jmenent@2byte.es>
  *
@@ -132,9 +132,7 @@ if ($action == 'set')
 	{
 		$db->rollback();
 		setEventMessages($error, $errors, 'errors');
-
 	}
-
 }
 
 // Set level
@@ -232,7 +230,7 @@ foreach ($syslogModules as $moduleName)
 		    if (! empty($tmpoption))
 		    {
     			if (isset($_POST[$tmpoption])) $value=$_POST[$tmpoption];
-    			else if (! empty($conf->global->$tmpoption)) $value = $conf->global->$tmpoption;
+    			elseif (! empty($conf->global->$tmpoption)) $value = $conf->global->$tmpoption;
 		    }
 			else $value = (isset($option['default']) ? $option['default'] : '');
 
@@ -250,7 +248,7 @@ foreach ($syslogModules as $moduleName)
 	}
 	print '</td>';
 
-	print '<td align="left">';
+	print '<td class="left">';
 	if ($module->getInfo())
 	{
 		print $form->textwithpicto('', $module->getInfo(), 1, 'help');
@@ -277,7 +275,7 @@ print '<input type="hidden" name="action" value="setlevel">';
 print '<table class="noborder" width="100%">';
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("Parameter").'</td><td>'.$langs->trans("Value").'</td>';
-print '<td align="right"><input type="submit" class="button" '.$option.' value="'.$langs->trans("Modify").'"></td>';
+print '<td class="right"><input type="submit" class="button" '.$option.' value="'.$langs->trans("Modify").'"></td>';
 print "</tr>\n";
 
 print '<tr class="oddeven"><td width="140">'.$langs->trans("SyslogLevel").'</td>';
@@ -302,6 +300,6 @@ if(! empty($conf->loghandlers['mod_syslog_file']) && ! empty($conf->cron->enable
 print '</table>';
 print "</form>\n";
 
+// End of page
 llxFooter();
-
 $db->close();

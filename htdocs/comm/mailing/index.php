@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2005-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010      Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2010      Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ if (is_resource($handle))
                           while ($i < $num )
                             {
                               $obj = $db->fetch_object($result);
-                              print '<td>'.img_object('',$mailmodule->picto).' '.$obj->label.'</td><td align="right">'.$obj->nb.'<td>';
+                              print '<td>'.img_object('',$mailmodule->picto).' '.$obj->label.'</td><td class="right">'.$obj->nb.'<td>';
                               $i++;
                             }
 
@@ -161,7 +161,7 @@ if ($result)
   print '<td colspan="2">'.$langs->trans("LastMailings",$limit).'</td>';
   print '<td align="center">'.$langs->trans("DateCreation").'</td>';
   print '<td align="center">'.$langs->trans("NbOfEMails").'</td>';
-  print '<td align="right"><a href="'.DOL_URL_ROOT.'/comm/mailing/list.php">'.$langs->trans("AllEMailings").'</a></td></tr>';
+  print '<td class="right"><a href="'.DOL_URL_ROOT.'/comm/mailing/list.php">'.$langs->trans("AllEMailings").'</a></td></tr>';
 
   $num = $db->num_rows($result);
   if ($num > 0)
@@ -178,11 +178,10 @@ if ($result)
 	  print '<td align="center">'.dol_print_date($db->jdate($obj->date_creat),'day').'</td>';
 	  print '<td align="center">'.($obj->nbemail?$obj->nbemail:"0").'</td>';
 	  $mailstatic=new Mailing($db);
-	  print '<td align="right">'.$mailstatic->LibStatut($obj->statut,5).'</td>';
+	  print '<td class="right">'.$mailstatic->LibStatut($obj->statut,5).'</td>';
       print '</tr>';
 	  $i++;
 	}
-
     }
   else
     {
@@ -210,7 +209,6 @@ if ($langs->file_exists("html/spam.html",0)) {
     print '<br>';
  }
 
-
+// End of page
 llxFooter();
-
 $db->close();

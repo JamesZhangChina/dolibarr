@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2016	Xebax Christy	<xebax@wanadoo.fr>
- * Copyright (C) 2017	Regis Houssin	<regis.houssin@capnetworks.com>
+ * Copyright (C) 2017	Regis Houssin	<regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,8 @@ class Members extends DolibarrApi
      *
      * @throws RestException
      */
-    function index($sortfield = "t.rowid", $sortorder = 'ASC', $limit = 100, $page = 0, $typeid = '', $sqlfilters = '') {
+    function index($sortfield = "t.rowid", $sortorder = 'ASC', $limit = 100, $page = 0, $typeid = '', $sqlfilters = '')
+    {
         global $db, $conf;
 
         $obj_ret = array();
@@ -212,7 +213,7 @@ class Members extends DolibarrApi
                     if ($result < 0) {
                         throw new RestException(500, 'Error when resiliating member: '.$member->error);
                     }
-                } else if ($value == '1') {
+                } elseif ($value == '1') {
                     $result = $member->validate(DolibarrApiAccess::$user);
                     if ($result < 0) {
                         throw new RestException(500, 'Error when validating member: '.$member->error);
@@ -293,7 +294,8 @@ class Members extends DolibarrApi
      * @param   object  $object    Object to clean
      * @return    array    Array of cleaned object properties
      */
-    function _cleanObjectDatas($object) {
+    function _cleanObjectDatas($object)
+    {
 
         $object = parent::_cleanObjectDatas($object);
 
@@ -359,7 +361,7 @@ class Members extends DolibarrApi
      *
      * @url POST {id}/subscriptions
      */
-    function createSubscription($id, $start_date, $end_date, $amount, $label='')
+    function createSubscription($id, $start_date, $end_date, $amount, $label = '')
     {
         if(! DolibarrApiAccess::$user->rights->adherent->cotisation->creer) {
             throw new RestException(401);
@@ -407,5 +409,4 @@ class Members extends DolibarrApi
 
 		return $result;
 	}
-
 }

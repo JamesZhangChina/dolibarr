@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2007      Patrick Raguin       <patrick.raguin@gmail.com>
  * Copyright (C) 2007-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2009-2012 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ require '../../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formadmin.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/treeview.lib.php';
 
-$langs->load("other");
-$langs->load("admin");
+// Load translation files required by the page
+$langs->loadLangs(array("other","admin"));
 
 if (! $user->admin) accessforbidden();
 
@@ -266,7 +266,7 @@ print '<table class="noborder centpercent">';
 
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("TreeMenuPersonalized").'</td>';
-print '<td align="right"><div id="iddivjstreecontrol"><a href="#">'.img_picto('','object_category').' '.$langs->trans("UndoExpandAll").'</a>';
+print '<td class="right"><div id="iddivjstreecontrol"><a href="#">'.img_picto('','object_category').' '.$langs->trans("UndoExpandAll").'</a>';
 print ' | <a href="#">'.img_picto('','object_category-expanded').' '.$langs->trans("ExpandAll").'</a></div></td>';
 print '</tr>';
 
@@ -326,7 +326,7 @@ if ($conf->use_javascript_ajax)
 			    'position'=>$menu['position'],
 				'entry'=>'<table class="nobordernopadding centpercent"><tr><td>'.
 						'<strong> &nbsp; <a href="edit.php?menu_handler='.$menu_handler_to_search.'&action=edit&menuId='.$menu['rowid'].'">'.$titre.'</a></strong>'.
-						'</td><td align="right">'.
+						'</td><td class="right">'.
 						'<a href="edit.php?menu_handler='.$menu_handler_to_search.'&action=edit&menuId='.$menu['rowid'].'">'.img_edit('default',0,'class="menuEdit" id="edit'.$menu['rowid'].'"').'</a> '.
 						'<a href="edit.php?menu_handler='.$menu_handler_to_search.'&action=create&menuId='.$menu['rowid'].'">'.img_edit_add('default').'</a> '.
 						'<a href="index.php?menu_handler='.$menu_handler_to_search.'&action=delete&menuId='.$menu['rowid'].'">'.img_delete('default').'</a> '.
@@ -373,7 +373,7 @@ if ($conf->use_javascript_ajax)
 
     	print '<tr class="liste_titre">';
     	print '<td>'.$langs->trans("NotTopTreeMenuPersonalized").'</td>';
-    	print '<td align="right"></td>';
+    	print '<td class="right"></td>';
     	print '</tr>';
 
     	print '<tr>';
@@ -410,6 +410,6 @@ else
 
 print '<br>';
 
+// End of page
 llxFooter();
-
 $db->close();

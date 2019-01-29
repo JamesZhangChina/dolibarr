@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2006-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2017 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2006-2017 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ $contextpage=GETPOST('contextpage','aZ')?GETPOST('contextpage','aZ'):'userldap';
 $socid=0;
 if ($user->societe_id > 0) $socid = $user->societe_id;
 $feature2 = (($socid && $user->rights->user->self->creer)?'':'user');
-if ($user->id == $id) $feature2=''; // A user can always read its own card
+
 $result = restrictedArea($user, 'user', $id, 'user&user', $feature2);
 
 $object = new User($db);
@@ -218,5 +218,6 @@ else
 
 print '</table>';
 
+// End of page
 llxFooter();
 $db->close();

@@ -2,7 +2,7 @@
 /* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
  * Copyright (C) 2004-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2011 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,11 @@ class box_external_rss extends ModeleBoxes
     var $boxlabel="BoxLastRssInfos";
     var $depends = array("externalrss");
 
-	var $db;
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+    
 	var $paramdef;	// Params of box definition (not user params)
 
     var $info_box_head = array();
@@ -52,7 +56,7 @@ class box_external_rss extends ModeleBoxes
      * 	@param	DoliDB	$db			Database handler
      *  @param	string	$param		More parameters
      */
-    function __construct($db,$param)
+    function __construct($db, $param)
     {
 		$this->db=$db;
 		$this->paramdef=$param;
@@ -65,7 +69,7 @@ class box_external_rss extends ModeleBoxes
      *  @param	int		$cachedelay		Delay we accept for cache file
      *  @return	void
      */
-    function loadBox($max=5, $cachedelay=3600)
+    function loadBox($max = 5, $cachedelay = 3600)
     {
         global $user, $langs, $conf;
         $langs->load("boxes");
@@ -107,6 +111,7 @@ class box_external_rss extends ModeleBoxes
                 'sublink' => $link,
                 'subtext'=>$langs->trans("LastRefreshDate").': '.($rssparser->getLastFetchDate()?dol_print_date($rssparser->getLastFetchDate(),"dayhourtext"):$langs->trans("Unknown")),
                 'subpicto'=>'help',
+		'target'=>'_blank',
             );
 		}
 
@@ -190,10 +195,9 @@ class box_external_rss extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
         return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
     }
-
 }
 

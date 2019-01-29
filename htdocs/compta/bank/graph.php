@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2010 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
  *	\brief      Page graph des transactions bancaires
  */
 
-require('../../main.inc.php');
+require '../../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/bank.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/dolgraph.class.php';
@@ -265,7 +265,7 @@ else
 		unset($amounts);
 	}
 
-	// Tableau 2
+	// Graph Balance for the year
 
 	if ($mode == 'standard')
 	{
@@ -384,7 +384,7 @@ else
 		$px2->SetTitle($title);
 		$px2->SetWidth($WIDTH);
 		$px2->SetHeight($HEIGHT);
-		$px2->SetType(array('lines','lines','lines'));
+		$px2->SetType(array('linesnopoint','linesnopoint','linesnopoint'));
 		$px2->setBgColor('onglet');
 		$px2->setBgColorGrid(array(255,255,255));
 		$px2->SetHideXGrid(true);
@@ -403,7 +403,7 @@ else
 		unset($amounts);
 	}
 
-	// Tableau 3 - All time line
+	// Graph 3 - Balance for all time line
 
 	if ($mode == 'showalltime')
 	{
@@ -500,7 +500,7 @@ else
 		$px3->SetTitle($title);
 		$px3->SetWidth($WIDTH);
 		$px3->SetHeight($HEIGHT);
-		$px3->SetType(array('lines','lines','lines'));
+		$px3->SetType(array('linesnopoint','linesnopoint','linesnopoint'));
 		$px3->setBgColor('onglet');
 		$px3->setBgColorGrid(array(255,255,255));
 		$px3->SetPrecisionY(0);
@@ -804,7 +804,7 @@ dol_fiche_end();
 print '<table class="notopnoleftnoright" width="100%">';
 
 // Navigation links
-print '<tr><td align="right">'.$morehtml.' &nbsp; &nbsp; ';
+print '<tr><td class="right">'.$morehtml.' &nbsp; &nbsp; ';
 if ($mode == 'showalltime')
 {
 	print '<a href="'.$_SERVER["PHP_SELF"].'?account='.$account.'">';
@@ -830,7 +830,7 @@ if ($mode == 'standard')
 
 	// For month
 	$link="<a href='".$_SERVER["PHP_SELF"]."?account=".$account.($_GET["option"]!='all'?'':'&option=all')."&year=".$prevyear."&month=".$prevmonth."'>".img_previous('', 'class="valignbottom"')."</a> ".$langs->trans("Month")." <a href='".$_SERVER["PHP_SELF"]."?account=".$account."&year=".$nextyear."&month=".$nextmonth."'>".img_next('', 'class="valignbottom"')."</a>";
-	print '<tr><td align="right">'.$link.'</td></tr>';
+	print '<tr><td class="right">'.$link.'</td></tr>';
 
 	print '<tr><td align="center">';
 	$file = "movement".$account."-".$year.$month.".png";
@@ -844,7 +844,7 @@ if ($mode == 'standard')
 	// For year
 	$prevyear=$year-1;$nextyear=$year+1;
 	$link="<a href='".$_SERVER["PHP_SELF"]."?account=".$account.($_GET["option"]!='all'?'':'&option=all')."&year=".($prevyear)."'>".img_previous('', 'class="valignbottom"')."</a> ".$langs->trans("Year")." <a href='".$_SERVER["PHP_SELF"]."?account=".$account."&year=".($nextyear)."'>".img_next('', 'class="valignbottom"')."</a>";
-	print '<tr><td align="right">'.$link.'</td></tr>';
+	print '<tr><td class="right">'.$link.'</td></tr>';
 
 	print '<tr><td align="center">';
 	print $show5;
@@ -864,7 +864,6 @@ if ($mode == 'showalltime')
 
 print '</table>';
 
-
+// End of page
 llxFooter();
-
 $db->close();

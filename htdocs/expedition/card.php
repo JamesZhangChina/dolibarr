@@ -2,7 +2,7 @@
 /* Copyright (C) 2003-2008	Rodolphe Quiedeville	<rodolphe@quiedeville.org>
  * Copyright (C) 2005-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
  * Copyright (C) 2005		Simon TOSSER			<simon@kornog-computing.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2011-2017	Juanjo Menent			<jmenent@2byte.es>
  * Copyright (C) 2013       Florian Henry		  	<florian.henry@open-concept.pro>
  * Copyright (C) 2013       Marcos García           <marcosgdf@gmail.com>
@@ -11,6 +11,7 @@
  * Copyright (C) 2015		Claudio Aschieri		<c.aschieri@19.coop>
  * Copyright (C) 2016-2018	Ferran Marcet			<fmarcet@2byte.es>
  * Copyright (C) 2016		Yasser Carreón			<yacasia@gmail.com>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -276,11 +277,11 @@ if (empty($reshook))
 			            // We try to set an amount
     			        // Case we dont use the list of available qty for each warehouse/lot
     			        // GUI does not allow this yet
-    			        setEventMessage('StockIsRequiredToChooseWhichLotToUse', 'errors');
+    			        setEventMessages($langs->trans("StockIsRequiredToChooseWhichLotToUse"), null, 'errors');
 			        }
 			    }
 			}
-			else if (isset($_POST[$stockLocation]))
+			elseif (isset($_POST[$stockLocation]))
 			{
 			    //shipment line from multiple stock locations
 			    $qty .= '_'.$j;
@@ -315,7 +316,6 @@ if (empty($reshook))
 					unset($_POST["options_" . $key]);
 				}
 			}
-
 	    }
 
 	    //var_dump($batch_line[2]);
@@ -416,7 +416,7 @@ if (empty($reshook))
 	/*
 	 * Build a receiving receipt
 	 */
-	else if ($action == 'create_delivery' && $conf->livraison_bon->enabled && $user->rights->expedition->livraison->creer)
+	elseif ($action == 'create_delivery' && $conf->livraison_bon->enabled && $user->rights->expedition->livraison->creer)
 	{
 	    $result = $object->create_delivery($user);
 	    if ($result > 0)
@@ -430,7 +430,7 @@ if (empty($reshook))
 	    }
 	}
 
-	else if ($action == 'confirm_valid' && $confirm == 'yes' &&
+	elseif ($action == 'confirm_valid' && $confirm == 'yes' &&
         ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->expedition->creer))
        	|| (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->expedition->shipping_advance->validate)))
 	)
@@ -466,7 +466,7 @@ if (empty($reshook))
 	    }
 	}
 
-	else if ($action == 'confirm_delete' && $confirm == 'yes' && $user->rights->expedition->supprimer)
+	elseif ($action == 'confirm_delete' && $confirm == 'yes' && $user->rights->expedition->supprimer)
 	{
 	    $result = $object->delete();
 	    if ($result > 0)
@@ -489,7 +489,7 @@ if (empty($reshook))
 	    }
 	}*/
 
-	else if ($action == 'setdate_livraison' && $user->rights->expedition->creer)
+	elseif ($action == 'setdate_livraison' && $user->rights->expedition->creer)
 	{
 	    //print "x ".$_POST['liv_month'].", ".$_POST['liv_day'].", ".$_POST['liv_year'];
 	    $datedelivery=dol_mktime(GETPOST('liv_hour','int'), GETPOST('liv_min','int'), 0, GETPOST('liv_month','int'), GETPOST('liv_day','int'), GETPOST('liv_year','int'));
@@ -503,7 +503,7 @@ if (empty($reshook))
 	}
 
 	// Action update
-	else if (
+	elseif (
 		($action == 'settracking_number'
 		|| $action == 'settracking_url'
 		|| $action == 'settrueWeight'
@@ -614,7 +614,7 @@ if (empty($reshook))
 	/*
 	 *  Update a line
 	 */
-	else if ($action == 'updateline' && $user->rights->expedition->creer && GETPOST('save'))
+	elseif ($action == 'updateline' && $user->rights->expedition->creer && GETPOST('save'))
 	{
 		// Clean parameters
 		$qty=0;
@@ -701,7 +701,7 @@ if (empty($reshook))
 									$lineIdToAddLot = $line_id;
 								}
 							}
-							else if (count($lines[$i]->details_entrepot) > 1)
+							elseif (count($lines[$i]->details_entrepot) > 1)
 							{
 								// multi warehouse shipment lines
 								foreach ($lines[$i]->details_entrepot as $detail_entrepot)
@@ -776,7 +776,7 @@ if (empty($reshook))
 							unset($_POST[$stockLocation]);
 							unset($_POST[$qty]);
 						}
-						else if (count($lines[$i]->details_entrepot) > 1)
+						elseif (count($lines[$i]->details_entrepot) > 1)
 						{
 							// multi warehouse shipment lines
 							foreach ($lines[$i]->details_entrepot as $detail_entrepot)
@@ -844,7 +844,7 @@ if (empty($reshook))
 		}
 	}
 
-	else if ($action == 'updateline' && $user->rights->expedition->creer && GETPOST('cancel','alpha') == $langs->trans('Cancel')) {
+	elseif ($action == 'updateline' && $user->rights->expedition->creer && GETPOST('cancel','alpha') == $langs->trans('Cancel')) {
 		header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $object->id); // Pour reaffichage de la fiche en cours d'edition
 		exit();
 	}
@@ -858,7 +858,6 @@ if (empty($reshook))
 	$mode='emailfromshipment';
 	$trackid='shi'.$object->id;
 	include DOL_DOCUMENT_ROOT.'/core/actions_sendmails.inc.php';
-
 }
 
 
@@ -941,7 +940,7 @@ if ($action == 'create')
             // Ref client
             print '<tr><td>';
             if ($origin == 'commande') print $langs->trans('RefCustomerOrder');
-            else if ($origin == 'propal') print $langs->trans('RefCustomerOrder');
+            elseif ($origin == 'propal') print $langs->trans('RefCustomerOrder');
             else print $langs->trans('RefCustomer');
             print '</td><td colspan="3">';
             print '<input type="text" name="ref_customer" value="'.$object->ref_client.'" />';
@@ -974,7 +973,7 @@ if ($action == 'create')
             print '<td colspan="3">';
             //print dol_print_date($object->date_livraison,"day");	// date_livraison come from order and will be stored into date_delivery planed.
             $date_delivery = ($date_delivery?$date_delivery:$object->date_livraison); // $date_delivery comes from GETPOST
-            print $form->select_date($date_delivery?$date_delivery:-1,'date_delivery',1,1,1);
+            print $form->selectDate($date_delivery?$date_delivery:-1, 'date_delivery', 1, 1, 1);
             print "</td>\n";
             print '</tr>';
 
@@ -1123,11 +1122,11 @@ if ($action == 'create')
                 {
 					if (empty($conf->productbatch->enabled))
 					{
-                    	print '<td align="left">'.$langs->trans("Warehouse").' ('.$langs->trans("Stock").')</td>';
+                    	print '<td class="left">'.$langs->trans("Warehouse").' ('.$langs->trans("Stock").')</td>';
 					}
 					else
 					{
-						print '<td align="left">'.$langs->trans("Warehouse").' / '.$langs->trans("Batch").' ('.$langs->trans("Stock").')</td>';
+						print '<td class="left">'.$langs->trans("Warehouse").' / '.$langs->trans("Batch").' ('.$langs->trans("Stock").')</td>';
 					}
                 }
                 print "</tr>\n";
@@ -1249,7 +1248,7 @@ if ($action == 'create')
 						// Stock
 						if (! empty($conf->stock->enabled))
 						{
-							print '<td align="left">';
+							print '<td class="left">';
 							if ($line->product_type == Product::TYPE_PRODUCT || ! empty($conf->global->STOCK_SUPPORTS_SERVICES))   // Type of product need stock change ?
 							{
 								// Show warehouse combo list
@@ -1335,7 +1334,7 @@ if ($action == 'create')
 								print '</td>';
 
 								print '<!-- Show details of lot -->';
-								print '<td align="left">';
+								print '<td class="left">';
 
 								print $staticwarehouse->getNomUrl(0).' / ';
 
@@ -1366,7 +1365,7 @@ if ($action == 'create')
 							print '<input name="qtyl'.$indiceAsked.'_'.$subj.'" id="qtyl'.$indiceAsked.'_'.$subj.'" type="text" size="4" value="0" disabled="disabled"> ';
 							print '</td>';
 
-							print '<td align="left">';
+							print '<td class="left">';
 							print img_warning().' '.$langs->trans("NoProductToShipFoundIntoStock", $staticwarehouse->libelle);
 							print '</td></tr>';
 						}
@@ -1414,14 +1413,13 @@ if ($action == 'create')
 								// Stock
 								if (! empty($conf->stock->enabled))
 								{
-									print '<td align="left">';
+									print '<td class="left">';
 									if ($line->product_type == Product::TYPE_PRODUCT || ! empty($conf->global->STOCK_SUPPORTS_SERVICES))
 									{
 										print $tmpwarehouseObject->getNomUrl(0).' ';
 
 										print '<!-- Show details of stock -->';
 										print '('.$stock.')';
-
 									}
 									else
 									{
@@ -1499,7 +1497,7 @@ if ($action == 'create')
 									print '<input name="qtyl'.$indiceAsked.'_'.$subj.'" id="qtyl'.$indiceAsked.'_'.$subj.'" type="text" size="4" value="'.$deliverableQty.'">';
 									print '</td>';
 
-									print '<td align="left">';
+									print '<td class="left">';
 
 									print $tmpwarehouseObject->getNomUrl(0).' / ';
 
@@ -1524,7 +1522,6 @@ if ($action == 'create')
 								}
 							}
 						}
-
 					}
 					if ($subj == 0) // Line not shown yet, we show it
 					{
@@ -1545,7 +1542,7 @@ if ($action == 'create')
 						}
 						print '</td>';
 
-						print '<td align="left">';
+						print '<td class="left">';
 						if ($line->product_type == Product::TYPE_PRODUCT || ! empty($conf->global->STOCK_SUPPORTS_SERVICES))
 						{
 							$warehouse_selected_id = GETPOST('entrepot_id','int');
@@ -1610,7 +1607,7 @@ if ($action == 'create')
         }
     }
 }
-else if ($id || $ref)
+elseif ($id || $ref)
 /* *************************************************************************** */
 /*                                                                             */
 /* Edit and view mode                                                          */
@@ -1671,21 +1668,18 @@ else if ($id || $ref)
 			}
 
 			$formconfirm=$form->formconfirm($_SERVER['PHP_SELF'].'?id='.$object->id,$langs->trans('ValidateSending'),$text,'confirm_valid','',0,1);
-
 		}
 		// Confirm cancelation
 		if ($action == 'annuler')
 		{
 			$formconfirm=$form->formconfirm($_SERVER['PHP_SELF'].'?id='.$object->id,$langs->trans('CancelSending'),$langs->trans("ConfirmCancelSending",$object->ref),'confirm_cancel','',0,1);
-
 		}
 
-		if (! $formconfirm) {
-		    $parameters = array();
-		    $reshook = $hookmanager->executeHooks('formConfirm', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
-		    if (empty($reshook)) $formconfirm.=$hookmanager->resPrint;
-		    elseif ($reshook > 0) $formconfirm=$hookmanager->resPrint;
-		}
+		// Call Hook formConfirm
+		$parameters = array();
+		$reshook = $hookmanager->executeHooks('formConfirm', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
+		if (empty($reshook)) $formconfirm.=$hookmanager->resPrint;
+		elseif ($reshook > 0) $formconfirm=$hookmanager->resPrint;
 
 		// Print form confirm
 		print $formconfirm;
@@ -1802,7 +1796,7 @@ else if ($id || $ref)
 			print '<form name="setdate_livraison" action="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'" method="post">';
 			print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 			print '<input type="hidden" name="action" value="setdate_livraison">';
-			print $form->select_date($object->date_delivery?$object->date_delivery:-1,'liv_',1,1,'',"setdate_livraison",1,0,1);
+			print $form->selectDate($object->date_delivery?$object->date_delivery:-1, 'liv_', 1, 1, '', "setdate_livraison", 1, 0);
 			print '<input type="submit" class="button" value="'.$langs->trans('Modify').'">';
 			print '</form>';
 		}
@@ -1829,7 +1823,6 @@ else if ($id || $ref)
 			print ' <input class="button" name="modify" value="'.$langs->trans("Modify").'" type="submit">';
 			print ' <input class="button" name="cancel" value="'.$langs->trans("Cancel").'" type="submit">';
 			print '</form>';
-
 		}
 		else
 		{
@@ -1867,7 +1860,6 @@ else if ($id || $ref)
 			print ' <input class="button" name="modify" value="'.$langs->trans("Modify").'" type="submit">';
 			print ' <input class="button" name="cancel" value="'.$langs->trans("Cancel").'" type="submit">';
 			print '</form>';
-
 		}
 		else
 		{
@@ -2014,7 +2006,7 @@ else if ($id || $ref)
         print '<div class="div-table-responsive-no-min">';
 		print '<table class="noborder" width="100%">';
 		print '<tr class="liste_titre">';
-		// #
+		// Adds a line numbering column
 		if (! empty($conf->global->MAIN_VIEW_LINE_NUMBER))
 		{
 			print '<td width="5" align="center">&nbsp;</td>';
@@ -2063,12 +2055,12 @@ else if ($id || $ref)
 			}
 			if (! empty($conf->stock->enabled))
 			{
-				print '<td align="left">'.$langs->trans("WarehouseSource").'</td>';
+				print '<td class="left">'.$langs->trans("WarehouseSource").'</td>';
 			}
 
 			if (! empty($conf->productbatch->enabled))
 			{
-				print '<td align="left">'.$langs->trans("Batch").'</td>';
+				print '<td class="left">'.$langs->trans("Batch").'</td>';
 			}
 		}
 		print '<td align="center">'.$langs->trans("CalculatedWeight").'</td>';
@@ -2146,7 +2138,7 @@ else if ($id || $ref)
 		    print '<!-- origin line id = '.$lines[$i]->origin_line_id.' -->'; // id of order line
 			print '<tr class="oddeven">';
 
-			// #
+			// Adds a line numbering column
 			if (! empty($conf->global->MAIN_VIEW_LINE_NUMBER))
 			{
 				print '<td align="center">'.($i+1).'</td>';
@@ -2264,7 +2256,7 @@ else if ($id || $ref)
 					print '<td>' . $formproduct->selectLotStock('', 'batchl'.$line_id.'_0', '', 1, 0, $lines[$i]->fk_product). '</td>';
 					print '</tr>';
 				}
-				else if (! empty($conf->stock->enabled))
+				elseif (! empty($conf->stock->enabled))
 				{
 					if ($lines[$i]->fk_product > 0)
 					{
@@ -2280,7 +2272,7 @@ else if ($id || $ref)
 							print '<td> - ' . $langs->trans("NA") . '</td>';
 							print '</tr>';
 						}
-						else if (count($lines[$i]->details_entrepot) > 1)
+						elseif (count($lines[$i]->details_entrepot) > 1)
 						{
 							print '<!-- case edit 3 -->';
 							foreach ($lines[$i]->details_entrepot as $detail_entrepot)
@@ -2324,14 +2316,14 @@ else if ($id || $ref)
 				// Warehouse source
 				if (! empty($conf->stock->enabled))
 				{
-					print '<td align="left">';
+					print '<td class="left">';
 					if ($lines[$i]->entrepot_id > 0)
 					{
 						$entrepot = new Entrepot($db);
 						$entrepot->fetch($lines[$i]->entrepot_id);
 						print $entrepot->getNomUrl(1);
 					}
-					else if (count($lines[$i]->details_entrepot) > 1)
+					elseif (count($lines[$i]->details_entrepot) > 1)
 					{
 						$detail = '';
 						foreach ($lines[$i]->details_entrepot as $detail_entrepot)
@@ -2400,7 +2392,7 @@ else if ($id || $ref)
 				print '<input type="submit" class="button" id="savelinebutton" name="save" value="' . $langs->trans("Save") . '"><br>';
 				print '<input type="submit" class="button" id="cancellinebutton" name="cancel" value="' . $langs->trans("Cancel") . '"><br>';
 			}
-			else if ($object->statut == 0)
+			elseif ($object->statut == 0)
 			{
 				// edit-delete buttons
 				print '<td class="linecoledit" align="center">';
@@ -2474,7 +2466,7 @@ else if ($id || $ref)
 				}
 				else
 				{
-					print '<a class="butActionRefused" href="#" title="'.$langs->trans("NotAllowed").'">'.$langs->trans("Validate").'</a>';
+					print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("NotAllowed").'">'.$langs->trans("Validate").'</a>';
 				}
 			}
 
@@ -2499,7 +2491,7 @@ else if ($id || $ref)
 				{
 					print '<a class="butAction" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&action=presend&mode=init#formmailbeforetitle">'.$langs->trans('SendMail').'</a>';
 				}
-				else print '<a class="butActionRefused" href="#">'.$langs->trans('SendMail').'</a>';
+				else print '<a class="butActionRefused classfortooltip" href="#">'.$langs->trans('SendMail').'</a>';
 			}
 
 			// Create bill
@@ -2539,7 +2531,6 @@ else if ($id || $ref)
 			{
 				print '<a class="butActionDelete" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=delete">'.$langs->trans("Delete").'</a>';
 			}
-
 		}
 
 		print '</div>';
@@ -2599,7 +2590,6 @@ else if ($id || $ref)
 	include DOL_DOCUMENT_ROOT.'/core/tpl/card_presend.tpl.php';
 }
 
-
+// End of page
 llxFooter();
-
 $db->close();

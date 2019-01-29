@@ -35,15 +35,13 @@ if (substr($sapi_type, 0, 3) == 'cgi') {
 	exit(-1);
 }
 
-require_once($path."../../htdocs/master.inc.php");
-require_once(DOL_DOCUMENT_ROOT."/core/lib/date.lib.php");
-require_once(DOL_DOCUMENT_ROOT."/core/class/ldap.class.php");
-require_once(DOL_DOCUMENT_ROOT."/user/class/user.class.php");
-require_once(DOL_DOCUMENT_ROOT."/user/class/usergroup.class.php");
+require_once $path."../../htdocs/master.inc.php";
+require_once DOL_DOCUMENT_ROOT."/core/lib/date.lib.php";
+require_once DOL_DOCUMENT_ROOT."/core/class/ldap.class.php";
+require_once DOL_DOCUMENT_ROOT."/user/class/user.class.php";
+require_once DOL_DOCUMENT_ROOT."/user/class/usergroup.class.php";
 
-$langs->load("main");
-$langs->load("errors");
-
+$langs->loadLangs(array("main", "errors"));
 
 // Global variables
 $version=DOL_VERSION;
@@ -199,7 +197,7 @@ if ($result >= 0)
 
 					if($conf->global->LDAP_KEY_USERS == $conf->global->LDAP_FIELD_SID) {
 						$fuser->fetch('','',$userKey[0]); // Chargement du user concerné par le SID
-					} else if($conf->global->LDAP_KEY_USERS == $conf->global->LDAP_FIELD_LOGIN) {
+					} elseif($conf->global->LDAP_KEY_USERS == $conf->global->LDAP_FIELD_LOGIN) {
 						$fuser->fetch('',$userKey[0]); // Chargement du user concerné par le login
 					}
 

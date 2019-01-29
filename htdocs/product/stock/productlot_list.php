@@ -79,7 +79,7 @@ $extrafields = new ExtraFields($db);
 
 // fetch optionals attributes and labels
 $extralabels = $extrafields->fetch_name_optionals_label('product_lot');
-$search_array_options=$extrafields->getOptionalsFromPost($extralabels,'','search_');
+$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
 
 // List of fields to search into when doing a "search in all"
 $fieldstosearchall = array(
@@ -398,14 +398,12 @@ if ($resql)
 	$productlot = new Productlot($db);
 
 	$i=0;
-	$var=true;
 	$totalarray=array();
 	while ($i < min($num, $limit))
 	{
 		$obj = $db->fetch_object($resql);
 		if ($obj)
 		{
-			$var = !$var;
 
 			$productlot->id = $obj->rowid;
 			$productlot->batch = $obj->batch;
@@ -513,8 +511,8 @@ if ($resql)
 			$i++;
 			if ($i == 1)
 			{
-				if ($num < $limit && empty($offset)) print '<td align="left">'.$langs->trans("Total").'</td>';
-				else print '<td align="left">'.$langs->trans("Totalforthispage").'</td>';
+				if ($num < $limit && empty($offset)) print '<td class="left">'.$langs->trans("Total").'</td>';
+				else print '<td class="left">'.$langs->trans("Totalforthispage").'</td>';
 			}
 			elseif ($totalarray['totalhtfield'] == $i) print '<td align="right">'.price($totalarray['totalht']).'</td>';
 			elseif ($totalarray['totalvatfield'] == $i) print '<td align="right">'.price($totalarray['totalvat']).'</td>';
@@ -555,7 +553,6 @@ else
 	$error++;
 	dol_print_error($db);
 }
-
 
 // End of page
 llxFooter();

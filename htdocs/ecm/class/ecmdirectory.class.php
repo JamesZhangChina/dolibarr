@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2007-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2008-2012 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,32 +27,77 @@
  */
 class EcmDirectory // extends CommonObject
 {
-	public $element='ecm_directories';			//!< Id that identify managed objects
-	//public $table_element='ecm_directories';	//!< Name of table without prefix where object is stored
-	var $picto = 'dir';
+	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='ecm_directories';
 
-	var $id;
+	/**
+	 * @var string Name of table without prefix where object is stored
+	 */
+	//public $table_element='ecm_directories';
 
-	var $label;
-	var $fk_parent;
-	var $description;
-	var $cachenbofdoc=-1;	// By default cache initialized with value 'not calculated'
-	var $date_c;
-	var $date_m;
+	/**
+	 * @var string String with name of icon for myobject. Must be the part after the 'object_' into object_myobject.png
+	 */
+	public $picto = 'dir';
+
+	/**
+	 * @var int ID
+	 */
+	public $id;
+
+	/**
+     * @var string ECM directories label
+     */
+    public $label;
+
+    /**
+     * @var int ID
+     */
+	public $fk_parent;
+
+	/**
+	 * @var string description
+	 */
+	public $description;
+
+	public $cachenbofdoc=-1;	// By default cache initialized with value 'not calculated'
+	public $date_c;
+	public $date_m;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_m;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_c;
+
+	/**
+	 * @var string Ref
+	 */
 	public $ref;
 
-	var $cats=array();
-	var $motherof=array();
+	public $cats=array();
+	public $motherof=array();
 
-	var $forbiddenchars = array('<','>',':','/','\\','?','*','|','"');
-	var $forbiddencharsdir = array('<','>',':','?','*','|','"');
+	public $forbiddenchars = array('<','>',':','/','\\','?','*','|','"');
+	public $forbiddencharsdir = array('<','>',':','?','*','|','"');
 
 	public $full_arbo_loaded;
 
+	/**
+	 * @var string Error code (or message)
+	 */
 	public $error;
-	public $errors;
+
+	/**
+	 * @var string[] Error codes (or messages)
+	 */
+	public $errors = array();
 
 
 	/**
@@ -185,7 +230,7 @@ class EcmDirectory // extends CommonObject
 	 *  @param 	int		$notrigger	    0=no, 1=yes (no update trigger)
 	 *  @return int 			       	<0 if KO, >0 if OK
 	 */
-	function update($user=null, $notrigger=0)
+	function update($user = null, $notrigger = 0)
 	{
 		global $conf, $langs;
 
@@ -261,8 +306,8 @@ class EcmDirectory // extends CommonObject
 		else
 		{
 		    if (preg_match('/[0-9]+/', $value)) $this->cachenbofdoc = (int) $value;
-		    else if ($value == '+') $this->cachenbofdoc++;
-		    else if ($value == '-') $this->cachenbofdoc--;
+		    elseif ($value == '+') $this->cachenbofdoc++;
+		    elseif ($value == '-') $this->cachenbofdoc--;
 		}
 
 		return 1;
@@ -330,7 +375,7 @@ class EcmDirectory // extends CommonObject
 	 *  @param	int		$deletedirrecursive		1=Agree to delete content recursiveley (otherwise an error will be returned when trying to delete)
 	 *	@return	int								<0 if KO, >0 if OK
 	 */
-	function delete($user, $mode='all', $deletedirrecursive=0)
+	function delete($user, $mode = 'all', $deletedirrecursive = 0)
 	{
 		global $conf, $langs;
         require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
@@ -423,7 +468,7 @@ class EcmDirectory // extends CommonObject
      *  @param	int		$notooltip		1=Disable tooltip
 	 *  @return	string					Chaine avec URL
 	 */
-	function getNomUrl($withpicto=0, $option='', $max=0, $more='', $notooltip=0)
+	function getNomUrl($withpicto = 0, $option = '', $max = 0, $more = '', $notooltip = 0)
 	{
 		global $langs;
 
@@ -456,7 +501,7 @@ class EcmDirectory // extends CommonObject
 	 * 	@param	int		$force		Force reload of full arbo even if already loaded
 	 *	@return	string				Relative physical path
 	 */
-	function getRelativePath($force=0)
+	function getRelativePath($force = 0)
 	{
 		$this->get_full_arbo($force);
 
@@ -490,6 +535,7 @@ class EcmDirectory // extends CommonObject
 		return $ret;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Load this->motherof that is array(id_son=>id_parent, ...)
 	 *
@@ -497,6 +543,7 @@ class EcmDirectory // extends CommonObject
 	 */
 	function load_motherof()
 	{
+        // phpcs:enable
 		global $conf;
 
 		$this->motherof=array();
@@ -532,11 +579,12 @@ class EcmDirectory // extends CommonObject
 	 *  @param	int		$mode          0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return	string 			       Label of status
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
 		return $this->LibStatut($this->status,$mode);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return the status
 	 *
@@ -544,13 +592,15 @@ class EcmDirectory // extends CommonObject
 	 *  @param  int		$mode          	0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 5=Long label + Picto
 	 *  @return string 			       	Label of status
 	 */
-	static function LibStatut($status,$mode=0)
+	static function LibStatut($status, $mode = 0)
 	{
+        // phpcs:enable
 		global $langs;
 		return '';
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Reconstruit l'arborescence des categories sous la forme d'un tableau à partir de la base de donnée
 	 *	Renvoi un tableau de tableau('id','id_mere',...) trie selon arbre et avec:
@@ -570,8 +620,9 @@ class EcmDirectory // extends CommonObject
 	 *  @param	int		$force	        Force reload of full arbo even if already loaded in cache $this->cats
 	 *	@return	array			        Tableau de array
 	 */
-	function get_full_arbo($force=0)
+	function get_full_arbo($force = 0)
 	{
+        // phpcs:enable
 		global $conf;
 
 		if (empty($force) && ! empty($this->full_arbo_loaded))
@@ -629,7 +680,6 @@ class EcmDirectory // extends CommonObject
 					}
 				}
 				$i++;
-
 			}
 		}
 		else
@@ -651,6 +701,7 @@ class EcmDirectory // extends CommonObject
 		return $this->cats;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Define properties fullpath, fullrelativename, fulllabel of a directory of array this->cats and all its childs.
 	 *  Separator between directories is always '/', whatever is OS.
@@ -659,8 +710,9 @@ class EcmDirectory // extends CommonObject
 	 * 	@param	int		$protection		Deep counter to avoid infinite loop
 	 * 	@return	void
 	 */
-	function build_path_from_id_categ($id_categ,$protection=0)
+	function build_path_from_id_categ($id_categ, $protection = 0)
 	{
+        // phpcs:enable
 		// Define fullpath
 		if (! empty($this->cats[$id_categ]['id_mere']))
 		{
@@ -698,7 +750,7 @@ class EcmDirectory // extends CommonObject
 	 *  @param		int		$all       	0=refresh record using this->id , 1=refresh record using this->entity
 	 * 	@return		int					-1 if KO, Nb of files in directory if OK
 	 */
-	function refreshcachenboffile($all=0)
+	function refreshcachenboffile($all = 0)
 	{
 		global $conf;
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
@@ -735,6 +787,7 @@ class EcmDirectory // extends CommonObject
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      * Call trigger based on this instance
      *
@@ -748,6 +801,7 @@ class EcmDirectory // extends CommonObject
      */
     function call_trigger($trigger_name, $user)
     {
+        // phpcs:enable
         global $langs,$conf;
 
         include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';
@@ -764,8 +818,5 @@ class EcmDirectory // extends CommonObject
             }
         }
         return $result;
-
     }
-
-
 }

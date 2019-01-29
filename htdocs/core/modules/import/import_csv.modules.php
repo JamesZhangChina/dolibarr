@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2006-2012	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012	Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2009-2012	Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2012      Christophe Battarel  <christophe.battarel@altairis.fr>
  * Copyright (C) 2012-2016 Juanjo Menent		<jmenent@2byte.es>
  *
@@ -33,30 +33,58 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/import/modules_import.php';
  */
 class ImportCsv extends ModeleImports
 {
-    var $db;
-    var $datatoimport;
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
 
-	var $error='';
-	var $errors=array();
+    public $datatoimport;
 
-    var $id;           // Id of driver
-	var $label;        // Label of driver
-	var $extension;    // Extension of files imported by driver
-	var $version;      // Version of driver
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
-	var $label_lib;    // Label of external lib used by driver
-	var $version_lib;  // Version of external lib used by driver
+	/**
+	 * @var string[] Error codes (or messages)
+	 */
+	public $errors = array();
 
-	var $separator;
+    /**
+	 * @var int ID
+	 */
+	public $id;
 
-	var $file;      // Path of file
-	var $handle;    // Handle fichier
+	/**
+     * @var string label
+     */
+    public $label;
 
-	var $cacheconvert=array();      // Array to cache list of value found after a convertion
-	var $cachefieldtable=array();   // Array to cache list of value found into fields@tables
+	public $extension;    // Extension of files imported by driver
 
-	var $nbinsert = 0; // # of insert done during the import
-	var $nbupdate = 0; // # of update done during the import
+	/**
+     * Dolibarr version of driver
+     * @public string
+     */
+	public $version = 'dolibarr';
+
+	public $label_lib;    // Label of external lib used by driver
+
+	public $version_lib;  // Version of external lib used by driver
+
+	public $separator;
+
+	public $file;      // Path of file
+
+	public $handle;    // Handle fichier
+
+	public $cacheconvert=array();      // Array to cache list of value found after a convertion
+
+	public $cachefieldtable=array();   // Array to cache list of value found into fields@tables
+
+	public $nbinsert = 0; // # of insert done during the import
+
+	public $nbupdate = 0; // # of update done during the import
 
 
 	/**
@@ -65,9 +93,9 @@ class ImportCsv extends ModeleImports
 	 *	@param	DoliDB		$db				Database handler
 	 *	@param	string		$datatoimport	String code describing import set (ex: 'societe_1')
 	 */
-	function __construct($db,$datatoimport)
+	function __construct($db, $datatoimport)
 	{
-		global $conf,$langs;
+		global $conf, $langs;
 		$this->db = $db;
 
 		$this->separator=(GETPOST('separator')?GETPOST('separator'):(empty($conf->global->IMPORT_CSV_SEPARATOR_TO_USE)?',':$conf->global->IMPORT_CSV_SEPARATOR_TO_USE));
@@ -90,6 +118,7 @@ class ImportCsv extends ModeleImports
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Output header of an example file for this format
 	 *
@@ -98,9 +127,11 @@ class ImportCsv extends ModeleImports
 	 */
 	function write_header_example($outputlangs)
 	{
+        // phpcs:enable
 		return '';
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Output title line of an example file for this format
 	 *
@@ -108,12 +139,14 @@ class ImportCsv extends ModeleImports
 	 *  @param	array		$headerlinefields	Array of fields name
 	 * 	@return	string
 	 */
-	function write_title_example($outputlangs,$headerlinefields)
+	function write_title_example($outputlangs, $headerlinefields)
 	{
+        // phpcs:enable
 		$s=join($this->separator,array_map('cleansep',$headerlinefields));
 		return $s."\n";
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Output record of an example file for this format
 	 *
@@ -121,12 +154,14 @@ class ImportCsv extends ModeleImports
 	 * 	@param	array		$contentlinevalues	Array of lines
 	 * 	@return	string
 	 */
-	function write_record_example($outputlangs,$contentlinevalues)
+	function write_record_example($outputlangs, $contentlinevalues)
 	{
+        // phpcs:enable
 		$s=join($this->separator,array_map('cleansep',$contentlinevalues));
 		return $s."\n";
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Output footer of an example file for this format
 	 *
@@ -135,11 +170,13 @@ class ImportCsv extends ModeleImports
 	 */
 	function write_footer_example($outputlangs)
 	{
+        // phpcs:enable
 		return '';
 	}
 
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Open input file
 	 *
@@ -148,6 +185,7 @@ class ImportCsv extends ModeleImports
 	 */
 	function import_open_file($file)
 	{
+        // phpcs:enable
 		global $langs;
 		$ret=1;
 
@@ -171,6 +209,7 @@ class ImportCsv extends ModeleImports
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Return nb of records. File must be closed.
 	 *
@@ -179,10 +218,12 @@ class ImportCsv extends ModeleImports
 	 */
 	function import_get_nb_of_lines($file)
 	{
-	   return dol_count_nb_of_line($file);
+        // phpcs:enable
+       return dol_count_nb_of_line($file);
     }
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Input header line from file
 	 *
@@ -190,10 +231,12 @@ class ImportCsv extends ModeleImports
 	 */
 	function import_read_header()
 	{
+        // phpcs:enable
 		return 0;
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Return array of next record in input file.
 	 *
@@ -201,6 +244,7 @@ class ImportCsv extends ModeleImports
 	 */
 	function import_read_record()
 	{
+        // phpcs:enable
 		global $conf;
 
 		$arrayres=fgetcsv($this->handle,100000,$this->separator,$this->enclosure,$this->escape);
@@ -249,6 +293,7 @@ class ImportCsv extends ModeleImports
 		return $newarrayres;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Close file handle
 	 *
@@ -256,11 +301,13 @@ class ImportCsv extends ModeleImports
 	 */
 	function import_close_file()
 	{
+        // phpcs:enable
 		fclose($this->handle);
 		return 0;
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Insert a record into database
 	 *
@@ -272,8 +319,9 @@ class ImportCsv extends ModeleImports
 	 * @param	array	$updatekeys						Array of keys to use to try to do an update first before insert. This field are defined into the module descriptor.
 	 * @return	int										<0 if KO, >0 if OK
 	 */
-	function import_insert($arrayrecord,$array_match_file_to_database,$objimport,$maxfields,$importid,$updatekeys)
+	function import_insert($arrayrecord, $array_match_file_to_database, $objimport, $maxfields, $importid, $updatekeys)
 	{
+        // phpcs:enable
 		global $langs,$conf,$user;
         global $thirdparty_static;    	// Specific to thirdparty import
 		global $tablewithentity_cache;	// Cache to avoid to call  desc at each rows on tables
@@ -410,7 +458,7 @@ class ImportCsv extends ModeleImports
                                             else
                                             {
                                                 if (!empty($objimport->array_import_convertvalue[0][$val]['dict'])) $this->errors[$error]['lib']=$langs->trans('ErrorFieldValueNotIn',$key,$newval,'code',$langs->transnoentitiesnoconv($objimport->array_import_convertvalue[0][$val]['dict']));
-                                                else if (!empty($objimport->array_import_convertvalue[0][$val]['element'])) $this->errors[$error]['lib']=$langs->trans('ErrorFieldRefNotIn',$key,$newval,$langs->transnoentitiesnoconv($objimport->array_import_convertvalue[0][$val]['element']));
+                                                elseif (!empty($objimport->array_import_convertvalue[0][$val]['element'])) $this->errors[$error]['lib']=$langs->trans('ErrorFieldRefNotIn',$key,$newval,$langs->transnoentitiesnoconv($objimport->array_import_convertvalue[0][$val]['element']));
                                                 else $this->errors[$error]['lib']='ErrorFieldValueNotIn';
                                                 $this->errors[$error]['type']='FOREIGNKEY';
                                                 $errorforthistable++;
@@ -418,7 +466,6 @@ class ImportCsv extends ModeleImports
                                             }
                                         }
                                     }
-
                                 }
                                 elseif ($objimport->array_import_convertvalue[0][$val]['rule']=='zeroifnull')
                                 {
@@ -530,7 +577,7 @@ class ImportCsv extends ModeleImports
 									}
 								}
 								// If test is just a static regex
-								else if (! preg_match('/'.$objimport->array_import_regex[0][$val].'/i',$newval))
+								elseif (! preg_match('/'.$objimport->array_import_regex[0][$val].'/i',$newval))
 								{
 								    //if ($key == 19) print "xxx".$newval."zzz".$objimport->array_import_regex[0][$val]."<br>";
 									$this->errors[$error]['lib']=$langs->transnoentitiesnoconv('ErrorWrongValueForField',$key,$newval,$objimport->array_import_regex[0][$val]);
@@ -548,9 +595,13 @@ class ImportCsv extends ModeleImports
 						$listfields[] = $fieldname;
 
 						// Note: arrayrecord (and 'type') is filled with ->import_read_record called by import.php page before calling import_insert
-						if (empty($newval) && $arrayrecord[($key-1)]['type'] < 0)		 $listvalues[] = ($newval=='0'?$newval:"null");
-						elseif (empty($newval) && $arrayrecord[($key-1)]['type'] == 0)	 $listvalues[] = "''";
-						else															 $listvalues[] = "'".$this->db->escape($newval)."'";
+						if (empty($newval) && $arrayrecord[($key-1)]['type'] < 0) {
+                            $listvalues[] = ($newval=='0'?$newval:"null");
+                        } elseif (empty($newval) && $arrayrecord[($key-1)]['type'] == 0) {
+                            $listvalues[] = "''";
+                        } else {
+                            $listvalues[] = "'".$this->db->escape($newval)."'";
+                        }
 					}
 					$i++;
 				}
@@ -581,6 +632,7 @@ class ImportCsv extends ModeleImports
 				//print 'listfields='.$listfields.'<br>listvalues='.$listvalues.'<br>';
 
 				// If no error for this $alias/$tablename, we have a complete $listfields and $listvalues that are defined
+				// so we can try to make the insert or update now.
 				if (! $errorforthistable)
 				{
 					//print "$alias/$tablename/$listfields/$listvalues<br>";
@@ -592,7 +644,7 @@ class ImportCsv extends ModeleImports
 						if (!empty($updatekeys)) {
 							// We do SELECT to get the rowid, if we already have the rowid, it's to be used below for related tables (extrafields)
 
-							if (empty($lastinsertid)) {
+							if (empty($lastinsertid)) {	// No insert done yet for a parent table
 								$sqlSelect = 'SELECT rowid FROM '.$tablename;
 
 								$data = array_combine($listfields, $listvalues);
@@ -612,7 +664,7 @@ class ImportCsv extends ModeleImports
 									if($resql->num_rows == 1) {
 										$lastinsertid = $res->rowid;
 										$last_insert_id_array[$tablename] = $lastinsertid;
-									} else if($resql->num_rows > 1) {
+									} elseif($resql->num_rows > 1) {
 										$this->errors[$error]['lib']=$langs->trans('MultipleRecordFoundWithTheseFilters', implode($filters, ', '));
 										$this->errors[$error]['type']='SQL';
 										$error++;
@@ -628,10 +680,11 @@ class ImportCsv extends ModeleImports
 									$error++;
 								}
 							} else {
-								// We have a last INSERT ID. Check if we have a row referencing this foreign key.
-								// This is required when updating table with some extrafields. When inserting a record in parent table, we can make 
-								// a direct insert into subtable extrafields, but when me wake an update, the insertid is defined and the child record 
-								// may already exists. So we rescan the extrafield table to be know if record exists or not for the rowid.
+								// We have a last INSERT ID (got by previous pass), so we check if we have a row referencing this foreign key.
+								// This is required when updating table with some extrafields. When inserting a record in parent table, we can make
+								// a direct insert into subtable extrafields, but when me wake an update, the insertid is defined and the child record
+								// may already exists. So we rescan the extrafield table to know if record exists or not for the rowid.
+								// Note: For extrafield tablename, we have in importfieldshidden_array an enty 'extra.fk_object'=>'lastrowid-tableparent' so $keyfield is 'fk_object'
 								$sqlSelect = 'SELECT rowid FROM '.$tablename;
 
 								if(empty($keyfield)) $keyfield = 'rowid';
@@ -739,7 +792,6 @@ class ImportCsv extends ModeleImports
 
 		return 1;
 	}
-
 }
 
 /**
@@ -752,5 +804,3 @@ function cleansep($value)
 {
 	return str_replace(array(',',';'),'/',$value);
 };
-
-

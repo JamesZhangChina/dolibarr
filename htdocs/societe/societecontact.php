@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005     	Patrick Rouillon    <patrick@rouillon.net>
  * Copyright (C) 2005-2011	Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin       <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin       <regis.houssin@inodbox.com>
  * Copyright (C) 2011-2015	Philippe Grand      <philippe.grand@atoo-net.com>
  * Copyright (C) 2014		Charles-Fr Benke	<charles.fr@benke.fr>
  * Copyright (C) 2015       Marcos García       <marcosgdf@gmail.com>
@@ -32,8 +32,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
 
-$langs->load("orders");
-$langs->load("companies");
+$langs->loadLangs(array("orders", "companies"));
 
 $id=GETPOST('id','int')?GETPOST('id','int'):GETPOST('socid','int');
 $ref=GETPOST('ref','alpha');
@@ -83,7 +82,7 @@ if ($action == 'addcontact' && $user->rights->societe->creer)
 }
 
 // bascule du statut d'un contact
-else if ($action == 'swapstatut' && $user->rights->societe->creer)
+elseif ($action == 'swapstatut' && $user->rights->societe->creer)
 {
 	if ($object->fetch($id))
 	{
@@ -96,7 +95,7 @@ else if ($action == 'swapstatut' && $user->rights->societe->creer)
 }
 
 // Efface un contact
-else if ($action == 'deletecontact' && $user->rights->societe->creer)
+elseif ($action == 'deletecontact' && $user->rights->societe->creer)
 {
 	$object->fetch($id);
 	$result = $object->delete_contact($_GET["lineid"]);
@@ -343,5 +342,6 @@ if ($id > 0 || ! empty($ref))
 	}
 }
 
+// End of page
 llxFooter();
 $db->close();

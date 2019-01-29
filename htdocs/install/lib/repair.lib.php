@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2012 Regis Houssin	<regis.houssin@capnetworks.com>
+/* Copyright (C) 2012 Regis Houssin	<regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,13 +62,13 @@ function checkLinkedElements($sourcetype, $targettype)
 	$targettable=$targettype;
 
 	if ($sourcetype == 'shipping') $sourcetable = 'expedition';
-	else if ($targettype == 'shipping') $targettable = 'expedition';
+	elseif ($targettype == 'shipping') $targettable = 'expedition';
 	if ($sourcetype == 'delivery') $sourcetable = 'livraison';
-	else if ($targettype == 'delivery') $targettable = 'livraison';
+	elseif ($targettype == 'delivery') $targettable = 'livraison';
 	if ($sourcetype == 'order_supplier') $sourcetable = 'commande_fournisseur';
-	else if ($targettype == 'order_supplier') $targettable = 'commande_fournisseur';
+	elseif ($targettype == 'order_supplier') $targettable = 'commande_fournisseur';
 	if ($sourcetype == 'invoice_supplier') $sourcetable = 'facture_fourn';
-	else if ($targettype == 'invoice_supplier') $targettable = 'facture_fourn';
+	elseif ($targettype == 'invoice_supplier') $targettable = 'facture_fourn';
 
 	$out = $langs->trans('SourceType').': '.$sourcetype.' => '.$langs->trans('TargetType').': '.$targettype.' ';
 
@@ -136,7 +136,6 @@ function clean_data_ecm_directories()
 				$resqlupdate=$db->query($sqlupdate);
 				if (! $resqlupdate) dol_print_error($db,'Failed to update');
 			}
-
 		}
 	}
 	else dol_print_error($db,'Failed to run request');

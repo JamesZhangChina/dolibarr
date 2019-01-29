@@ -2,7 +2,7 @@
 /* Copyright (C) 2003		Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2015	Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2004		Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2011	Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2011	Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ if ($conf->use_javascript_ajax)
 
 print '<tr class="liste_total">';
 print '<td>'.$langs->trans("Total").'</td>';
-print '<td align="right">'.$totalnb.'</td>';
+print '<td class="right">'.$totalnb.'</td>';
 print '</tr>';
 
 print '</table>';
@@ -163,8 +163,8 @@ if ($result)
     print '<table class="noborder" width="100%">';
     print '<tr class="liste_titre">';
     print '<td colspan="2">'.$langs->trans("BoxTitleLastModifiedExpenses",min($max,$num)).'</td>';
-    print '<td align="right">'.$langs->trans("FeesKilometersOrAmout").'</td>';
-    print '<td align="right">'.$langs->trans("DateModificationShort").'</td>';
+    print '<td class="right">'.$langs->trans("FeesKilometersOrAmout").'</td>';
+    print '<td class="right">'.$langs->trans("DateModificationShort").'</td>';
     print '<td width="16">&nbsp;</td>';
     print '</tr>';
     if ($num)
@@ -184,14 +184,13 @@ if ($result)
             print '<tr class="oddeven">';
             print '<td>'.$deplacementstatic->getNomUrl(1).'</td>';
             print '<td>'.$userstatic->getNomUrl(1).'</td>';
-            print '<td align="right">'.$obj->km.'</td>';
-            print '<td align="right">'.dol_print_date($db->jdate($obj->dm),'day').'</td>';
+            print '<td class="right">'.$obj->km.'</td>';
+            print '<td class="right">'.dol_print_date($db->jdate($obj->dm),'day').'</td>';
             print '<td>'.$deplacementstatic->LibStatut($obj->fk_statut,3).'</td>';
             print '</tr>';
 
             $i++;
         }
-
     }
     else
     {
@@ -204,7 +203,6 @@ else dol_print_error($db);
 
 print '</div></div></div>';
 
-
+// End of page
 llxFooter();
-
 $db->close();

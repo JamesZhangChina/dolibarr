@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2010 Regis Houssin  <regis.houssin@capnetworks.com>
+/* Copyright (C) 2010-2018 Regis Houssin  <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class ActionsCardService
      *    @param   string	$canvas         Name of canvas
      *    @param   string	$card           Name of tab (sub-canvas)
 	 */
-	function __construct($db,$targetmodule,$canvas,$card)
+	function __construct($db, $targetmodule, $canvas, $card)
 	{
 		$this->db 				= $db;
 		$this->targetmodule     = $targetmodule;
@@ -63,6 +63,7 @@ class ActionsCardService
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
 	 *    Assign custom values for canvas (for example into this->tpl to be used by templates)
 	 *
@@ -71,8 +72,9 @@ class ActionsCardService
 	 *    @param	string	$ref		Ref of object
 	 *    @return	void
 	 */
-	function assign_values(&$action, $id=0, $ref='')
+	function assign_values(&$action, $id = 0, $ref = '')
 	{
+        // phpcs:enable
 		global $limit, $offset, $sortfield, $sortorder;
         global $conf, $langs, $user, $mysoc, $canvas;
 		global $form, $formproduct;
@@ -122,20 +124,6 @@ class ActionsCardService
 			$this->tpl['tva_tx'] = $form->load_tva("tva_tx",-1,$mysoc,'');
 		}
 
-		if ($action == 'create' || $action == 'edit')
-		{
-			// Status
-			$statutarray=array('1' => $langs->trans("OnSell"), '0' => $langs->trans("NotOnSell"));
-			$this->tpl['status'] = $form->selectarray('statut',$statutarray,$this->status);
-
-			//To Buy
-			$statutarray=array('1' => $langs->trans("Yes"), '0' => $langs->trans("No"));
-			$this->tpl['tobuy'] = $form->selectarray('tobuy',$statutarray,$this->status_buy);
-
-            $this->tpl['description'] = $this->description;
-            $this->tpl['note'] = $this->note;
-		}
-
 		if ($action == 'view')
 		{
             $head = product_prepare_head($this->object);
@@ -182,10 +170,13 @@ class ActionsCardService
 		{
     		// Status
     		$statutarray=array('1' => $langs->trans("OnSell"), '0' => $langs->trans("NotOnSell"));
-    		$this->tpl['status'] = $form->selectarray('statut',$statutarray,$_POST["statut"]);
+    		$this->tpl['status'] = $form->selectarray('statut',$statutarray,$this->object->status);
 
     		$statutarray=array('1' => $langs->trans("ProductStatusOnBuy"), '0' => $langs->trans("ProductStatusNotOnBuy"));
-    		$this->tpl['status_buy'] = $form->selectarray('statut_buy',$statutarray,$_POST["statut_buy"]);
+    		$this->tpl['status_buy'] = $form->selectarray('statut_buy',$statutarray,$this->object->status_buy);
+
+    		$this->tpl['description'] = $this->description;
+    		$this->tpl['note'] = $this->note;
 
 		    // Duration unit
 			// TODO creer fonction
@@ -203,10 +194,6 @@ class ActionsCardService
 
 		if ($action == 'view')
 		{
-    		// Status
-    		$this->tpl['status'] = $this->object->getLibStatut(2,0);
-    		$this->tpl['status_buy'] = $this->object->getLibStatut(2,1);
-
 		    // Photo
 			$this->tpl['nblignes'] = 4;
 			if ($this->object->is_photo_available($conf->service->multidir_output[$this->object->entity]))
@@ -219,7 +206,7 @@ class ActionsCardService
 			{
 				$dur=array("h"=>$langs->trans("Hours"),"d"=>$langs->trans("Days"),"w"=>$langs->trans("Weeks"),"m"=>$langs->trans("Months"),"y"=>$langs->trans("Years"));
 			}
-			else if ($this->object->duration_value > 0)
+			elseif ($this->object->duration_value > 0)
 			{
 				$dur=array("h"=>$langs->trans("Hour"),"d"=>$langs->trans("Day"),"w"=>$langs->trans("Week"),"m"=>$langs->trans("Month"),"y"=>$langs->trans("Year"));
 			}
@@ -232,7 +219,6 @@ class ActionsCardService
 		{
 	        $this->LoadListDatas($limit, $offset, $sortfield, $sortorder);
 		}
-
 	}
 
 
@@ -247,7 +233,7 @@ class ActionsCardService
 
         $this->field_list = array();
 
-		$sql = "SELECT rowid, name, alias, title, align, sort, search, enabled, rang";
+		$sql = "SELECT rowid, name, alias, title, align, sort, search, visible, enabled, rang";
 		$sql.= " FROM ".MAIN_DB_PREFIX."c_field_list";
 		$sql.= " WHERE element = '".$this->db->escape($this->fieldListName)."'";
 		$sql.= " AND entity = ".$conf->entity;
@@ -272,6 +258,7 @@ class ActionsCardService
 				$fieldlist["align"]		= $obj->align;
 				$fieldlist["sort"]		= $obj->sort;
 				$fieldlist["search"]	= $obj->search;
+				$fieldlist["visible"]	= $obj->visible;
 				$fieldlist["enabled"]	= verifCond($obj->enabled);
 				$fieldlist["order"]		= $obj->rang;
 
@@ -287,6 +274,7 @@ class ActionsCardService
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Fetch datas list and save into ->list_datas
 	 *
@@ -298,6 +286,7 @@ class ActionsCardService
 	 */
 	function LoadListDatas($limit, $offset, $sortfield, $sortorder)
 	{
+        // phpcs:enable
 		global $conf;
 		global $search_categ,$sall,$sref,$search_barcode,$snom,$catid;
 
@@ -377,6 +366,4 @@ class ActionsCardService
 			print $sql;
 		}
 	}
-
 }
-

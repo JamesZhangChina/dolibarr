@@ -45,7 +45,7 @@ if ($user->societe_id > 0)
 
 if ($_POST["action"] == 'setpricelevel')
 {
-	$soc = New Societe($db);
+	$soc = new Societe($db);
 	$soc->fetch($id);
 	$soc->set_price_level($_POST["price_level"],$user);
 
@@ -149,7 +149,7 @@ if ($_socid > 0)
 		print '<tr class="liste_titre">';
 		print '<td>'.$langs->trans("Date").'</td>';
 		print '<td>'.$langs->trans("PriceLevel").'</td>';
-		print '<td align="right">'.$langs->trans("User").'</td>';
+		print '<td class="right">'.$langs->trans("User").'</td>';
 		print '</tr>';
 		$i = 0 ;
 		$num = $db->num_rows($resql);
@@ -163,7 +163,7 @@ if ($_socid > 0)
 			print '<td>'.$obj->price_level.' </td>';
 			$userstatic->id=$obj->uid;
 			$userstatic->lastname=$obj->login;
-			print '<td align="right">'.$userstatic->getNomUrl(1).'</td>';
+			print '<td class="right">'.$userstatic->getNomUrl(1).'</td>';
 			print '</tr>';
 			$i++;
 		}
@@ -174,8 +174,8 @@ if ($_socid > 0)
 	{
 		dol_print_error($db);
 	}
-
 }
 
+// End of page
 llxFooter();
 $db->close();

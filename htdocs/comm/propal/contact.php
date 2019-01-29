@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
  * Copyright (C) 2005-2016 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2011-2015 Philippe Grand       <philippe.grand@atoo-net.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@ if ($id > 0 || ! empty($ref))
 		setEventMessages($langs->trans('ErrorRecordNotFound'), null, 'errors');
 		$error++;
 	}
-	else if ($ret < 0)
+	elseif ($ret < 0)
 	{
 		setEventMessages($object->error, $object->errors, 'errors');
 		$error++;
@@ -105,7 +105,7 @@ if ($action == 'addcontact' && $user->rights->propale->creer)
 }
 
 // Toggle the status of a contact
-else if ($action == 'swapstatut' && $user->rights->propale->creer)
+elseif ($action == 'swapstatut' && $user->rights->propale->creer)
 {
 	if ($object->id > 0)
 	{
@@ -114,7 +114,7 @@ else if ($action == 'swapstatut' && $user->rights->propale->creer)
 }
 
 // Deletes a contact
-else if ($action == 'deletecontact' && $user->rights->propale->creer)
+elseif ($action == 'deletecontact' && $user->rights->propale->creer)
 {
 	$result = $object->delete_contact($lineid);
 
@@ -212,6 +212,6 @@ if ($object->id > 0)
 	}
 }
 
+// End of page
 llxFooter();
-
 $db->close();

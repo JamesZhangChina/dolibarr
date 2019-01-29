@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2004-2014	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2008		Raphael Bertrand		<raphael.bertrand@resultic.fr>
  * Copyright (C) 2010-2014	Juanjo Menent		<jmenent@2byte.es>
  * Copyright (C) 2012		Christophe Battarel	<christophe.battarel@altairis.fr>
@@ -70,9 +70,9 @@ class pdf_crabe extends ModelePDFFactures
 
 	/**
      * @var array() Minimum version of PHP required by module.
-	 * e.g.: PHP ≥ 5.3 = array(5, 3)
+	 * e.g.: PHP ≥ 5.4 = array(5, 4)
      */
-	public $phpmin = array(5, 2);
+	public $phpmin = array(5, 4);
 
 	/**
      * Dolibarr version of the loaded document
@@ -80,15 +80,46 @@ class pdf_crabe extends ModelePDFFactures
      */
 	public $version = 'dolibarr';
 
+	/**
+     * @var int page_largeur
+     */
     public $page_largeur;
+
+	/**
+     * @var int page_hauteur
+     */
     public $page_hauteur;
+
+	/**
+     * @var array format
+     */
     public $format;
+
+	/**
+     * @var int marge_gauche
+     */
 	public $marge_gauche;
+
+	/**
+     * @var int marge_droite
+     */
 	public $marge_droite;
+
+	/**
+     * @var int marge_haute
+     */
 	public $marge_haute;
+
+	/**
+     * @var int marge_basse
+     */
 	public $marge_basse;
 
-	public $emetteur;	// Objet societe qui emet
+	/**
+	 * Issuer
+	 * @var Company object that emits
+	 */
+	public $emetteur;
 
 	/**
 	 * @var bool Situation invoice type
@@ -108,7 +139,7 @@ class pdf_crabe extends ModelePDFFactures
 	 */
 	function __construct($db)
 	{
-		global $conf,$langs,$mysoc;
+		global $conf, $langs, $mysoc;
 
 		// Translations
 		$langs->loadLangs(array("main", "bills"));
@@ -187,6 +218,7 @@ class pdf_crabe extends ModelePDFFactures
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      *  Function to build pdf onto disk
      *
@@ -198,15 +230,16 @@ class pdf_crabe extends ModelePDFFactures
      *  @param		int			$hideref			Do not show ref
      *  @return     int         	    			1=OK, 0=KO
 	 */
-	function write_file($object,$outputlangs,$srctemplatepath='',$hidedetails=0,$hidedesc=0,$hideref=0)
+	function write_file($object, $outputlangs, $srctemplatepath = '', $hidedetails = 0, $hidedesc = 0, $hideref = 0)
 	{
+        // phpcs:enable
 		global $user,$langs,$conf,$mysoc,$db,$hookmanager,$nblignes;
 
 		if (! is_object($outputlangs)) $outputlangs=$langs;
 		// For backward compatibility with FPDF, force output charset to ISO, because FPDF expect text to be encoded in ISO
 		if (! empty($conf->global->MAIN_USE_FPDF)) $outputlangs->charset_output='ISO-8859-1';
 
-		// Translations
+		// Load traductions files requiredby by page
 		$outputlangs->loadLangs(array("main", "bills", "products", "dict", "companies"));
 
 		$nblignes = count($object->lines);
@@ -293,6 +326,7 @@ class pdf_crabe extends ModelePDFFactures
                 $heightforinfotot = 50+(4*$nbpayments);	// Height reserved to output the info and total part and payment part
 		        $heightforfreetext= (isset($conf->global->MAIN_PDF_FREETEXT_HEIGHT)?$conf->global->MAIN_PDF_FREETEXT_HEIGHT:5);	// Height reserved to output the free text on last page
 	            $heightforfooter = $this->marge_basse + 8;	// Height reserved to output the footer (value include bottom margin)
+	            if ($conf->global->MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS >0) $heightforfooter+= 6;
 
                 if (class_exists('TCPDF'))
                 {
@@ -538,7 +572,7 @@ class pdf_crabe extends ModelePDFFactures
 					{
 						$pdf->MultiCell($this->posxprogress-$this->posxqty-0.8, 4, $qty, 0, 'R');
 					}
-					else if($conf->global->PRODUCT_USE_UNITS)
+					elseif($conf->global->PRODUCT_USE_UNITS)
 					{
 						$pdf->MultiCell($this->posxunit-$this->posxqty-0.8, 4, $qty, 0, 'R');
 					}
@@ -556,7 +590,7 @@ class pdf_crabe extends ModelePDFFactures
 						{
 							$pdf->MultiCell($this->posxunit-$this->posxprogress-1, 3, $progress, 0, 'R');
 						}
-						else if ($this->atleastonediscount)
+						elseif ($this->atleastonediscount)
 						{
 							$pdf->MultiCell($this->posxdiscount-$this->posxprogress-1, 3, $progress, 0, 'R');
 						}
@@ -743,6 +777,7 @@ class pdf_crabe extends ModelePDFFactures
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Show payments table
 	 *
@@ -754,6 +789,7 @@ class pdf_crabe extends ModelePDFFactures
 	 */
 	function _tableau_versements(&$pdf, $object, $posy, $outputlangs)
 	{
+        // phpcs:enable
 		global $conf;
 
         $sign=1;
@@ -880,10 +916,10 @@ class pdf_crabe extends ModelePDFFactures
 			$this->error=$this->db->lasterror();
 			return -1;
 		}
-
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *   Show miscellaneous information (payment mode, payment term, ...)
 	 *
@@ -895,6 +931,7 @@ class pdf_crabe extends ModelePDFFactures
 	 */
 	function _tableau_info(&$pdf, $object, $posy, $outputlangs)
 	{
+        // phpcs:enable
 		global $conf;
 
 		$default_font_size = pdf_getPDFFontSize($outputlangs);
@@ -1041,6 +1078,7 @@ class pdf_crabe extends ModelePDFFactures
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Show total to pay
 	 *
@@ -1053,6 +1091,7 @@ class pdf_crabe extends ModelePDFFactures
 	 */
 	function _tableau_tot(&$pdf, $object, $deja_regle, $posy, $outputlangs)
 	{
+        // phpcs:enable
 		global $conf,$mysoc;
 
         $sign=1;
@@ -1164,7 +1203,6 @@ class pdf_crabe extends ModelePDFFactures
 
 								$pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
 								$pdf->MultiCell($largcol2, $tab2_hl, price($tvaval, 0, $outputlangs), 0, 'R', 1);
-
 							}
 						}
 					}
@@ -1187,7 +1225,6 @@ class pdf_crabe extends ModelePDFFactures
 							$this->tva[$tvakey]=$tvaval * $coef_fix_tva;
 						}
 					}
-
 				}
 
 				foreach($this->tva as $tvakey => $tvaval)
@@ -1374,7 +1411,7 @@ class pdf_crabe extends ModelePDFFactures
 	 *   @param		string		$currency		Currency code
 	 *   @return	void
 	 */
-	function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop=0, $hidebottom=0, $currency='')
+	function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
 	{
 		global $conf;
 
@@ -1449,7 +1486,7 @@ class pdf_crabe extends ModelePDFFactures
 			{
 				$pdf->MultiCell($this->posxprogress-$this->posxqty-1,2, $outputlangs->transnoentities("Qty"),'','C');
 			}
-			else if($conf->global->PRODUCT_USE_UNITS)
+			elseif($conf->global->PRODUCT_USE_UNITS)
 			{
 				$pdf->MultiCell($this->posxunit-$this->posxqty-1,2, $outputlangs->transnoentities("Qty"),'','C');
 			}
@@ -1470,7 +1507,7 @@ class pdf_crabe extends ModelePDFFactures
 				{
 					$pdf->MultiCell($this->posxunit-$this->posxprogress,2, $outputlangs->transnoentities("Progress"),'','C');
 				}
-				else if ($this->atleastonediscount)
+				elseif ($this->atleastonediscount)
 				{
 					$pdf->MultiCell($this->posxdiscount-$this->posxprogress,2, $outputlangs->transnoentities("Progress"),'','C');
 				}
@@ -1478,9 +1515,7 @@ class pdf_crabe extends ModelePDFFactures
 				{
 					$pdf->MultiCell($this->postotalht-$this->posxprogress,2, $outputlangs->transnoentities("Progress"),'','C');
 				}
-
 			}
-
 		}
 
 		if($conf->global->PRODUCT_USE_UNITS) {
@@ -1536,7 +1571,7 @@ class pdf_crabe extends ModelePDFFactures
 	{
 		global $conf, $langs;
 
-		// Translations
+		// Load traductions files requiredby by page
 		$outputlangs->loadLangs(array("main", "bills", "propal", "companies"));
 
 		$default_font_size = pdf_getPDFFontSize($outputlangs);
@@ -1560,26 +1595,29 @@ class pdf_crabe extends ModelePDFFactures
 		$pdf->SetXY($this->marge_gauche,$posy);
 
 		// Logo
-		$logo=$conf->mycompany->dir_output.'/logos/'.$this->emetteur->logo;
-		if ($this->emetteur->logo)
+		if (empty($conf->global->PDF_DISABLE_MYCOMPANY_LOGO))
 		{
-			if (is_readable($logo))
+			$logo=$conf->mycompany->dir_output.'/logos/'.$this->emetteur->logo;
+			if ($this->emetteur->logo)
 			{
-			    $height=pdf_getHeightForLogo($logo);
-				$pdf->Image($logo, $this->marge_gauche, $posy, 0, $height);	// width=0 (auto)
+				if (is_readable($logo))
+				{
+				    $height=pdf_getHeightForLogo($logo);
+					$pdf->Image($logo, $this->marge_gauche, $posy, 0, $height);	// width=0 (auto)
+				}
+				else
+				{
+					$pdf->SetTextColor(200,0,0);
+					$pdf->SetFont('','B',$default_font_size - 2);
+					$pdf->MultiCell($w, 3, $outputlangs->transnoentities("ErrorLogoFileNotFound",$logo), 0, 'L');
+					$pdf->MultiCell($w, 3, $outputlangs->transnoentities("ErrorGoToGlobalSetup"), 0, 'L');
+				}
 			}
 			else
 			{
-				$pdf->SetTextColor(200,0,0);
-				$pdf->SetFont('','B',$default_font_size - 2);
-				$pdf->MultiCell($w, 3, $outputlangs->transnoentities("ErrorLogoFileNotFound",$logo), 0, 'L');
-				$pdf->MultiCell($w, 3, $outputlangs->transnoentities("ErrorGoToGlobalSetup"), 0, 'L');
+				$text=$this->emetteur->name;
+				$pdf->MultiCell($w, 4, $outputlangs->convToOutputCharset($text), 0, 'L');
 			}
-		}
-		else
-		{
-			$text=$this->emetteur->name;
-			$pdf->MultiCell($w, 4, $outputlangs->convToOutputCharset($text), 0, 'L');
 		}
 
 		$pdf->SetFont('','B', $default_font_size + 3);
@@ -1804,11 +1842,10 @@ class pdf_crabe extends ModelePDFFactures
 	 *      @param	int			$hidefreetext		1=Hide free text
 	 *      @return	int								Return height of bottom margin including footer text
 	 */
-	function _pagefoot(&$pdf,$object,$outputlangs,$hidefreetext=0)
+	function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
 	{
 		global $conf;
 		$showdetails=$conf->global->MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS;
 		return pdf_pagefoot($pdf,$outputlangs,'INVOICE_FREE_TEXT',$this->emetteur,$this->marge_basse,$this->marge_gauche,$this->page_hauteur,$object,$showdetails,$hidefreetext);
 	}
-
 }

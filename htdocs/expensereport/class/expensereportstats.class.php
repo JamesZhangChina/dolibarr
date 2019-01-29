@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (c) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +22,18 @@
  *       \ingroup    expensereport
  *       \brief      Fichier de la classe de gestion des stats des expensereport et notes de frais
  */
-include_once DOL_DOCUMENT_ROOT . '/core/class/stats.class.php';
-include_once DOL_DOCUMENT_ROOT . '/expensereport/class/expensereport.class.php';
+require_once DOL_DOCUMENT_ROOT . '/core/class/stats.class.php';
+require_once DOL_DOCUMENT_ROOT . '/expensereport/class/expensereport.class.php';
 
 /**
  *  Classe permettant la gestion des stats des expensereports et notes de frais
  */
 class ExpenseReportStats extends Stats
 {
-    public $table_element;
+    /**
+	 * @var string Name of table without prefix where object is stored
+	 */
+	public $table_element;
 
     var $socid;
     var $userid;
@@ -47,7 +50,7 @@ class ExpenseReportStats extends Stats
      * @param   int			$userid    Id user for filter
 	 * @return 	void
 	 */
-	function __construct($db, $socid=0, $userid=0)
+	function __construct($db, $socid = 0, $userid = 0)
 	{
 		global $conf, $user;
 
@@ -104,7 +107,7 @@ class ExpenseReportStats extends Stats
      *	@param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 *	@return	array				Array of values
 	 */
-	function getNbByMonth($year, $format=0)
+	function getNbByMonth($year, $format = 0)
 	{
 		$sql = "SELECT MONTH(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').") as dm, count(*)";
 		$sql.= " FROM ".$this->from;
@@ -126,7 +129,7 @@ class ExpenseReportStats extends Stats
      *	@param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 *	@return	array				Array of values
 	 */
-	function getAmountByMonth($year, $format=0)
+	function getAmountByMonth($year, $format = 0)
 	{
 		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').",'%m') as dm, sum(".$this->field.")";
 		$sql.= " FROM ".$this->from;

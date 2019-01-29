@@ -43,8 +43,15 @@ class Import
 	var $array_import_convertvalue;
 	var $array_import_run_sql_after;
 
-	var $error;
-	var $errors;
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
+
+	/**
+	 * @var string[] Error codes (or messages)
+	 */
+	public $errors = array();
 
 
 	/**
@@ -58,6 +65,7 @@ class Import
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Load description int this->array_import_module, this->array_import_fields, ... of an importable dataset
 	 *
@@ -65,8 +73,9 @@ class Import
 	 *  @param  	string	$filter		Load a particular dataset only. Index will start to 0.
  	 *  @return		int					<0 if KO, >0 if OK
 	 */
-	function load_arrays($user,$filter='')
+	function load_arrays($user, $filter = '')
 	{
+        // phpcs:enable
 		global $langs,$conf;
 
 		dol_syslog(get_class($this)."::load_arrays user=".$user->id." filter=".$filter);
@@ -176,6 +185,7 @@ class Import
 
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Build an import example file.
 	 *  Arrays this->array_export_xxx are already loaded for required datatoexport
@@ -186,8 +196,9 @@ class Import
 	 *  @param		string	$datatoimport		Dataset to import
 	 *  @return		string						<0 if KO, >0 if OK
 	 */
-	function build_example_file($model, $headerlinefields, $contentlinevalues,$datatoimport)
+	function build_example_file($model, $headerlinefields, $contentlinevalues, $datatoimport)
 	{
+        // phpcs:enable
 		global $conf,$langs;
 
 		$indice=0;
@@ -305,7 +316,7 @@ class Import
 	 *  @param      int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *	@return		int						<0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -349,5 +360,4 @@ class Import
 			return 1;
 		}
 	}
-
 }

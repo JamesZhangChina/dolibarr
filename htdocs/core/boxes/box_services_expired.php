@@ -35,7 +35,11 @@ class box_services_expired extends ModeleBoxes
     var $boxlabel="BoxOldestExpiredServices";
     var $depends = array("contrat");	// conf->propal->enabled
 
-    var $db;
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+
     var $param;
 
     var $info_box_head = array();
@@ -48,7 +52,7 @@ class box_services_expired extends ModeleBoxes
      *  @param  DoliDB  $db         Database handler
      *  @param  string  $param      More parameters
      */
-    function __construct($db,$param)
+    function __construct($db, $param)
     {
         global $user;
 
@@ -63,7 +67,7 @@ class box_services_expired extends ModeleBoxes
      *  @param	int		$max        Maximum number of records to load
      *  @return	void
      */
-    function loadBox($max=5)
+    function loadBox($max = 5)
     {
     	global $user, $langs, $db, $conf;
 
@@ -80,7 +84,7 @@ class box_services_expired extends ModeleBoxes
     	    // Select contracts with at least one expired service
 			$sql = "SELECT ";
     		$sql.= " c.rowid, c.ref, c.statut as fk_statut, c.date_contrat, c.ref_customer, c.ref_supplier,";
-			$sql.= " s.nom as name, s.rowid as socid,";
+			$sql.= " s.nom as name, s.rowid as socid, s.email, s.client, s.fournisseur, s.code_client, s.code_fournisseur, s.code_compta, s.code_compta_fournisseur,";
 			$sql.= " MIN(cd.date_fin_validite) as date_line, COUNT(cd.rowid) as nb_services";
     		$sql.= " FROM ".MAIN_DB_PREFIX."contrat as c, ".MAIN_DB_PREFIX."societe s, ".MAIN_DB_PREFIX."contratdet as cd";
             if (!$user->rights->societe->client->voir && !$user->societe_id) $sql.= ", ".MAIN_DB_PREFIX."societe_commerciaux as sc";
@@ -109,8 +113,15 @@ class box_services_expired extends ModeleBoxes
 
     				$objp = $db->fetch_object($resql);
 
-    				$thirdpartytmp->id = $objp->socid;
     				$thirdpartytmp->name = $objp->name;
+    				$thirdpartytmp->id = $objp->socid;
+    				$thirdpartytmp->email = $objp->email;
+    				$thirdpartytmp->client = $objp->client;
+    				$thirdpartytmp->fournisseur = $objp->fournisseur;
+    				$thirdpartytmp->code_client = $objp->code_client;
+    				$thirdpartytmp->code_fournisseur = $objp->code_fournisseur;
+    				$thirdpartytmp->code_compta = $objp->code_compta;
+    				$thirdpartytmp->code_compta_fournisseur = $objp->code_compta_fournisseur;
 
     				$contract->id = $objp->rowid;
     				$contract->ref = $objp->ref;
@@ -156,8 +167,6 @@ class box_services_expired extends ModeleBoxes
                                                         'maxlength'=>500,
                                                         'text' => ($db->error().' sql='.$sql));
     		}
-
-
     	}
     	else
     	{
@@ -176,10 +185,9 @@ class box_services_expired extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
         return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
     }
-
- }
+}
 

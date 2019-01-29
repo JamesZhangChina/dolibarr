@@ -59,9 +59,9 @@ class pdf_stdmovement extends ModelePDFMovement
 
 	/**
      * @var array() Minimum version of PHP required by module.
-	 * e.g.: PHP ≥ 5.3 = array(5, 3)
+	 * e.g.: PHP ≥ 5.4 = array(5, 4)
      */
-	public $phpmin = array(5, 2);
+	public $phpmin = array(5, 4);
 
 	/**
      * Dolibarr version of the loaded document
@@ -69,15 +69,46 @@ class pdf_stdmovement extends ModelePDFMovement
      */
 	public $version = 'dolibarr';
 
+    /**
+     * @var int page_largeur
+     */
     public $page_largeur;
+
+    /**
+     * @var int page_hauteur
+     */
     public $page_hauteur;
+
+    /**
+     * @var array format
+     */
     public $format;
+
+	/**
+     * @var int marge_gauche
+     */
 	public $marge_gauche;
+
+	/**
+     * @var int marge_droite
+     */
 	public $marge_droite;
+
+	/**
+     * @var int marge_haute
+     */
 	public $marge_haute;
+
+	/**
+     * @var int marge_basse
+     */
 	public $marge_basse;
 
-    public $emetteur;	// Objet societe qui emet
+    /**
+	 * Issuer
+	 * @var Societe
+	 */
+	public $emetteur;
 
 
 	/**
@@ -89,8 +120,8 @@ class pdf_stdmovement extends ModelePDFMovement
 	{
 		global $conf,$langs,$mysoc;
 
-		$langs->load("main");
-		$langs->load("companies");
+		// Load traductions files requiredby by page
+		$langs->loadLangs(array("main", "companies"));
 
 		$this->db = $db;
 		$this->name = "stdmouvement";
@@ -119,7 +150,7 @@ class pdf_stdmovement extends ModelePDFMovement
 		// Define position of columns
 		$this->wref = 15;
 		$this->posxidref = $this->marge_gauche;
-		$this->posxdatemouv = $this->marge_gauche+8;;
+		$this->posxdatemouv = $this->marge_gauche+8;
 		$this->posxdesc=37;
 		$this->posxlabel=50;
 		$this->posxtva=80;
@@ -149,6 +180,7 @@ class pdf_stdmovement extends ModelePDFMovement
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Function to build a document on disk using the generic odt module.
 	 *
@@ -160,21 +192,17 @@ class pdf_stdmovement extends ModelePDFMovement
 	 *  @param		int			$hideref			Do not show ref
 	 *	@return		int         					1 if OK, <=0 if KO
 	 */
-	function write_file($object,$outputlangs,$srctemplatepath,$hidedetails=0,$hidedesc=0,$hideref=0)
+	function write_file($object, $outputlangs, $srctemplatepath, $hidedetails = 0, $hidedesc = 0, $hideref = 0)
 	{
+        // phpcs:enable
 		global $user,$langs,$conf,$mysoc,$db,$hookmanager;
 
 		if (! is_object($outputlangs)) $outputlangs=$langs;
 		// For backward compatibility with FPDF, force output charset to ISO, because FPDF expect text to be encoded in ISO
 		if (! empty($conf->global->MAIN_USE_FPDF)) $outputlangs->charset_output='ISO-8859-1';
 
-		$outputlangs->load("main");
-		$outputlangs->load("dict");
-		$outputlangs->load("companies");
-		$outputlangs->load("bills");
-		$outputlangs->load("stocks");
-		$outputlangs->load("orders");
-		$outputlangs->load("deliveries");
+		// Load traductions files requiredby by page
+		$outputlangs->loadLangs(array("main", "dict", "companies", "bills", "stocks", "orders", "deliveries"));
 
 	/**
 	 * TODO: get from object
@@ -219,7 +247,7 @@ class pdf_stdmovement extends ModelePDFMovement
 
 		// fetch optionals attributes and labels
 		$extralabels = $extrafields->fetch_name_optionals_label('movement');
-		$search_array_options=$extrafields->getOptionalsFromPost($extralabels,'','search_');
+		$search_array_options=$extrafields->getOptionalsFromPost('movement','','search_');
 
 		$productlot=new ProductLot($db);
 		$productstatic=new Product($db);
@@ -259,7 +287,7 @@ class pdf_stdmovement extends ModelePDFMovement
 			else
 			$sql.= " AND date_format(m.datem, '%m') = '$month'";
 		}
-		else if ($year > 0)
+		elseif ($year > 0)
 		{
 			$sql.= " AND m.datem BETWEEN '".$db->idate(dol_get_first_day($year,1,false))."' AND '".$db->idate(dol_get_last_day($year,12,false))."'";
 		}
@@ -685,7 +713,6 @@ class pdf_stdmovement extends ModelePDFMovement
 					// Total Qty
 					$pdf->SetXY($this->postotalht, $curY);
 					$pdf->MultiCell($this->page_largeur-$this->marge_droite-$this->postotalht, 3, $totalunit, 0, 'R', 0);
-
 				}
 				else
 				{
@@ -791,7 +818,7 @@ class pdf_stdmovement extends ModelePDFMovement
 	 *   @param		string		$currency		Currency code
 	 *   @return	void
 	 */
-	function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop=0, $hidebottom=0, $currency='')
+	function _tableau(&$pdf, $tab_top, $tab_height, $nexY, $outputlangs, $hidetop = 0, $hidebottom = 0, $currency = '')
 	{
 	    global $conf;
 
@@ -905,7 +932,6 @@ class pdf_stdmovement extends ModelePDFMovement
 		$pdf->SetLineStyle(array('dash'=>'0','color'=>array(220,26,26)));
 		$pdf->line($this->marge_gauche, $tab_top+11, $this->page_largeur-$this->marge_droite, $tab_top+11);
 		$pdf->SetLineStyle(array('dash'=>0));
-
 	}
 
 	/**
@@ -918,16 +944,13 @@ class pdf_stdmovement extends ModelePDFMovement
 	 *  @param	string		$titlekey		Translation key to show as title of document
 	 *  @return	void
 	 */
-	function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $titlekey="")
+	function _pagehead(&$pdf, $object, $showaddress, $outputlangs, $titlekey = "")
 	{
 	    global $conf,$langs,$db,$hookmanager;
 
-	    $outputlangs->load("main");
-	    $outputlangs->load("bills");
-	    $outputlangs->load("propal");
-	    $outputlangs->load("companies");
-	    $outputlangs->load("orders");
-	    $outputlangs->load("stocks");
+	    // Load traductions files requiredby by page
+		$outputlangs->loadLangs(array("main", "propal", "companies", "bills", "orders", "stocks"));
+
 	    $default_font_size = pdf_getPDFFontSize($outputlangs);
 
 	    if ($object->type == 1) $titlekey='ServiceSheet';
@@ -1149,12 +1172,10 @@ class pdf_stdmovement extends ModelePDFMovement
 	 *      @param	int			$hidefreetext		1=Hide free text
 	 *      @return	int								Return height of bottom margin including footer text
 	 */
-	function _pagefoot(&$pdf,$object,$outputlangs,$hidefreetext=0)
+	function _pagefoot(&$pdf, $object, $outputlangs, $hidefreetext = 0)
 	{
 	    global $conf;
 	    $showdetails=$conf->global->MAIN_GENERATE_DOCUMENTS_SHOW_FOOT_DETAILS;
 	    return pdf_pagefoot($pdf,$outputlangs,'PRODUCT_FREE_TEXT',$this->emetteur,$this->marge_basse,$this->marge_gauche,$this->page_hauteur,$object,$showdetails,$hidefreetext);
 	}
-
 }
-

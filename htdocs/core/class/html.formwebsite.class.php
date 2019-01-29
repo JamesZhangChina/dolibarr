@@ -28,7 +28,11 @@
 class FormWebsite
 {
     private $db;
-    public $error;
+
+    /**
+	 * @var string Error code (or message)
+	 */
+	public $error;
 
 
     /**
@@ -39,8 +43,6 @@ class FormWebsite
     function __construct($db)
     {
         $this->db = $db;
-
-        return 1;
     }
 
 
@@ -52,7 +54,7 @@ class FormWebsite
      *    @param    int		$useempty          Show empty value or not
      *    @return	string					   Html component
      */
-    function selectWebsite($selected='',$htmlname='exportmodelid',$useempty=0)
+    function selectWebsite($selected = '', $htmlname = 'exportmodelid', $useempty = 0)
     {
     	$out='';
 
@@ -105,7 +107,7 @@ class FormWebsite
      *  @param  string  $moreattrib         More attributes on HTML select tag
      * 	@return	void
      */
-    function selectTypeOfContainer($htmlname, $selected='', $useempty=0, $moreattrib='')
+    function selectTypeOfContainer($htmlname, $selected = '', $useempty = 0, $moreattrib = '')
     {
     	global $langs, $conf, $user;
 
@@ -168,7 +170,7 @@ class FormWebsite
      *  @param  string  $moreattrib         More attributes on HTML select tag
      * 	@return	void
      */
-    function selectSampleOfContainer($htmlname, $selected='', $useempty=0, $moreattrib='')
+    function selectSampleOfContainer($htmlname, $selected = '', $useempty = 0, $moreattrib = '')
     {
     	global $langs, $conf, $user;
 
@@ -201,5 +203,4 @@ class FormWebsite
 
     	return $out;
     }
-
 }

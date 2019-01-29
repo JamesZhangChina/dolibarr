@@ -25,6 +25,7 @@ OrdersToBill=Commandes clients à délivrer
 OrdersInProcess=Commandes clients en traitement
 OrdersToProcess=Commandes clients à traiter
 SuppliersOrdersToProcess=Commandes fournisseurs à traiter
+SuppliersOrdersInProcess=Commandes fournisseurs en traitement
 StatusOrderCanceledShort=Annulée
 StatusOrderDraftShort=Brouillon
 StatusOrderValidatedShort=Validée
@@ -141,6 +142,7 @@ OrderByWWW=En ligne
 OrderByPhone=Téléphone
 # Documents models
 PDFEinsteinDescription=Modèle de commande complet (logo…)
+PDFEratostheneDescription=Modèle de commande complet (logo…)
 PDFEdisonDescription=Modèle de commande simple
 PDFProformaDescription=Modèle de facture proforma complet (logo…)
 CreateInvoiceForThisCustomer=Facturer commandes

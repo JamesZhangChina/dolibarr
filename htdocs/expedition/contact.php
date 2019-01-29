@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
  * Copyright (C) 2005-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,13 +103,13 @@ if ($action == 'addcontact' && $user->rights->expedition->creer)
 }
 
 // bascule du statut d'un contact
-else if ($action == 'swapstatut' && $user->rights->expedition->creer)
+elseif ($action == 'swapstatut' && $user->rights->expedition->creer)
 {
     $result=$objectsrc->swapContactStatus(GETPOST('ligne'));
 }
 
 // Efface un contact
-else if ($action == 'deletecontact' && $user->rights->expedition->creer)
+elseif ($action == 'deletecontact' && $user->rights->expedition->creer)
 {
 	$result = $objectsrc->delete_contact(GETPOST("lineid"));
 
@@ -265,9 +265,8 @@ if ($id > 0 || ! empty($ref))
 	    $res=@include dol_buildpath($reldir.'/contacts.tpl.php');
 	    if ($res) break;
 	}
-
 }
 
+// End of page
 llxFooter();
-
 $db->close();

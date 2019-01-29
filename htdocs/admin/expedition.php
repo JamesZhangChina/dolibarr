@@ -4,7 +4,7 @@
  * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
  * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
  * Copyright (C) 2004		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2011-2012	Juanjo Menent			<jmenent@2byte.es>
  * Copyright (C) 2011-2018	Philippe Grand			<philippe.grand@atoo-net.com>
  *
@@ -74,7 +74,7 @@ if ($action == 'updateMask')
 	}
 }
 
-else if ($action == 'set_param')
+elseif ($action == 'set_param')
 {
 	$freetext=GETPOST('SHIPPING_FREE_TEXT','none');	// No alpha here, we want exact string
 	$res = dolibarr_set_const($db, "SHIPPING_FREE_TEXT",$freetext,'chaine',0,'',$conf->entity);
@@ -98,7 +98,7 @@ else if ($action == 'set_param')
 	}
 }
 
-else if ($action == 'specimen')
+elseif ($action == 'specimen')
 {
 	$modele=GETPOST('module','alpha');
 
@@ -144,12 +144,12 @@ else if ($action == 'specimen')
 }
 
 // Activate a model
-else if ($action == 'set')
+elseif ($action == 'set')
 {
 	$ret = addDocumentModel($value, $type, $label, $scandir);
 }
 
-else if ($action == 'del')
+elseif ($action == 'del')
 {
 	$ret = delDocumentModel($value, $type);
 	if ($ret > 0)
@@ -159,7 +159,7 @@ else if ($action == 'del')
 }
 
 // Set default model
-else if ($action == 'setdoc')
+elseif ($action == 'setdoc')
 {
 	if (dolibarr_set_const($db, "EXPEDITION_ADDON_PDF",$value,'chaine',0,'',$conf->entity))
 	{
@@ -176,7 +176,7 @@ else if ($action == 'setdoc')
 	}
 }
 
-else if ($action == 'setmodel')
+elseif ($action == 'setmodel')
 {
 	dolibarr_set_const($db, "EXPEDITION_ADDON_NUMBER",$value,'chaine',0,'',$conf->entity);
 }
@@ -507,5 +507,6 @@ print '<div class="center"><input type="submit" class="button" value="'.$langs->
 
 print '</form>';
 
+// End of page
 llxFooter();
 $db->close();

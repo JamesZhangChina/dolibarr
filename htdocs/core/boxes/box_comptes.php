@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Christophe
  * Copyright (C) 2005-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2013      Juanjo Menent        <jmenent@2byte.es>
  * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
  *
@@ -38,7 +38,11 @@ class box_comptes extends ModeleBoxes
 	var $boxlabel="BoxCurrentAccounts";
 	var $depends = array("banque");     // Box active if module banque active
 
-	var $db;
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+    
 	var $param;
 	var $enabled = 1;
 
@@ -52,7 +56,7 @@ class box_comptes extends ModeleBoxes
 	 *  @param  DoliDB	$db      	Database handler
      *  @param	string	$param		More parameters
 	 */
-	function __construct($db,$param='')
+	function __construct($db, $param = '')
 	{
 		global $conf, $user;
 
@@ -71,7 +75,7 @@ class box_comptes extends ModeleBoxes
 	 *  @param	int		$max        Maximum number of records to load
      *  @return	void
 	 */
-	function loadBox($max=5)
+	function loadBox($max = 5)
 	{
 		global $user, $langs, $db, $conf;
 
@@ -170,7 +174,6 @@ class box_comptes extends ModeleBoxes
                 'text' => $langs->trans("ReadPermissionNotAllowed")
             );
         }
-
 	}
 
 	/**
@@ -181,10 +184,9 @@ class box_comptes extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
 		return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
 	}
-
 }
 

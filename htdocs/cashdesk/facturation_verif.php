@@ -51,7 +51,7 @@ switch($action)
 			{
 				$sql.= " AND p.rowid = ".$_POST['selProduit'];
 			}
-			else if ( $_POST['hdnSource'] == 'REF' )
+			elseif ( $_POST['hdnSource'] == 'REF' )
 			{
 				$sql.= " AND p.ref = '".$_POST['txtRef']."'";
 			}
@@ -163,7 +163,7 @@ switch($action)
 					{
 						$filtre = $ret['ref'];
 					}
-					else if ( $_POST['hdnSource'] == 'REF' )
+					elseif ( $_POST['hdnSource'] == 'REF' )
 					{
 						$filtre = $_POST['txtRef'];
 					}
@@ -216,7 +216,6 @@ switch($action)
 			$obj_facturation->remisePercent($_POST['txtRemise']);
 			$obj_facturation->ajoutArticle();	// This add an entry into $_SESSION['poscart']
 			// We update prixTotalTtc
-
 		}
 
 		$redirection = DOL_URL_ROOT.'/cashdesk/affIndex.php?menutpl=facturation';
@@ -227,7 +226,6 @@ switch($action)
 
 		$redirection = DOL_URL_ROOT.'/cashdesk/affIndex.php?menutpl=facturation';
 		break;
-
 }
 
 // We saved object obj_facturation

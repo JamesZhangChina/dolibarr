@@ -22,7 +22,7 @@
 
 if (! defined("NOCSRFCHECK"))    define("NOCSRFCHECK",'1');
 
-require_once '../master.inc.php';
+require '../master.inc.php';
 require_once NUSOAP_PATH.'/nusoap.php';        // Include SOAP
 require_once DOL_DOCUMENT_ROOT.'/core/lib/ws.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
@@ -181,7 +181,7 @@ function getVersions($authentication)
  * @param	string	$refname			Ref of object to check permission for external users (autodetect if not provided)
  * @return	void
  */
-function getDocument($authentication, $modulepart, $file, $refname='')
+function getDocument($authentication, $modulepart, $file, $refname = '')
 {
 	global $db,$conf,$langs,$mysoc;
 

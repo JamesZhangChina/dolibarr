@@ -30,9 +30,28 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/payment/modules_payment.php';
  */
 class mod_payment_ant extends ModeleNumRefPayments
 {
-	var $version='dolibarr';		// 'development', 'experimental', 'dolibarr'
-	var $error = '';
-	var $nom = 'Ant';
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';		// 'development', 'experimental', 'dolibarr'
+
+	/**
+	 * @var string Error message
+	 */
+	public $error = '';
+
+	/**
+	 * @var string Nom du modele
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Ant';
+
+	/**
+	 * @var string model name
+	 */
+	public $name='Ant';
 
 
     /**
@@ -42,7 +61,7 @@ class mod_payment_ant extends ModeleNumRefPayments
      */
 	function info()
     {
-    	global $conf,$langs;
+    	global $conf, $langs;
 
 		$langs->load("bills");
 
@@ -103,7 +122,7 @@ class mod_payment_ant extends ModeleNumRefPayments
 	 *  @param  Object		$object		Object we need next value for
 	 *  @return string      			Value if KO, <0 if KO
 	 */
-    function getNextValue($objsoc,$object)
+    function getNextValue($objsoc, $object)
     {
 		global $db,$conf;
 
@@ -124,6 +143,7 @@ class mod_payment_ant extends ModeleNumRefPayments
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return next free value
 	 *
@@ -131,10 +151,9 @@ class mod_payment_ant extends ModeleNumRefPayments
 	 * 	@param	string		$objforref	Object for number to search
 	 *  @return string      			Next free value
      */
-    function commande_get_num($objsoc,$objforref)
+    function commande_get_num($objsoc, $objforref)
     {
+        // phpcs:enable
         return $this->getNextValue($objsoc,$objforref);
     }
-
 }
-

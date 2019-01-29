@@ -3,6 +3,7 @@
  * Copyright (C) 2013-2016  Olivier Geffroy     <jeff@jeffinfo.com>
  * Copyright (C) 2013-2016  Florian Henry       <florian.henry@open-concept.pro>
  * Copyright (C) 2013-2018  Alexandre Spangaro  <aspangaro@zendsi.com>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -287,10 +288,10 @@ print '</td>';
 print '<td class="liste_titre"></td>';
 print '<td class="liste_titre" align="center">';
 print $langs->trans('From') . ': ';
-print $form->select_date($search_date_start, 'search_date_start', 0, 0, 1);
+print $form->selectDate($search_date_start, 'search_date_start', 0, 0, 1);
 print '<br>';
 print $langs->trans('to') . ': ';
-print $form->select_date($search_date_end, 'search_date_end', 0, 0, 1);
+print $form->selectDate($search_date_end, 'search_date_end', 0, 0, 1);
 print '</td>';
 print '<td class="liste_titre"><input type="text" size="7" class="flat" name="search_doc_ref" value="' . dol_escape_htmltag($search_doc_ref) . '"/></td>';
 print '<td class="liste_titre"><input type="text" size="7" class="flat" name="search_label_operation" value="' . dol_escape_htmltag($search_label_operation) . '"/></td>';
@@ -362,7 +363,7 @@ while ($i < min($num, $limit))
 
 	print '<tr class="oddeven">';
 	print '<td>&nbsp;</td>';
-	print '<td align="right"><a href="./card.php?piece_num=' . $line->piece_num . '">'.$line->piece_num.'</a></td>';
+	print '<td class="right"><a href="./card.php?piece_num=' . $line->piece_num . '">'.$line->piece_num.'</a></td>';
 	print '<td align="center">' . dol_print_date($line->doc_date, 'day') . '</td>';
 
 	// TODO Add a link according to doc_type and fk_doc
@@ -377,8 +378,8 @@ while ($i < min($num, $limit))
 	print strlen(length_accounta($line->subledger_account)) == 0 ? '<td>' . $line->label_operation . '</td>' : '<td>' . $line->label_operation . '<br><span style="font-size:0.8em">(' . length_accounta($line->subledger_account) . ')</span></td>';
 
 
-	print '<td align="right">' . ($line->debit ? price($line->debit) :''). '</td>';
-	print '<td align="right">' . ($line->credit ? price($line->credit) : '') . '</td>';
+	print '<td class="right">' . ($line->debit ? price($line->debit) :''). '</td>';
+	print '<td class="right">' . ($line->credit ? price($line->credit) : '') . '</td>';
 
 	$accountingjournal = new AccountingJournal($db);
 	$result = $accountingjournal->fetch('',$line->code_journal);
@@ -421,5 +422,6 @@ print '</tr>';
 print "</table>";
 print '</form>';
 
+// End of page
 llxFooter();
 $db->close();

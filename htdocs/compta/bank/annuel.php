@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2013      Charles-Fr BENKE     <charles.fr@benke.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
  *		\brief       Page to report input-output of a bank account
  */
 
-require('../../main.inc.php');
+require '../../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/bank.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/dolgraph.class.php';
@@ -232,7 +232,7 @@ for ($mois = 1 ; $mois < 13 ; $mois++)
 print '<tr class="liste_total"><td><b>'.$langs->trans("Total")."</b></td>";
 for ($annee = $year_start ; $annee <= $year_end ; $annee++)
 {
-	print '<td align="right"><b>'.price($totsorties[$annee]).'</b></td><td align="right"><b>'.price($totentrees[$annee]).'</b></td>';
+	print '<td class="right"><b>'.price($totsorties[$annee]).'</b></td><td class="right"><b>'.price($totentrees[$annee]).'</b></td>';
 }
 print "</tr>\n";
 
@@ -339,7 +339,6 @@ else
 				$i++;
 			}
 			$db->free($resql);
-
 		}
 		else
 		{
@@ -494,5 +493,6 @@ else
 
 print "\n</div><br>\n";
 
+// End of page
 llxFooter();
 $db->close();

@@ -2,7 +2,7 @@
 /* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2004      Eric Seigne          <eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2014      Marcos García        <marcosgdf@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,8 +37,12 @@ require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';   // Requ
  */
 abstract class ModelePDFFactures extends CommonDocGenerator
 {
-	var $error='';
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return list of active generation modules
 	 *
@@ -46,8 +50,9 @@ abstract class ModelePDFFactures extends CommonDocGenerator
      *  @param  integer	$maxfilenamelength  Max length of value to show
      *  @return	array						List of templates
 	 */
-	static function liste_modeles($db,$maxfilenamelength=0)
+	static function liste_modeles($db, $maxfilenamelength = 0)
 	{
+        // phpcs:enable
 		global $conf;
 
 		$type='invoice';
@@ -61,11 +66,14 @@ abstract class ModelePDFFactures extends CommonDocGenerator
 }
 
 /**
- *	Classe mere des modeles de numerotation des references de facture
+ *  Classe mere des modeles de numerotation des references de facture
  */
 abstract class ModeleNumRefFactures
 {
-	var $error='';
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
 	/**
 	 * Return if a module can be used or not
@@ -119,7 +127,7 @@ abstract class ModeleNumRefFactures
 	 * @param   Facture		$facture	Objet facture
 	 * @return  string      			Value
 	 */
-	function getNextValue($objsoc,$facture)
+	function getNextValue($objsoc, $facture)
 	{
 		global $langs;
 		return $langs->trans("NotAvailable");

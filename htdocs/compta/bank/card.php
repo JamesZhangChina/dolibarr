@@ -2,10 +2,11 @@
 /* Copyright (C) 2002-2003	Rodolphe Quiedeville	<rodolphe@quiedeville.org>
  * Copyright (C) 2003		Jean-Louis Bergamo		<jlb@j1b.org>
  * Copyright (C) 2004-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2009	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2014-2017	Alexandre Spangaro		<aspangaro@zendsi.com>
  * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
  * Copyright (C) 2016		Marcos García			<marcosgdf@gmail.com>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@
  *		\brief      Page to create/view a bank account
  */
 
-require('../../main.inc.php');
+require '../../main.inc.php';
 require_once DOL_DOCUMENT_ROOT . '/core/lib/bank.lib.php';
 require_once DOL_DOCUMENT_ROOT . '/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT . '/core/class/html.formcompany.class.php';
@@ -59,7 +60,8 @@ $extrafields = new ExtraFields($db);
 // fetch optionals attributes and labels
 $extralabels=$extrafields->fetch_name_optionals_label($object->table_element);
 
-
+// Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
+$hookmanager->initHooks(array('bankcard','globalcard'));
 
 /*
  * Actions
@@ -284,7 +286,7 @@ if ($action == 'confirm_delete' && $_POST["confirm"] == "yes" && $user->rights->
 $form = new Form($db);
 $formbank = new FormBank($db);
 $formcompany = new FormCompany($db);
-if (! empty($conf->accounting->enabled)) $formaccounting = New FormAccounting($db);
+if (! empty($conf->accounting->enabled)) $formaccounting = new FormAccounting($db);
 
 $countrynotdefined=$langs->trans("ErrorSetACountryFirst").' ('.$langs->trans("SeeAbove").')';
 
@@ -362,7 +364,7 @@ if ($action == 'create')
 	{
 		$selectedcode=$_POST["account_country_id"]?$_POST["account_country_id"]:$object->country_code;
 	}
-	else if (empty($selectedcode)) $selectedcode=$mysoc->country_code;
+	elseif (empty($selectedcode)) $selectedcode=$mysoc->country_code;
 	$object->country_code = getCountry($selectedcode, 2);	// Force country code on account to have following field on bank fields matching country rules
 
 	print '<tr><td class="fieldrequired">'.$langs->trans("BankAccountCountry").'</td>';
@@ -431,7 +433,7 @@ if ($action == 'create')
 
 	print '<tr><td>'.$langs->trans("Date").'</td>';
 	print '<td>';
-	$form->select_date('', 're', 0, 0, 0, 'formsoc');
+	print $form->selectDate('', 're', 0, 0, 0, 'formsoc');
 	print '</td></tr>';
 
 	print '<tr><td>'.$langs->trans("BalanceMinimalAllowed").'</td>';
@@ -574,7 +576,6 @@ else
 		if ($action == 'delete')
 		{
 			$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id,$langs->trans("DeleteAccount"),$langs->trans("ConfirmDeleteAccount"),"confirm_delete");
-
 		}
 
 		// Print form confirm
@@ -590,7 +591,7 @@ else
 		print '<div class="fichehalfleft">';
 		print '<div class="underbanner clearboth"></div>';
 
-		print '<table class="border" width="100%">';
+		print '<table class="border tableforfield" width="100%">';
 
 		// Type
 		print '<tr><td class="titlefield">'.$langs->trans("AccountType").'</td>';
@@ -609,7 +610,7 @@ else
 		print '<td>';
 		$conciliate=$object->canBeConciliated();
 		if ($conciliate == -2) print $langs->trans("No").' ('.$langs->trans("CashAccount").')';
-		else if ($conciliate == -3) print $langs->trans("No").' ('.$langs->trans("Closed").')';
+		elseif ($conciliate == -3) print $langs->trans("No").' ('.$langs->trans("Closed").')';
 		else print ($object->rappro==1 ? $langs->trans("Yes") : ($langs->trans("No").' ('.$langs->trans("ConciliationDisabled").')'));
 		print '</td></tr>';
 
@@ -657,7 +658,7 @@ else
 		print '<div class="ficheaddleft">';
 		print '<div class="underbanner clearboth"></div>';
 
-		print '<table class="border centpercent">';
+		print '<table class="border tableforfield centpercent">';
 
 		// Categories
 		if ($conf->categorie->enabled) {
@@ -676,7 +677,7 @@ else
 
 			print '<div class="underbanner clearboth"></div>';
 
-			print '<table class="border centpercent">';
+			print '<table class="border tableforfield centpercent">';
 
 			print '<tr class="liste_titre"><td class="titlefield">'.$langs->trans("BankName").'</td>';
 			print '<td>'.$object->bank.'</td></tr>';
@@ -764,7 +765,6 @@ else
 		}
 
 		print '</div>';
-
 	}
 
 	/* ************************************************************************** */
@@ -846,7 +846,7 @@ else
 		$object->country_id=$object->country_id?$object->country_id:$mysoc->country_id;
 		$selectedcode=$object->country_code;
 		if (isset($_POST["account_country_id"])) $selectedcode=$_POST["account_country_id"];
-		else if (empty($selectedcode)) $selectedcode=$mysoc->country_code;
+		elseif (empty($selectedcode)) $selectedcode=$mysoc->country_code;
 		$object->country_code = getCountry($selectedcode, 2);	// Force country code on account to have following field on bank fields matching country rules
 
 		print '<tr><td class="fieldrequired">'.$langs->trans("Country").'</td>';
@@ -872,7 +872,7 @@ else
 		print '<td>';
 		$conciliate=$object->canBeConciliated();
 		if ($conciliate == -2) print $langs->trans("No").' ('.$langs->trans("CashAccount").')';
-		else if ($conciliate == -3) print $langs->trans("No").' ('.$langs->trans("Closed").')';
+		elseif ($conciliate == -3) print $langs->trans("No").' ('.$langs->trans("Closed").')';
 		else print '<input type="checkbox" class="flat" name="norappro"'.(($conciliate > 0)?'':' checked="checked"').'"> '.$langs->trans("DisableConciliation");
 		print '</td></tr>';
 
@@ -1031,8 +1031,8 @@ else
 
 		print '</form>';
 	}
-
 }
 
+// End of page
 llxFooter();
 $db->close();

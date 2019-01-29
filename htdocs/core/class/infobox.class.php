@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
  * Copyright (C) 2004-2012	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class InfoBox
      *  @param  int         $includehidden  Include also hidden boxes
      *  @return array       	        	Array of boxes
      */
-    static function listBoxes($db, $mode, $zone, $user=null, $excludelist=array(), $includehidden=1)
+    static function listBoxes($db, $mode, $zone, $user = null, $excludelist = array(), $includehidden = 1)
     {
         global $conf;
 
@@ -186,7 +186,7 @@ class InfoBox
      *  @param  int     $userid     	Id of user
      *  @return int                   	<0 if KO, 0=Nothing done, > 0 if OK
      */
-    static function saveboxorder($db, $zone,$boxorder,$userid=0)
+    static function saveboxorder($db, $zone, $boxorder, $userid = 0)
     {
         global $conf;
 
@@ -281,6 +281,5 @@ class InfoBox
             return -1;
         }
     }
-
 }
 

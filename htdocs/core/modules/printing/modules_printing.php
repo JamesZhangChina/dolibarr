@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2014-2015 Frederic France      <frederic.france@free.fr>
+ * Copyright (C) 2014-2018 Frederic France      <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,15 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
  */
 class PrintingDriver
 {
-    var $db;
-    var $error;
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+
+    /**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
 
     /**
@@ -52,7 +59,7 @@ class PrintingDriver
      *  @param  integer  $maxfilenamelength  Max length of value to show
      *  @return array                       List of drivers
     */
-    static function listDrivers($db,$maxfilenamelength=0)
+    static function listDrivers($db, $maxfilenamelength = 0)
     {
         global $conf;
 
@@ -81,6 +88,4 @@ class PrintingDriver
         if ($langs->trans($transstring) != $transstring) return $langs->trans($transstring);
         else return $this->desc;
     }
-
 }
-

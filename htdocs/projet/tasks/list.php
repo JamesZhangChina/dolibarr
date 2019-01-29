@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2006-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2006-2010 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2006-2010 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2018	   Ferran Marcet        <fmarcet@2byte.es>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
  *	\brief      List all task of a project
  */
 
-require ("../../main.inc.php");
+require "../../main.inc.php";
 require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
 require_once DOL_DOCUMENT_ROOT.'/projet/class/task.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/project.lib.php';
@@ -42,7 +42,7 @@ $toselect = GETPOST('toselect', 'array');
 
 $id=GETPOST('id','int');
 
-$search_all=GETPOST('search_all', 'alphanohtml');
+$search_all=trim((GETPOST('search_all', 'alphanohtml')!='')?GETPOST('search_all', 'alphanohtml'):GETPOST('sall', 'alphanohtml'));
 $search_categ=GETPOST("search_categ",'alpha');
 $search_project=GETPOST('search_project');
 if (! isset($_GET['search_projectstatus']) && ! isset($_POST['search_projectstatus']))
@@ -79,7 +79,7 @@ $extrafields = new ExtraFields($db);
 
 // fetch optionals attributes and labels
 $extralabels = $extrafields->fetch_name_optionals_label('projet_task');
-$search_array_options=$extrafields->getOptionalsFromPost($extralabels,'','search_');
+$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
 
 // Security check
 $socid=0;
@@ -284,12 +284,12 @@ if ($search_smonth > 0)
 {
 	if ($search_syear > 0 && empty($search_sday))
 		$sql.= " AND t.dateo BETWEEN '".$db->idate(dol_get_first_day($search_syear,$search_smonth,false))."' AND '".$db->idate(dol_get_last_day($search_syear,$search_smonth,false))."'";
-		else if ($search_syear > 0 && ! empty($search_sday))
+		elseif ($search_syear > 0 && ! empty($search_sday))
 			$sql.= " AND t.dateo BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $search_smonth, $search_sday, $search_syear))."' AND '".$db->idate(dol_mktime(23, 59, 59, $search_smonth, $search_sday, $search_syear))."'";
 			else
 				$sql.= " AND date_format(t.dateo, '%m') = '".$search_smonth."'";
 }
-else if ($search_syear > 0)
+elseif ($search_syear > 0)
 {
 	$sql.= " AND t.dateo BETWEEN '".$db->idate(dol_get_first_day($search_syear,1,false))."' AND '".$db->idate(dol_get_last_day($search_syear,12,false))."'";
 }
@@ -297,12 +297,12 @@ if ($search_emonth > 0)
 {
 	if ($search_eyear > 0 && empty($search_eday))
 		$sql.= " AND t.datee BETWEEN '".$db->idate(dol_get_first_day($search_eyear,$search_emonth,false))."' AND '".$db->idate(dol_get_last_day($search_eyear,$search_emonth,false))."'";
-		else if ($search_eyear > 0 && ! empty($search_eday))
+		elseif ($search_eyear > 0 && ! empty($search_eday))
 			$sql.= " AND t.datee BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $search_emonth, $search_eday, $search_eyear))."' AND '".$db->idate(dol_mktime(23, 59, 59, $search_emonth, $search_eday, $search_eyear))."'";
 			else
 				$sql.= " AND date_format(t.datee, '%m') = '".$search_emonth."'";
 }
-else if ($search_eyear > 0)
+elseif ($search_eyear > 0)
 {
 	$sql.= " AND t.datee BETWEEN '".$db->idate(dol_get_first_day($search_eyear,1,false))."' AND '".$db->idate(dol_get_last_day($search_eyear,12,false))."'";
 }
@@ -336,10 +336,9 @@ if (empty($conf->global->MAIN_DISABLE_FULL_SCANLIST))
 }
 
 $sql.= $db->plimit($limit + 1,$offset);
-//print $sql;
 
 dol_syslog("list allowed project", LOG_DEBUG);
-//print $sql;
+
 $resql = $db->query($sql);
 if (! $resql)
 {
@@ -819,8 +818,8 @@ if (isset($totalarray['totaldurationeffectivefield']) || isset($totalarray['tota
 		$i++;
 		if ($i == 1)
 		{
-			if ($num < $limit && empty($offset)) print '<td align="left">'.$langs->trans("Total").'</td>';
-			else print '<td align="left">'.$langs->trans("Totalforthispage").'</td>';
+			if ($num < $limit && empty($offset)) print '<td class="left">'.$langs->trans("Total").'</td>';
+			else print '<td class="left">'.$langs->trans("Totalforthispage").'</td>';
 		}
 		elseif ($totalarray['totalplannedworkloadfield'] == $i) print '<td align="center">'.convertSecondToTime($totalarray['totalplannedworkload'],$plannedworkloadoutputformat).'</td>';
 		elseif ($totalarray['totaldurationeffectivefield'] == $i) print '<td align="center">'.convertSecondToTime($totalarray['totaldurationeffective'],$timespentoutputformat).'</td>';
@@ -841,5 +840,6 @@ print '</div>';
 
 print '</form>';
 
+// End of page
 llxFooter();
 $db->close();

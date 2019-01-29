@@ -24,12 +24,13 @@
  * @param	string	$ref		Ref of object
  * @return	string				Url string
  */
-function showOnlineSignatureUrl($type,$ref)
+function showOnlineSignatureUrl($type, $ref)
 {
 	global $conf, $langs;
 
-	$langs->load("payment");
-	$langs->load("paybox");
+	// Load translation files required by the page
+    $langs->loadLangs(array("payment","paybox"));
+
 	$servicename='Online';
 
 	$out = img_picto('','object_globe.png').' '.$langs->trans("ToOfferALinkForOnlineSignature",$servicename).'<br>';
@@ -48,7 +49,7 @@ function showOnlineSignatureUrl($type,$ref)
  * @param	string	$ref		Ref of object
  * @return	string				Url string
  */
-function getOnlineSignatureUrl($mode, $type, $ref='')
+function getOnlineSignatureUrl($mode, $type, $ref = '')
 {
 	global $conf, $db, $langs;
 

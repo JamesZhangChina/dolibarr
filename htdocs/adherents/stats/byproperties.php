@@ -44,8 +44,8 @@ $year = strftime("%Y", time());
 $startyear=$year-2;
 $endyear=$year;
 
-$langs->load("members");
-$langs->load("companies");
+// Load translation files required by the page
+$langs->loadLangs(array("companies","members"));
 
 
 /*
@@ -119,7 +119,7 @@ else
 print '<table class="liste" width="100%">';
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("Nature").'</td>';
-print '<td align="right">'.$langs->trans("NbOfMembers").'</td>';
+print '<td class="right">'.$langs->trans("NbOfMembers").'</td>';
 print '<td align="center">'.$langs->trans("LatestSubscriptionDate").'</td>';
 print '</tr>';
 
@@ -132,7 +132,7 @@ foreach ($data as $val)
 	$year = $val['year'];
 	print '<tr class="oddeven">';
 	print '<td>'.$memberstatic->getmorphylib($val['label']).'</td>';
-	print '<td align="right">'.$val['nb'].'</td>';
+	print '<td class="right">'.$val['nb'].'</td>';
 	print '<td align="center">'.dol_print_date($val['lastdate'],'dayhour').'</td>';
 	print '</tr>';
 	$oldyear=$year;
@@ -143,7 +143,6 @@ print '</table>';
 
 dol_fiche_end();
 
-
+// End of page
 llxFooter();
-
 $db->close();

@@ -29,10 +29,30 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/contract/modules_contract.php';
  */
 class mod_contract_magre extends ModelNumRefContracts
 {
-	var $version='dolibarr';
-	var $error = '';
-	var $nom = 'Magre';
-	var $code_auto=1;
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';
+
+	/**
+	 * @var string Error message
+	 */
+	public $error = '';
+
+	/**
+	 * @var string nom
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Magre';
+
+	/**
+	 * @var string name
+	 */
+	public $name='Magre';
+
+	public $code_auto=1;
 
 	/**
 	 *	Return default description of numbering model
@@ -98,7 +118,7 @@ class mod_contract_magre extends ModelNumRefContracts
 	 *	@param	Object		$contract	contract object
 	 *	@return string      			Value if OK, 0 if KO
 	 */
-    function getNextValue($objsoc,$contract)
+    function getNextValue($objsoc, $contract)
     {
 		global $db,$conf;
 
@@ -117,17 +137,17 @@ class mod_contract_magre extends ModelNumRefContracts
 		return  $numFinal;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
-	 *	Return next value
+	 *  Return next value
 	 *
 	 *	@param	Societe		$objsoc     third party object
 	 *	@param	Object		$objforref	contract object
 	 *	@return string      			Value if OK, 0 if KO
 	 */
-    function contract_get_num($objsoc,$objforref)
+    function contract_get_num($objsoc, $objforref)
     {
+        // phpcs:enable
         return $this->getNextValue($objsoc,$objforref);
     }
-
 }
-

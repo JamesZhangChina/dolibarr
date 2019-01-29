@@ -256,6 +256,7 @@ print '</table>';
 print '</form>';
 print '<br><br>';
 
+print '<div class="div-table-responsive-no-min">';
 print '<table class="border" width="100%">';
 print '<tr height="24">';
 print '<td align="center">'.$langs->trans("Year").'</td>';
@@ -273,22 +274,22 @@ foreach ($data as $val)
 		$oldyear--;
 		print '<tr height="24">';
 		print '<td align="center"><a href="'.$_SERVER["PHP_SELF"].'?year='.$oldyear.'&amp;mode='.$mode.'">'.$oldyear.'</a></td>';
-		print '<td align="right">0</td>';
-		print '<td align="right">0</td>';
-		print '<td align="right">0</td>';
+		print '<td class="right">0</td>';
+		print '<td class="right">0</td>';
+		print '<td class="right">0</td>';
 		print '</tr>';
 	}
 	print '<tr height="24">';
 	print '<td align="center"><a href="'.$_SERVER["PHP_SELF"].'?year='.$year.'&amp;mode='.$mode.'">'.$year.'</a></td>';
-	print '<td align="right">'.$val['nb'].'</td>';
-	print '<td align="right">'.price(price2num($val['total'],'MT'),1).'</td>';
-	print '<td align="right">'.price(price2num($val['avg'],'MT'),1).'</td>';
+	print '<td class="right">'.$val['nb'].'</td>';
+	print '<td class="right">'.price(price2num($val['total'],'MT'),1).'</td>';
+	print '<td class="right">'.price(price2num($val['avg'],'MT'),1).'</td>';
 	print '</tr>';
 	$oldyear=$year;
 }
 
 print '</table>';
-
+print '</div>';
 
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
 
@@ -312,7 +313,6 @@ print '<div style="clear:both"></div>';
 
 dol_fiche_end();
 
-
+// End of page
 llxFooter();
-
 $db->close();

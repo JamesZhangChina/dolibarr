@@ -1,11 +1,11 @@
 <?php
-/* Copyright (c) 2005		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (c) 2005-2018	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (c) 2005-2018	Regis Houssin		<regis.houssin@capnetworks.com>
- * Copyright (C) 2012		Florian Henry		<florian.henry@open-concept.pro>
- * Copyright (C) 2014		Juanjo Menent		<jmenent@2byte.es>
- * Copyright (C) 2014		Alexis Algoud		<alexis@atm-consulting.fr>
- * Copyright (C) 2018           Nicolas ZABOURI		<info@inovea-conseil.com>
+/* Copyright (c) 2005		Rodolphe Quiedeville <rodolphe@quiedeville.org>
+ * Copyright (c) 2005-2018	Laurent Destailleur	 <eldy@users.sourceforge.net>
+ * Copyright (c) 2005-2018	Regis Houssin		 <regis.houssin@inodbox.com>
+ * Copyright (C) 2012		Florian Henry		 <florian.henry@open-concept.pro>
+ * Copyright (C) 2014		Juanjo Menent		 <jmenent@2byte.es>
+ * Copyright (C) 2014		Alexis Algoud		 <alexis@atm-consulting.fr>
+ * Copyright (C) 2018       Nicolas ZABOURI		 <info@inovea-conseil.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  */
 
 require_once DOL_DOCUMENT_ROOT.'/core/class/commonobject.class.php';
-if (! empty($conf->ldap->enabled)) require_once (DOL_DOCUMENT_ROOT."/core/class/ldap.class.php");
+if (! empty($conf->ldap->enabled)) require_once DOL_DOCUMENT_ROOT."/core/class/ldap.class.php";
 
 
 /**
@@ -35,23 +35,49 @@ if (! empty($conf->ldap->enabled)) require_once (DOL_DOCUMENT_ROOT."/core/class/
  */
 class UserGroup extends CommonObject
 {
-	public $element='usergroup';
-	public $table_element='usergroup';
-	public $ismultientitymanaged = 1;	// 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
-    public $picto='group';
-	public $entity;		// Entity of group
-
-
-	public $name;			// Name of group
 	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='usergroup';
+
+	/**
+	 * @var string Name of table without prefix where object is stored
+	 */
+	public $table_element='usergroup';
+
+	/**
+	 * 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
+	 * @var int
+	 */
+	public $ismultientitymanaged = 1;
+
+    public $picto='group';
+
+	/**
+	 * @var int Entity of group
+	 */
+	public $entity;
+
+	/**
+	 * @var string
 	 * @deprecated
 	 * @see name
 	 */
-	public $nom;			// Name of group
+	public $nom;
+
+	/**
+	 * @var string name
+	 */
+	public $name;			// Name of group
+
 	public $globalgroup;	// Global group
+
 	public $datec;			// Creation date of group
+
 	public $datem;			// Modification date of group
+
 	public $note;			// Description
+
 	public $members=array();	// Array of users
 
 	public $nb_rights;					// Number of rights granted to the user
@@ -81,7 +107,7 @@ class UserGroup extends CommonObject
 	 *  @param		boolean	$load_members	Load all members of the group
 	 *	@return		int						<0 if KO, >0 if OK
 	 */
-	function fetch($id='', $groupname='', $load_members = true)
+	function fetch($id = '', $groupname = '', $load_members = true)
 	{
 		global $conf;
 
@@ -198,7 +224,7 @@ class UserGroup extends CommonObject
 	 *  @param	int		$mode				0=Return array of user instance, 1=Return array of users id only
 	 * 	@return	mixed						Array of users or -1 on error
 	 */
-	function listUsersForGroup($excludefilter='', $mode=0)
+	function listUsersForGroup($excludefilter = '', $mode = 0)
 	{
 		global $conf, $user;
 
@@ -263,7 +289,7 @@ class UserGroup extends CommonObject
 	 *    @param	int		$entity		Entity to use
 	 *    @return	int					> 0 if OK, < 0 if KO
 	 */
-	function addrights($rid, $allmodule='', $allperms='', $entity=0)
+	function addrights($rid, $allmodule = '', $allperms = '', $entity = 0)
 	{
 		global $conf, $user, $langs;
 
@@ -300,7 +326,7 @@ class UserGroup extends CommonObject
 			$whereforadd="id=".$this->db->escape($rid);
 			// Ajout des droits induits
 			if ($subperms)   $whereforadd.=" OR (module='$module' AND perms='$perms' AND (subperms='lire' OR subperms='read'))";
-			else if ($perms) $whereforadd.=" OR (module='$module' AND (perms='lire' OR perms='read') AND subperms IS NULL)";
+			elseif ($perms) $whereforadd.=" OR (module='$module' AND (perms='lire' OR perms='read') AND subperms IS NULL)";
 
 			// Pour compatibilite, si lowid = 0, on est en mode ajout de tout
 			// TODO A virer quand sera gere par l'appelant
@@ -308,8 +334,18 @@ class UserGroup extends CommonObject
 		}
 		else {
 			// Where pour la liste des droits a ajouter
-			if (! empty($allmodule)) $whereforadd="module='".$this->db->escape($allmodule)."'";
-			if (! empty($allperms))  $whereforadd=" AND perms='".$this->db->escape($allperms)."'";
+			if (! empty($allmodule))
+			{
+				if ($allmodule == 'allmodules')
+				{
+					$whereforadd='allmodules';
+				}
+				else
+				{
+					$whereforadd="module='".$this->db->escape($allmodule)."'";
+					if (! empty($allperms))  $whereforadd.=" AND perms='".$this->db->escape($allperms)."'";
+				}
+			}
 		}
 
 		// Ajout des droits de la liste whereforadd
@@ -318,8 +354,10 @@ class UserGroup extends CommonObject
 			//print "$module-$perms-$subperms";
 			$sql = "SELECT id";
 			$sql.= " FROM ".MAIN_DB_PREFIX."rights_def";
-			$sql.= " WHERE $whereforadd";
-			$sql.= " AND entity = ".$entity;
+			$sql.= " WHERE entity = ".$entity;
+			if (! empty($whereforadd) && $whereforadd != 'allmodules') {
+				$sql.= " AND ".$whereforadd;
+			}
 
 			$result=$this->db->query($sql);
 			if ($result)
@@ -365,7 +403,6 @@ class UserGroup extends CommonObject
 			$this->db->commit();
 			return 1;
 		}
-
 	}
 
 
@@ -378,7 +415,7 @@ class UserGroup extends CommonObject
 	 *    @param	int		$entity		Entity to use
 	 *    @return	int					> 0 if OK, < 0 if OK
 	 */
-	function delrights($rid, $allmodule='', $allperms='', $entity=0)
+	function delrights($rid, $allmodule = '', $allperms = '', $entity = 0)
 	{
 		global $conf, $user, $langs;
 
@@ -422,8 +459,18 @@ class UserGroup extends CommonObject
 		}
 		else {
 			// Where pour la liste des droits a supprimer
-			if (! empty($allmodule)) $wherefordel="module='".$this->db->escape($allmodule)."'";
-			if (! empty($allperms))  $wherefordel=" AND perms='".$this->db->escape($allperms)."'";
+			if (! empty($allmodule))
+			{
+				if ($allmodule == 'allmodules')
+				{
+					$wherefordel='allmodules';
+				}
+				else
+				{
+					$wherefordel="module='".$this->db->escape($allmodule)."'";
+					if (! empty($allperms))  $whereforadd.=" AND perms='".$this->db->escape($allperms)."'";
+				}
+			}
 		}
 
 		// Suppression des droits de la liste wherefordel
@@ -432,8 +479,10 @@ class UserGroup extends CommonObject
 			//print "$module-$perms-$subperms";
 			$sql = "SELECT id";
 			$sql.= " FROM ".MAIN_DB_PREFIX."rights_def";
-			$sql.= " WHERE $wherefordel";
-			$sql.= " AND entity = ".$entity;
+			$sql.= " WHERE entity = ".$entity;
+			if (! empty($wherefordel) && $wherefordel != 'allmodules') {
+				$sql.= " AND ".$wherefordel;
+			}
 
 			$result=$this->db->query($sql);
 			if ($result)
@@ -479,7 +528,6 @@ class UserGroup extends CommonObject
 			$this->db->commit();
 			return 1;
 		}
-
 	}
 
 
@@ -489,7 +537,7 @@ class UserGroup extends CommonObject
 	 *  @param      string	$moduletag	 	Name of module we want permissions ('' means all)
 	 *	@return		int						<0 if KO, >0 if OK
 	 */
-	function getrights($moduletag='')
+	function getrights($moduletag = '')
 	{
 		global $conf;
 
@@ -569,13 +617,14 @@ class UserGroup extends CommonObject
 	}
 
 	/**
-	 *        Efface un groupe de la base
+	 *	Delete a group
 	 *
-	 *        @return     <0 if KO, > 0 if OK
+	 *	@param	User	$user		User that delete
+	 *	@return     				<0 if KO, > 0 if OK
 	 */
-	function delete()
+	function delete(User $user)
 	{
-		global $user,$conf,$langs;
+		global $conf,$langs;
 
 		$error=0;
 
@@ -627,7 +676,7 @@ class UserGroup extends CommonObject
 	 *	@param		int		$notrigger	0=triggers enabled, 1=triggers disabled
 	 *	@return     int					<0 if KO, >=0 if OK
 	 */
-	function create($notrigger=0)
+	function create($notrigger = 0)
 	{
 		global $user, $conf, $langs, $hookmanager;
 
@@ -698,7 +747,7 @@ class UserGroup extends CommonObject
 	 *      @param      int		$notrigger	    0=triggers enabled, 1=triggers disabled
 	 *    	@return     int						<0 if KO, >=0 if OK
 	 */
-	function update($notrigger=0)
+	function update($notrigger = 0)
 	{
 		global $user, $conf, $langs, $hookmanager;
 
@@ -768,11 +817,12 @@ class UserGroup extends CommonObject
 	 *  @param	int		$mode          0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return	string 			       Label of status
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
 	    return $this->LibStatut(0,$mode);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Renvoi le libelle d'un statut donne
 	 *
@@ -780,8 +830,9 @@ class UserGroup extends CommonObject
 	 *  @param  int		$mode          	0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return string 			       	Label of status
 	 */
-	function LibStatut($statut,$mode=0)
+	function LibStatut($statut, $mode = 0)
 	{
+        // phpcs:enable
 	    global $langs;
 	    $langs->load('users');
 	    return '';
@@ -798,7 +849,7 @@ class UserGroup extends CommonObject
 	 *  @param  int     $save_lastsearch_value    	-1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
 	 *	@return	string								String with URL
 	 */
-	function getNomUrl($withpicto=0, $option='', $notooltip=0, $morecss='', $save_lastsearch_value=-1)
+	function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
 	{
 		global $langs, $conf, $db, $hookmanager;
 		global $dolibarr_main_authentication, $dolibarr_main_demo;
@@ -864,6 +915,7 @@ class UserGroup extends CommonObject
 		return $result;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Retourne chaine DN complete dans l'annuaire LDAP pour l'objet
 	 *
@@ -873,8 +925,9 @@ class UserGroup extends CommonObject
 	 *									2=Return key only (uid=qqq)
 	 *	@return		string				DN
 	 */
-	function _load_ldap_dn($info,$mode=0)
+	function _load_ldap_dn($info, $mode = 0)
 	{
+        // phpcs:enable
 		global $conf;
 		$dn='';
 		if ($mode==0) $dn=$conf->global->LDAP_KEY_GROUPS."=".$info[$conf->global->LDAP_KEY_GROUPS].",".$conf->global->LDAP_GROUP_DN;
@@ -884,6 +937,7 @@ class UserGroup extends CommonObject
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Initialize the info array (array of LDAP values) that will be used to call LDAP functions
 	 *
@@ -891,6 +945,7 @@ class UserGroup extends CommonObject
 	 */
 	function _load_ldap_info()
 	{
+        // phpcs:enable
 		global $conf,$langs;
 
 		$info=array();
@@ -953,10 +1008,10 @@ class UserGroup extends CommonObject
 	 *  @param      int			$hidedetails    Hide details of lines
 	 *  @param      int			$hidedesc       Hide description
 	 *  @param      int			$hideref        Hide ref
-         *  @param   null|array  $moreparams     Array to provide more information
+     *  @param      null|array  $moreparams     Array to provide more information
 	 * 	@return     int         				0 if KO, 1 if OK
 	 */
-	public function generateDocument($modele, $outputlangs, $hidedetails=0, $hidedesc=0, $hideref=0, $moreparams=null)
+	public function generateDocument($modele, $outputlangs, $hidedetails = 0, $hidedesc = 0, $hideref = 0, $moreparams = null)
 	{
 		global $conf,$user,$langs;
 
@@ -980,4 +1035,3 @@ class UserGroup extends CommonObject
 		return $this->commonGenerateDocument($modelpath, $modele, $outputlangs, $hidedetails, $hidedesc, $hideref, $moreparams);
 	}
 }
-

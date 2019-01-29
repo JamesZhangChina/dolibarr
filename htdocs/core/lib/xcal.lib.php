@@ -32,7 +32,7 @@
  *	@param		string	$outputfile			Output file
  *	@return		int							<0 if ko, Nb of events in file if ok
  */
-function build_calfile($format,$title,$desc,$events_array,$outputfile)
+function build_calfile($format, $title, $desc, $events_array, $outputfile)
 {
 	global $conf,$langs;
 
@@ -64,7 +64,7 @@ function build_calfile($format,$title,$desc,$events_array,$outputfile)
         && $conf->global->MAIN_AGENDA_EXPORT_CACHE > 60){
 	        $hh=convertSecondToTime($conf->global->MAIN_AGENDA_EXPORT_CACHE,'hour');
 	        $mm=convertSecondToTime($conf->global->MAIN_AGENDA_EXPORT_CACHE,'min');
-	        $ss=convertSecondToTime($conf->global->MAIN_AGENDA_EXPORT_CACHE,'sec'); 
+	        $ss=convertSecondToTime($conf->global->MAIN_AGENDA_EXPORT_CACHE,'sec');
 	        fwrite($calfileh,"X-PUBLISHED-TTL: P".$hh."H".$mm."M".$ss."S\n");
         }
 
@@ -263,7 +263,6 @@ function build_calfile($format,$title,$desc,$events_array,$outputfile)
 				$comment ['enddate']		= $enddate;
 				fwrite($calfileh,"COMMENT:" . serialize ($comment) . "\n");
 				*/
-
 			}
 		}
 
@@ -293,7 +292,7 @@ function build_calfile($format,$title,$desc,$events_array,$outputfile)
  *	@param		string	$filter				Filter
  *	@return		int							<0 if ko, Nb of events in file if ok
  */
-function build_rssfile($format,$title,$desc,$events_array,$outputfile,$filter='')
+function build_rssfile($format, $title, $desc, $events_array, $outputfile, $filter = '')
 {
 	global $user,$conf,$langs;
 	global $dolibarr_main_url_root;
@@ -396,7 +395,7 @@ function build_rssfile($format,$title,$desc,$events_array,$outputfile,$filter=''
  * 	@param 		string	$string		string to encode
  * 	@return		string				string encoded
  */
-function format_cal($format,$string)
+function format_cal($format, $string)
 {
 	global $conf;
 
@@ -477,7 +476,7 @@ function calEncode($line)
  *	@param		int		$forcal		1=For cal
  *	@return		string 				String converted
  */
-function quotedPrintEncode($str,$forcal=0)
+function quotedPrintEncode($str, $forcal = 0)
 {
 	$lines = preg_split("/\r\n/", $str);
 	$out = '';
@@ -520,4 +519,3 @@ function quotedPrintDecode($str)
 	$out = quoted_printable_decode($out);	// Available with PHP 4+
 	return trim($out);
 }
-

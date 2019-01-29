@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2005-2018	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2018	Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2018	Regis Houssin		<regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,12 +156,12 @@ if ($resql)
 		{
 			print img_picto($langs->trans("SuperAdministrator"),'redstar');
 		}
-		else if ($obj->admin)
+		elseif ($obj->admin)
 		{
 			print img_picto($langs->trans("Administrator"),'star');
 		}
 		print "</td>";
-		print '<td align="left">'.$obj->login.'</td>';
+		print '<td class="left">'.$obj->login.'</td>';
 		print "<td>";
 		if ($obj->fk_soc)
 		{
@@ -286,6 +286,6 @@ if ($canreadperms)
 //print '</td></tr></table>';
 print '</div></div></div>';
 
+// End of page
 llxFooter();
-
 $db->close();

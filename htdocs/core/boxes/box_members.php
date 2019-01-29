@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003-2007 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,7 +37,11 @@ class box_members extends ModeleBoxes
 	var $boxlabel="BoxLastMembers";
 	var $depends = array("adherent");
 
-	var $db;
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+    
 	var $param;
 	var $enabled = 1;
 
@@ -51,7 +55,7 @@ class box_members extends ModeleBoxes
 	 *  @param  DoliDB	$db      	Database handler
      *  @param	string	$param		More parameters
 	 */
-	function __construct($db,$param='')
+	function __construct($db, $param = '')
 	{
 		global $conf, $user;
 
@@ -70,7 +74,7 @@ class box_members extends ModeleBoxes
 	 *  @param	int		$max        Maximum number of records to load
      *  @return	void
 	 */
-	function loadBox($max=5)
+	function loadBox($max = 5)
 	{
 		global $user, $langs, $db, $conf;
 		$langs->load("boxes");
@@ -164,7 +168,6 @@ class box_members extends ModeleBoxes
                 'text' => $langs->trans("ReadPermissionNotAllowed")
             );
         }
-
     }
 
 	/**
@@ -175,10 +178,9 @@ class box_members extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
 		return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
 	}
-
 }
 

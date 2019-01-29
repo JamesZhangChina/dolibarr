@@ -31,12 +31,27 @@ require_once DOL_DOCUMENT_ROOT.'/core/modules/societe/modules_societe.class.php'
  */
 class mod_codecompta_aquarium extends ModeleAccountancyCode
 {
-	var $nom='Aquarium';
-	var $name='Aquarium';
-	var $version='dolibarr';        // 'development', 'experimental', 'dolibarr'
+	/**
+	 * @var string Nom du modele
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Aquarium';
 
-	var	$prefixcustomeraccountancycode;
-	var	$prefixsupplieraccountancycode;
+	/**
+	 * @var string model name
+	 */
+	public $name='Aquarium';
+
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';        // 'development', 'experimental', 'dolibarr'
+
+	public	$prefixcustomeraccountancycode;
+
+	public	$prefixsupplieraccountancycode;
 
 
 	/**
@@ -82,7 +97,7 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 		//if (! empty($conf->global->COMPANY_AQUARIUM_REMOVE_ALPHA)) $texte.=$langs->trans('COMPANY_AQUARIUM_REMOVE_ALPHA').' = '.yn($conf->global->COMPANY_AQUARIUM_REMOVE_ALPHA)."<br>\n";
 		if (! empty($conf->global->COMPANY_AQUARIUM_CLEAN_REGEX))  $texte.=$langs->trans('COMPANY_AQUARIUM_CLEAN_REGEX').' = '.$conf->global->COMPANY_AQUARIUM_CLEAN_REGEX."<br>\n";
 		$texte.= '</td>';
-		$texte.= '<td align="left">&nbsp; <input type="submit" class="button" value="'.$langs->trans("Modify").'" name="Button"></td>';
+		$texte.= '<td class="left">&nbsp; <input type="submit" class="button" value="'.$langs->trans("Modify").'" name="Button"></td>';
         $texte.= '</tr></table>';
         $texte.= '</form>';
 
@@ -97,7 +112,7 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 	 * @param	int			$type		Type of third party (1:customer, 2:supplier, -1:autodetect)
 	 * @return	string					Return string example
 	 */
-	function getExample($langs,$objsoc=0,$type=-1)
+	function getExample($langs, $objsoc = 0, $type = -1)
 	{
 		$s='';
 		$s.=$this->prefixcustomeraccountancycode.'CUSTCODE';
@@ -107,6 +122,7 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Set accountancy account code for a third party into this->code
 	 *
@@ -115,8 +131,9 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 	 *  @param  string		$type			'customer' or 'supplier'
 	 *  @return	int							>=0 if OK, <0 if KO
 	 */
-	function get_code($db, $societe, $type='')
+	function get_code($db, $societe, $type = '')
 	{
+        // phpcs:enable
 		global $conf;
 
 		$i = 0;
@@ -130,7 +147,7 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 			$codetouse=(! empty($societe->code_client)?$societe->code_client:'CUSTCODE');
 			$prefix = $this->prefixcustomeraccountancycode;
 		}
-		else if ($type == 'supplier')
+		elseif ($type == 'supplier')
 		{
 			$codetouse=(! empty($societe->code_fournisseur)?$societe->code_fournisseur:'SUPPCODE');
 			$prefix = $this->prefixsupplieraccountancycode;
@@ -147,7 +164,7 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 		if (! isset($conf->global->COMPANY_AQUARIUM_REMOVE_SPECIAL) || ! empty($conf->global->COMPANY_AQUARIUM_REMOVE_SPECIAL)) $codetouse=preg_replace('/([^a-z0-9])/i','',$codetouse);
 		// Remove special alpha if COMPANY_AQUARIUM_REMOVE_ALPHA is set to 1
 		if (! empty($conf->global->COMPANY_AQUARIUM_REMOVE_ALPHA))   $codetouse=preg_replace('/([a-z])/i','',$codetouse);
-		// Apply a regex replacement pattern if COMPANY_AQUARIUM_REMOVE_ALPHA is set to 1
+		// Apply a regex replacement pattern on code if COMPANY_AQUARIUM_CLEAN_REGEX is set. Value must be a regex with parenthesis. The part into parenthesis is kept, the rest removed.
 		if (! empty($conf->global->COMPANY_AQUARIUM_CLEAN_REGEX))	// Example: $conf->global->COMPANY_AQUARIUM_CLEAN_REGEX='^..(..)..';
 		{
 			$codetouse=preg_replace('/'.$conf->global->COMPANY_AQUARIUM_CLEAN_REGEX.'/','\1\2\3',$codetouse);
@@ -183,11 +200,11 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 	{
 		$sql = "SELECT ";
 		if ($type == 'customer') $sql.= "code_compta";
-		else if ($type == 'supplier') $sql.= "code_compta_fournisseur";
+		elseif ($type == 'supplier') $sql.= "code_compta_fournisseur";
 		$sql.= " FROM ".MAIN_DB_PREFIX."societe";
 		$sql.= " WHERE ";
 		if ($type == 'customer') $sql.= "code_compta";
-		else if ($type == 'supplier') $sql.= "code_compta_fournisseur";
+		elseif ($type == 'supplier') $sql.= "code_compta_fournisseur";
 		$sql.= " = '".$db->escape($code)."'";
 		if (! empty($societe->id)) $sql.= " AND rowid <> ".$societe->id;
 
@@ -212,4 +229,3 @@ class mod_codecompta_aquarium extends ModeleAccountancyCode
 		}
 	}
 }
-

@@ -24,6 +24,7 @@
 
 require '../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
+require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/dolgeoip.class.php';
 
 // Security check
@@ -101,7 +102,7 @@ print '<input type="hidden" name="action" value="set">';
 print '<table class="noborder" width="100%">';
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("Parameter").'</td><td>'.$langs->trans("Value").'</td>';
-print '<td align="right"><input type="submit" class="button" value="'.$langs->trans("Modify").'"></td>';
+print '<td class="right"><input type="submit" class="button" value="'.$langs->trans("Modify").'"></td>';
 print "</tr>\n";
 
 print '<tr class="oddeven"><td width=\"50%\">'.$langs->trans("PathToGeoIPMaxmindCountryDataFile").'</td>';
@@ -150,9 +151,28 @@ if ($geoip)
 	if ($result) print $result;
 	else print $langs->trans("Error");
 	*/
+	//var_dump($_SERVER);
+	$ip = getUserRemoteIP();
+	//$ip='91.161.249.43';
+	$isip=is_ip($ip);
+	if ($isip == 1)
+	{
+		print '<br>'.$ip.' -> ';
+		$result=dol_print_ip($ip,1);
+		if ($result) print $result;
+		else print $langs->trans("Error");
+	}
+	else
+	{
+		print '<br>'.$ip.' -> ';
+		$result=dol_print_ip($ip,1);
+		if ($result) print $result;
+		else print $langs->trans("NotAPublicIp");
+	}
+
 	$geoip->close();
 }
 
+// End of page
 llxFooter();
-
 $db->close();

@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2015       Jean-François Ferry		<jfefe@aternatik.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -289,14 +289,14 @@ if ($resql)
 						$sql="UPDATE ".MAIN_DB_PREFIX."boxes SET box_order = '".$box_order."' WHERE entity = ".$conf->entity." AND box_order = '".$record['box_order']."'";
 						$resql = $db->query($sql);
 					}
-					else if (preg_match("/[02468]{1}/",substr($record['box_order'],-1)))
+					elseif (preg_match("/[02468]{1}/",substr($record['box_order'],-1)))
 					{
 						$box_order = "B0".$record['box_order'];
 						$sql="UPDATE ".MAIN_DB_PREFIX."boxes SET box_order = '".$box_order."' WHERE entity = ".$conf->entity." AND box_order = '".$record['box_order']."'";
 						$resql = $db->query($sql);
 					}
 				}
-				else if (dol_strlen($record['box_order']) == 2)
+				elseif (dol_strlen($record['box_order']) == 2)
 				{
 					if (preg_match("/[13579]{1}/",substr($record['box_order'],-1)))
 					{
@@ -304,7 +304,7 @@ if ($resql)
 						$sql="UPDATE ".MAIN_DB_PREFIX."boxes SET box_order = '".$box_order."' WHERE entity = ".$conf->entity." AND box_order = '".$record['box_order']."'";
 						$resql = $db->query($sql);
 					}
-					else if (preg_match("/[02468]{1}/",substr($record['box_order'],-1)))
+					elseif (preg_match("/[02468]{1}/",substr($record['box_order'],-1)))
 					{
 						$box_order = "B".$record['box_order'];
 						$sql="UPDATE ".MAIN_DB_PREFIX."boxes SET box_order = '".$box_order."' WHERE entity = ".$conf->entity." AND box_order = '".$record['box_order']."'";
@@ -488,7 +488,6 @@ print '<div class="center"><input type="submit" class="button" value="'.$langs->
 print '</form>';
 print "\n".'<!-- End Other Const -->'."\n";
 
-
+// End of page
 llxFooter();
-
 $db->close();

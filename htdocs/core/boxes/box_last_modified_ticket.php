@@ -34,7 +34,12 @@ class box_last_modified_ticket extends ModeleBoxes
     public $boximg = "ticket";
     public $boxlabel;
     public $depends = array("ticket");
+    
+    /**
+     * @var DoliDB Database handler.
+     */
     public $db;
+    
     public $param;
     public $info_box_head = array();
     public $info_box_contents = array();
@@ -182,7 +187,7 @@ class box_last_modified_ticket extends ModeleBoxes
      *     @param  int   $nooutput No print, only return string
      *     @return string
      */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
         parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
     }

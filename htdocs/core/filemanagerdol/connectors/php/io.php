@@ -24,12 +24,12 @@
 
 /**
  * CombinePaths
- * 
+ *
  * @param   string $sBasePath     sBasePath
  * @param   string $sFolder       sFolder
  * @return  string                Combined path
  */
-function CombinePaths( $sBasePath, $sFolder )
+function CombinePaths($sBasePath, $sFolder)
 {
 	return RemoveFromEnd($sBasePath, '/') . '/' . RemoveFromStart($sFolder, '/');
 }
@@ -238,7 +238,7 @@ function GetRootPath()
 
 // Emulate the asp Server.mapPath function.
 // given an url path return the physical directory that it corresponds to
-function Server_MapPath( $path )
+function Server_MapPath($path)
 {
     // This function is available only for Apache
     if (function_exists('apache_lookup_uri')) {
@@ -339,7 +339,7 @@ function GetCurrentFolder()
 }
 
 // Do a cleanup of the folder name to avoid possible problems
-function SanitizeFolderName( $sNewFolderName )
+function SanitizeFolderName($sNewFolderName)
 {
 	$sNewFolderName = stripslashes($sNewFolderName);
 
@@ -350,7 +350,7 @@ function SanitizeFolderName( $sNewFolderName )
 }
 
 // Do a cleanup of the file name to avoid possible problems
-function SanitizeFileName( $sNewFileName )
+function SanitizeFileName($sNewFileName)
 {
 	global $Config ;
 
@@ -367,7 +367,7 @@ function SanitizeFileName( $sNewFileName )
 }
 
 // This is the function that sends the results of the uploading process.
-function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $customMsg = '' )
+function SendUploadResults($errorNumber, $fileUrl = '', $fileName = '', $customMsg = '')
 {
 	// Minified version of the document.domain automatic fix script (#1919).
 	// The original script can be found at _dev/domain_fix_template.js
@@ -393,13 +393,13 @@ EOF;
 // This is the function that sends the results of the uploading process to CKE.
 /**
  * SendCKEditorResults
- * 
+ *
  * @param   string  $callback       callback
  * @param   string  $sFileUrl       sFileUrl
  * @param   string  $customMsg      customMsg
  * @return  void
  */
-function SendCKEditorResults ($callback, $sFileUrl, $customMsg = '')
+function SendCKEditorResults($callback, $sFileUrl, $customMsg = '')
 {
   echo '<script type="text/javascript">';
 
@@ -409,5 +409,3 @@ function SendCKEditorResults ($callback, $sFileUrl, $customMsg = '')
 
   echo '</script>';
 }
-
-

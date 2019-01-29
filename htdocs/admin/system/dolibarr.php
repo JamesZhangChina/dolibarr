@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005-2017	Laurent Destailleur		<eldy@users.sourceforge.net>
  * Copyright (C) 2007		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2007-2012	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2007-2012	Regis Houssin			<regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,8 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/geturl.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 
-$langs->load("admin");
-$langs->load("install");
-$langs->load("other");
+// Load translation files required by the page
+$langs->loadLangs(array("install","other","admin"));
 
 $action=GETPOST('action','alpha');
 
@@ -141,8 +140,11 @@ print '<tr class="liste_titre"><td class="titlefield">'.$langs->trans("Session")
 print '<tr class="oddeven"><td>'.$langs->trans("SessionSavePath").'</td><td colspan="2">'.session_save_path().'</td></tr>'."\n";
 print '<tr class="oddeven"><td>'.$langs->trans("SessionName").'</td><td colspan="2">'.session_name().'</td></tr>'."\n";
 print '<tr class="oddeven"><td>'.$langs->trans("SessionId").'</td><td colspan="2">'.session_id().'</td></tr>'."\n";
-print '<tr class="oddeven"><td>'.$langs->trans("CurrentSessionTimeOut").'</td><td>'.ini_get('session.gc_maxlifetime').' '.$langs->trans("seconds");
-print '</td><td align="right">';
+print '<tr class="oddeven"><td>'.$langs->trans("CurrentSessionTimeOut").' (session.gc_maxlifetime)</td><td>'.ini_get('session.gc_maxlifetime').' '.$langs->trans("seconds");
+print '</td><td class="right">';
+print '<!-- session.gc_maxlifetime = '.ini_get("session.gc_maxlifetime").' -->'."\n";
+print '<!-- session.gc_probability = '.ini_get("session.gc_probability").' -->'."\n";
+print '<!-- session.gc_divisor = '.ini_get("session.gc_divisor").' -->'."\n";
 print $form->textwithpicto('',$langs->trans("SessionExplanation",ini_get("session.gc_probability"),ini_get("session.gc_divisor")));
 print "</td></tr>\n";
 print '<tr class="oddeven"><td>'.$langs->trans("CurrentTheme").'</td><td colspan="2">'.$conf->theme.'</td></tr>'."\n";
@@ -177,14 +179,14 @@ if (isset($conf->global->MAIN_OPTIMIZE_SPEED) && ($conf->global->MAIN_OPTIMIZE_S
 	print '<tr class="liste_titre">';
 	print '<td class="titlefield">'.$langs->trans("LanguageFilesCachedIntoShmopSharedMemory").'</td>';
 	print '<td>'.$langs->trans("NbOfEntries").'</td>';
-	print '<td align="right">'.$langs->trans("Address").'</td>';
+	print '<td class="right">'.$langs->trans("Address").'</td>';
 	print '</tr>'."\n";
 
 	foreach($shmoparray as $key => $val)
 	{
 		print '<tr class="oddeven"><td>'.$key.'</td>';
 		print '<td>'.count($val).'</td>';
-		print '<td align="right">'.dol_getshmopaddress($key).'</td>';
+		print '<td class="right">'.dol_getshmopaddress($key).'</td>';
 		print '</tr>'."\n";
 	}
 
@@ -372,8 +374,8 @@ foreach($configfileparameters as $key => $value)
 			// Value
 			print "<td>";
 			if ($newkey == 'dolibarr_main_db_pass') print preg_replace('/./i','*',${$newkey});
-			else if ($newkey == 'dolibarr_main_url_root' && preg_match('/__auto__/',${$newkey})) print ${$newkey}.' => '.constant('DOL_MAIN_URL_ROOT');
-			else if ($newkey == 'dolibarr_main_document_root_alt')
+			elseif ($newkey == 'dolibarr_main_url_root' && preg_match('/__auto__/',${$newkey})) print ${$newkey}.' => '.constant('DOL_MAIN_URL_ROOT');
+			elseif ($newkey == 'dolibarr_main_document_root_alt')
 			{
 				$tmparray=explode(',',${$newkey});
 				$i=0;
@@ -454,7 +456,6 @@ if ($resql)
 print '</table>';
 print '</div>';
 
-
+// End of page
 llxFooter();
-
 $db->close();

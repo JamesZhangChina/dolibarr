@@ -1,23 +1,60 @@
 <?php
+/*
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * or see http://www.gnu.org/
+ */
+
 /**
  * 	Class to manage comment
  */
 class Comment extends CommonObject
 {
-	public $element='comment';		//!< Id that identify managed objects
-	public $table_element='comment';	//!< Name of table without prefix where object is stored
+	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='comment';
 
-	public $fk_element;
+	/**
+	 * @var string Name of table without prefix where object is stored
+	 */
+	public $table_element='comment';
+
+	/**
+	 * @var int Field with ID of parent key if this field has a parent
+	 */
+	public $fk_element ='';
+
 	public $element_type;
 
+	/**
+	 * @var string description
+	 */
 	public $description;
 
 	public $tms;
 
 	public $datec;
 
+	/**
+     * @var int ID
+     */
 	public $fk_user_author;
 
+	/**
+	 * @var int Entity
+	 */
 	public $entity;
 
 	public $import_key;
@@ -45,7 +82,7 @@ class Comment extends CommonObject
 	 *  @param 	int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *  @return int 		        	<0 if KO, Id of created object if OK
 	 */
-	function create($user, $notrigger=0)
+	function create($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 
@@ -118,7 +155,7 @@ class Comment extends CommonObject
 	 *  @param	int		$ref		ref object
 	 *  @return int 		        <0 if KO, 0 if not found, >0 if OK
 	 */
-	function fetch($id, $ref='')
+	function fetch($id, $ref = '')
 	{
 		global $langs;
 
@@ -176,7 +213,7 @@ class Comment extends CommonObject
 	 *  @param  int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *  @return int			         	<=0 if KO, >0 if OK
 	 */
-	function update(User $user, $notrigger=0)
+	function update(User $user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -241,7 +278,7 @@ class Comment extends CommonObject
 	 *  @param  int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *	@return	int						<0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		require_once DOL_DOCUMENT_ROOT . '/core/lib/files.lib.php';
@@ -320,10 +357,9 @@ class Comment extends CommonObject
 				}
 				$db->free($resql);
 			} else {
-				$error++; $this->errors[]="Error ".$this->db->lasterror();
+				$this->errors[]="Error ".$this->db->lasterror();
 				return -1;
 			}
-
 		}
 
 		return count($this->comments);

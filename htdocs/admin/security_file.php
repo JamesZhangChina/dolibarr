@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2004-2017	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2017	Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2017	Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2013		Juanjo Menent		<jmenent@2byte.es>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -67,7 +67,7 @@ if ($action == 'updateform')
 
 
 // Delete file
-else if ($action == 'delete')
+elseif ($action == 'delete')
 {
 	$langs->load("other");
 	$file = $conf->admin->dir_temp . '/' . GETPOST('urlfile','alpha');	// Do not use urldecode here ($_GET and $_REQUEST are already decoded by PHP).
@@ -126,7 +126,7 @@ print '</tr>';
 
 
 print '<tr class="oddeven">';
-print '<td>'.$langs->trans("UMask").'</td><td align="right">';
+print '<td>'.$langs->trans("UMask").'</td><td class="right">';
 print $form->textwithpicto('',$langs->trans("UMaskExplanation"));
 print '</td>';
 print '<td class="nowrap">';
@@ -178,7 +178,6 @@ print '<div class="center"><input type="submit" class="button" name="button" val
 print '</form>';
 
 
-
 // Form to test upload
 print '<br>';
 $formfile=new FormFile($db);
@@ -188,5 +187,6 @@ $formfile->form_attach_new_file($_SERVER['PHP_SELF'], $langs->trans("FormToTestF
 $filearray=dol_dir_list($upload_dir, "files", 0, '', '', 'name', SORT_ASC, 1);
 $formfile->list_of_documents($filearray, null, 'admin_temp', '');
 
+// End of page
 llxFooter();
 $db->close();

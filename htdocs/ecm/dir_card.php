@@ -118,7 +118,7 @@ if (GETPOST("sendit") && ! empty($conf->global->MAIN_UPLOAD_DOC))
 			{
 				setEventMessages($langs->trans("ErrorFileNotUploaded"), null, 'errors');
 			}
-			else if (preg_match('/ErrorFileIsInfectedWithAVirus/',$resupload))	// Files infected by a virus
+			elseif (preg_match('/ErrorFileIsInfectedWithAVirus/',$resupload))	// Files infected by a virus
 			{
 				setEventMessages($langs->trans("ErrorFileIsInfectedWithAVirus"), null, 'errors');
 			}
@@ -271,7 +271,6 @@ if ($action == 'update' && ! GETPOST('cancel','alpha'))
     		$upload_dir = $conf->medias->multidir_output[$conf->entity].'/'.$relativepath;
     		$section = $relativepath;
     	}
-
     }
 }
 
@@ -479,7 +478,7 @@ if ($action != 'edit' && $action != 'delete')
 	}
 	else
 	{
-		print '<a class="butActionRefused" href="#" title="'.$langs->trans("NotAllowed").'">'.$langs->trans('ECMAddSection').'</a>';
+		print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("NotAllowed").'">'.$langs->trans('ECMAddSection').'</a>';
 	}
 
 	//if (count($filearrayall) == 0)
@@ -496,9 +495,9 @@ if ($action != 'edit' && $action != 'delete')
 	else
 	{
 		if (count($filearray) > 0)
-			print '<a class="butActionRefused" href="#" title="'.$langs->trans("CannotRemoveDirectoryContainsFiles").'">'.$langs->trans('Delete').'</a>';
+			print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("CannotRemoveDirectoryContainsFiles").'">'.$langs->trans('Delete').'</a>';
 		else
-			print '<a class="butActionRefused" href="#" title="'.$langs->trans("CannotRemoveDirectoryContainsFilesOrDirs").'">'.$langs->trans('Delete').'</a>';
+			print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("CannotRemoveDirectoryContainsFilesOrDirs").'">'.$langs->trans('Delete').'</a>';
 	}*/
 	print '</div>';
 }

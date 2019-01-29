@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2001      Eric Seigne         <erics@rycks.com>
  * Copyright (C) 2004-2015 Destailleur Laurent <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin       <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2010 Regis Houssin       <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ class Translate
 	 *  @param	string	$srclang     	Language to use. If '' or 'auto', we use browser lang.
 	 *  @return	void
 	 */
-	function setDefaultLang($srclang='en_US')
+	function setDefaultLang($srclang = 'en_US')
 	{
 		global $conf;
 
@@ -105,7 +105,7 @@ class Translate
 			$longforshort=array('ar'=>'ar_SA');
 			$longforshortexcep=array('ar_EG');
 			if (isset($longforshort[strtolower($langpart[0])]) && ! in_array($codetouse, $longforshortexcep)) $srclang=$longforshort[strtolower($langpart[0])];
-			else if (! is_numeric($langpart[1])) {		// Second part YY may be a numeric with some Chrome browser
+			elseif (! is_numeric($langpart[1])) {		// Second part YY may be a numeric with some Chrome browser
 				$srclang=strtolower($langpart[0])."_".strtoupper($langpart[1]);
 				$longforlong=array('no_nb'=>'nb_NO');
 				if (isset($longforlong[strtolower($srclang)])) $srclang=$longforlong[strtolower($srclang)];
@@ -116,7 +116,7 @@ class Translate
     	    // Array to convert short lang code into long code.
 	        $longforshort=array('ar'=>'ar_SA', 'el'=>'el_GR', 'ca'=>'ca_ES', 'en'=>'en_US', 'nb'=>'nb_NO', 'no'=>'nb_NO');
 			if (isset($longforshort[strtolower($langpart[0])])) $srclang=$longforshort[strtolower($langpart[0])];
-			else if (! empty($langpart[0])) $srclang=strtolower($langpart[0])."_".strtoupper($langpart[0]);
+			elseif (! empty($langpart[0])) $srclang=strtolower($langpart[0])."_".strtoupper($langpart[0]);
 			else $srclang='en_US';
 		}
 
@@ -132,7 +132,7 @@ class Translate
 	 *  @param	int		$mode       0=Long language code, 1=Short language code (en, fr, es, ...)
 	 *  @return string      		Language code used (en_US, en_AU, fr_FR, ...)
 	 */
-	function getDefaultLang($mode=0)
+	function getDefaultLang($mode = 0)
 	{
 	    if (empty($mode)) return $this->defaultlang;
 	    else return substr($this->defaultlang,0,2);
@@ -173,7 +173,7 @@ class Translate
 	 *	@return	int							<0 if KO, 0 if already loaded or loading not required, >0 if OK
 	 *  @see loadLangs
 	 */
-	function load($domain,$alt=0,$stopafterdirection=0,$forcelangdir='',$loadfromfileonly=0)
+	function load($domain, $alt = 0, $stopafterdirection = 0, $forcelangdir = '', $loadfromfileonly = 0)
 	{
 		global $conf,$db;
 
@@ -189,7 +189,7 @@ class Translate
 
 
 		// Load $this->tab_translate[] from database
-		if (empty($loadfromfileonly) && count($this->tab_translate) == 0) $this->loadFromDatabase($db);      // Nothing was loaded yet, so we load database.
+		if (empty($loadfromfileonly) && count($this->tab_translate) == 0) $this->loadFromDatabase($db);      // No translation was never loaded yet, so we load database.
 
 
 		$newdomain = $domain;
@@ -231,7 +231,8 @@ class Translate
 
 			$filelangexists=is_file($file_lang_osencoded);
 
-			//dol_syslog(get_class($this).'::Load Try to read for alt='.$alt.' langofdir='.$langofdir.' newdomain='.$domain.' modulename='.$modulename.' file_lang='.$file_lang." => filelangexists=".$filelangexists);
+			//dol_syslog(get_class($this).'::Load Try to read for alt='.$alt.' langofdir='.$langofdir.' domain='.$domain.' newdomain='.$newdomain.' modulename='.$modulename.' file_lang='.$file_lang." => filelangexists=".$filelangexists);
+			//print 'Try to read for alt='.$alt.' langofdir='.$langofdir.' domain='.$domain.' newdomain='.$newdomain.' modulename='.$modulename.' this->_tab_loaded[newdomain]='.$this->_tab_loaded[$newdomain].' file_lang='.$file_lang." => filelangexists=".$filelangexists."\n";
 
 			if ($filelangexists)
 			{
@@ -246,7 +247,7 @@ class Translate
 					$usecachekey=$newdomain.'_'.$langofdir.'_'.md5($file_lang);    // Should not contains special chars
 				}
 				// Using cache with shmop. Speed gain: 40ms - Memory overusage: 200ko (Size of session cache file)
-				else if (isset($conf->global->MAIN_OPTIMIZE_SPEED) && ($conf->global->MAIN_OPTIMIZE_SPEED & 0x02))
+				elseif (isset($conf->global->MAIN_OPTIMIZE_SPEED) && ($conf->global->MAIN_OPTIMIZE_SPEED & 0x02))
 				{
 					$usecachekey=$newdomain;
 				}
@@ -354,12 +355,12 @@ class Translate
 			$this->load($domain,$alt+1,$stopafterdirection,$langofdir);
 		}
 
-		// We already are the reference file. No more files to scan to complete.
+		// We are in the pass of the reference file. No more files to scan to complete.
 		if ($alt == 2)
 		{
-			if ($fileread) $this->_tab_loaded[$newdomain]=1;	// Set domain file as loaded
+			if ($fileread) $this->_tab_loaded[$newdomain]=1;								// Set domain file as found so loaded
 
-			if (empty($this->_tab_loaded[$newdomain])) $this->_tab_loaded[$newdomain]=2;           // Set this file as found
+			if (empty($this->_tab_loaded[$newdomain])) $this->_tab_loaded[$newdomain]=2;	// Set this file as not found
 		}
 
 		// This part is deprecated and replaced with table llx_overwrite_trans
@@ -410,22 +411,18 @@ class Translate
 		//dol_syslog("Translate::Load Start domain=".$domain." alt=".$alt." forcelangdir=".$forcelangdir." this->defaultlang=".$this->defaultlang);
 
 		$newdomain = $domain;
-		$modulename = '';
 
-        // Check cache
-		if (! empty($this->_tab_loaded[$newdomain]))	// File already loaded for this domain
+		// Check cache
+		if (! empty($this->_tab_loaded[$newdomain]))	// File already loaded for this domain 'database'
 		{
 			//dol_syslog("Translate::Load already loaded for newdomain=".$newdomain);
 			return 0;
 		}
 
-		$this->_tab_loaded[$newdomain] = 1;   // We want to be sure this function is called once only.
+		$this->_tab_loaded[$newdomain] = 1;   // We want to be sure this function is called once only for domain 'database'
 
         $fileread=0;
-		$langofdir=(empty($forcelangdir)?$this->defaultlang:$forcelangdir);
-
-		// Redefine alt
-		$alt=2;
+		$langofdir=$this->defaultlang;
 
 		if (empty($langofdir))	// This may occurs when load is called without setting the language and without providing a value for forcelangdir
 		{
@@ -434,17 +431,17 @@ class Translate
 		}
 
 		// TODO Move cache read out of loop on dirs or at least filelangexists
-	    $found=false;
+		$found=false;
 
 		// Enable caching of lang file in memory (not by default)
 		$usecachekey='';
 		// Using a memcached server
 		if (! empty($conf->memcached->enabled) && ! empty($conf->global->MEMCACHED_SERVER))
 		{
-			$usecachekey=$newdomain.'_'.$langofdir.'_'.md5($file_lang);    // Should not contains special chars
+			$usecachekey=$newdomain.'_'.$langofdir;    // Should not contains special chars
 		}
 		// Using cache with shmop. Speed gain: 40ms - Memory overusage: 200ko (Size of session cache file)
-		else if (isset($conf->global->MAIN_OPTIMIZE_SPEED) && ($conf->global->MAIN_OPTIMIZE_SPEED & 0x02))
+		elseif (isset($conf->global->MAIN_OPTIMIZE_SPEED) && ($conf->global->MAIN_OPTIMIZE_SPEED & 0x02))
 		{
 			$usecachekey=$newdomain;
 		}
@@ -563,10 +560,6 @@ class Translate
         {
             $newstr=$this->getLabelFromKey($db,$reg[1],'c_paiement','code','libelle','',1);
         }
-		elseif (preg_match('/^OppStatusShort([0-9A-Z]+)$/i',$key,$reg))
-        {
-            $newstr=$this->getLabelFromKey($db,$reg[1],'c_lead_status','code','label');
-        }
         elseif (preg_match('/^OppStatus([0-9A-Z]+)$/i',$key,$reg))
         {
             $newstr=$this->getLabelFromKey($db,$reg[1],'c_lead_status','code','label');
@@ -577,7 +570,11 @@ class Translate
             //$newstr=$this->getLabelFromKey($db,$reg[1],'c_ordersource','code','label');
         }
 
-        if (! empty($conf->global->MAIN_FEATURES_LEVEL) && $conf->global->MAIN_FEATURES_LEVEL >= 2) dol_syslog(__METHOD__." missing translation for key '".$newstr."' in ".$_SERVER["PHP_SELF"], LOG_DEBUG);
+        /* Disabled. There is too many cases where translation of $newstr is not defined is normal (like when output with setEventMessage an already translated string)
+        if (! empty($conf->global->MAIN_FEATURES_LEVEL) && $conf->global->MAIN_FEATURES_LEVEL >= 2)
+        {
+        	dol_syslog(__METHOD__." MAIN_FEATURES_LEVEL=DEVELOP: missing translation for key '".$newstr."' in ".$_SERVER["PHP_SELF"], LOG_DEBUG);
+        }*/
 
         return $newstr;
 	}
@@ -597,7 +594,7 @@ class Translate
 	 *	@param	int		$maxsize	Max length of text
 	 *  @return string      		Translated string (encoded into HTML entities and UTF8)
 	 */
-	function trans($key, $param1='', $param2='', $param3='', $param4='', $maxsize=0)
+	function trans($key, $param1 = '', $param2 = '', $param3 = '', $param4 = '', $maxsize = 0)
 	{
         global $conf;
 
@@ -655,11 +652,12 @@ class Translate
 	 *  @param  string	$param2     chaine de param2
 	 *  @param  string	$param3     chaine de param3
 	 *  @param  string	$param4     chaine de param4
+	 *  @param  string	$param5     chaine de param5
 	 *  @return string      		Translated string (encoded into UTF8)
 	 */
-	function transnoentities($key, $param1='', $param2='', $param3='', $param4='')
+	function transnoentities($key, $param1 = '', $param2 = '', $param3 = '', $param4 = '', $param5 = '')
 	{
-		return $this->convToOutputCharset($this->transnoentitiesnoconv($key, $param1, $param2, $param3, $param4));
+		return $this->convToOutputCharset($this->transnoentitiesnoconv($key, $param1, $param2, $param3, $param4, $param5));
 	}
 
 
@@ -675,9 +673,10 @@ class Translate
 	 *  @param  string	$param2     chaine de param2
 	 *  @param  string	$param3     chaine de param3
 	 *  @param  string	$param4     chaine de param4
+	 *  @param  string	$param5     chaine de param5
 	 *  @return string      		Translated string
 	 */
-	function transnoentitiesnoconv($key, $param1='', $param2='', $param3='', $param4='')
+	function transnoentitiesnoconv($key, $param1 = '', $param2 = '', $param3 = '', $param4 = '', $param5 = '')
 	{
 		global $conf;
 
@@ -700,7 +699,7 @@ class Translate
             if (! preg_match('/^Format/',$key))
             {
             	//print $str;
-           		$str=sprintf($str,$param1,$param2,$param3,$param4);	// Replace %s and %d except for FormatXXX strings.
+           		$str=sprintf($str, $param1, $param2, $param3, $param4, $param5);	// Replace %s and %d except for FormatXXX strings.
             }
 
             return $str;
@@ -748,7 +747,7 @@ class Translate
 	 *  @param	string	$pagecodefrom	Page code of src string
 	 *  @return string         			Converted string
 	 */
-	function convToOutputCharset($str,$pagecodefrom='UTF-8')
+	function convToOutputCharset($str, $pagecodefrom = 'UTF-8')
 	{
 		if ($pagecodefrom == 'ISO-8859-1' && $this->charset_output == 'UTF-8')  $str=utf8_encode($str);
 		if ($pagecodefrom == 'UTF-8' && $this->charset_output == 'ISO-8859-1')	$str=utf8_decode(str_replace('€',chr(128),$str));
@@ -756,6 +755,7 @@ class Translate
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return list of all available languages
 	 *
@@ -764,8 +764,9 @@ class Translate
 	 *  @param	int		$usecode		1=Show code instead of country name for language variant, 2=Show only code
 	 *  @return array     				List of languages
 	 */
-	function get_available_languages($langdir=DOL_DOCUMENT_ROOT,$maxlength=0,$usecode=0)
+	function get_available_languages($langdir = DOL_DOCUMENT_ROOT, $maxlength = 0, $usecode = 0)
 	{
+        // phpcs:enable
 		global $conf;
 
 		// We scan directory langs to detect available languages
@@ -795,6 +796,7 @@ class Translate
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return if a filename $filename exists for current language (or alternate language)
 	 *
@@ -802,8 +804,9 @@ class Translate
 	 *  @param  integer	$searchalt      Search also alernate language file
 	 *  @return boolean         		true if exists and readable
 	 */
-	function file_exists($filename,$searchalt=0)
+	function file_exists($filename, $searchalt = 0)
 	{
+        // phpcs:enable
 		// Test si fichier dans repertoire de la langue
 		foreach($this->dir as $searchdir)
 		{
@@ -833,7 +836,7 @@ class Translate
 	 * 									10 if setDefaultLang was en_US => ten
 	 * 									123 if setDefaultLang was fr_FR => cent vingt trois
 	 */
-	function getLabelFromNumber($number,$isamount=0)
+	function getLabelFromNumber($number, $isamount = 0)
 	{
 		global $conf;
 
@@ -876,7 +879,7 @@ class Translate
 	 *      @return string					Label in UTF8 (but without entities)
 	 *      @see dol_getIdFromCode
 	 */
-	function getLabelFromKey($db,$key,$tablename,$fieldkey,$fieldlabel,$keyforselect='',$filteronentity=0)
+	function getLabelFromKey($db, $key, $tablename, $fieldkey, $fieldlabel, $keyforselect = '', $filteronentity = 0)
 	{
 		// If key empty
 		if ($key == '') return '';
@@ -944,7 +947,7 @@ class Translate
 	 *  @param	integer	$forceloadall		1=Force to load all currencies into cache. We know we need to use all of them. By default read and cache only required currency.
 	 *  @return	string						Currency symbol encoded into UTF8
 	 */
-	function getCurrencySymbol($currency_code, $forceloadall=0)
+	function getCurrencySymbol($currency_code, $forceloadall = 0)
 	{
 		$currency_sign = '';	// By default return iso code
 
@@ -1018,6 +1021,7 @@ class Translate
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Return an array with content of all loaded translation keys (found into this->tab_translate) so
 	 * we get a substitution array we can use for substitutions (for mail or ODT generation for example)
@@ -1026,6 +1030,7 @@ class Translate
 	 */
 	function get_translations_for_substitutions()
 	{
+        // phpcs:enable
 		$substitutionarray = array();
 
 		foreach($this->tab_translate as $code => $label) {

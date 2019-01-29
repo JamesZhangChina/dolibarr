@@ -217,7 +217,6 @@ foreach ($dirmodels as $reldir)
 							print '</td>';
 
 							print "</tr>\n";
-
 						}
 					}
 				}
@@ -268,7 +267,7 @@ else
     $doleditor=new DolEditor($variablename, $conf->global->$variablename,'',80,'dolibarr_notes');
     print $doleditor->Create();
 }
-print '</td><td align="right">';
+print '</td><td class="right">';
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 print '</table>';
@@ -280,6 +279,6 @@ dol_fiche_end();
 
 print '</form>';
 
+// End of page
 llxFooter();
-
 $db->close();

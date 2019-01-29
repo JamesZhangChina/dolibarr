@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
- * Copyright (C) 2013      Philippe Grand       <philippe.grand@atoo-net.com>
+ * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
+ * Copyright (C) 2013-2018 Philippe Grand       <philippe.grand@atoo-net.com>
  * Copyright (C) 2016      Alexandre Spangaro   <aspangaro@zendsi.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -33,12 +33,34 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/supplier_invoice/modules_facturef
  */
 class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
 {
-	var $version='dolibarr';		// 'development', 'experimental', 'dolibarr'
-	var $error = '';
-	var $nom = 'Cactus';
-	var $prefixinvoice='SI';
-	var $prefixcreditnote='SA';
-	var $prefixdeposit='SD';
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';		// 'development', 'experimental', 'dolibarr'
+
+	/**
+     * @var string Error code (or message)
+     */
+    public $error = '';
+
+	/**
+	 * @var string Nom du modele
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Cactus';
+
+	/**
+	 * @var string model name
+	 */
+	public $name='Cactus';
+
+	public $prefixinvoice='SI';
+
+	public $prefixcreditnote='SA';
+
+	public $prefixdeposit='SD';
 
 
     /**
@@ -148,12 +170,12 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
      * @param   string		$mode       'next' for next value or 'last' for last value
 	 * @return 	string      			Value if OK, 0 if KO
      */
-    function getNextValue($objsoc,$object,$mode='next')
+    function getNextValue($objsoc, $object, $mode = 'next')
     {
         global $db,$conf;
 
         if ($object->type == 2) $prefix=$this->prefixcreditnote;
-        else if ($facture->type == 3) $prefix=$this->prefixdeposit;
+        elseif ($facture->type == 3) $prefix=$this->prefixdeposit;
         else $prefix=$this->prefixinvoice;
 
         // D'abord on recupere la valeur max
@@ -198,7 +220,7 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
 
         	return $ref;
         }
-        else if ($mode == 'next')
+        elseif ($mode == 'next')
         {
         	$date=$object->date;	// This is invoice date (not creation date)
         	$yymm = strftime("%y%m",$date);
@@ -221,7 +243,7 @@ class mod_facture_fournisseur_cactus extends ModeleNumRefSuppliersInvoices
      * @param   string		$mode       	'next' for next value or 'last' for last value
      * @return  string      				Next free value
      */
-	function getNumRef($objsoc,$objforref,$mode='next')
+	function getNumRef($objsoc, $objforref, $mode = 'next')
 	{
 		return $this->getNextValue($objsoc,$objforref,$mode);
 	}

@@ -23,7 +23,7 @@
 
 if (! defined("NOCSRFCHECK"))    define("NOCSRFCHECK",'1');
 
-require_once '../master.inc.php';
+require '../master.inc.php';
 require_once NUSOAP_PATH.'/nusoap.php';        // Include SOAP
 require_once DOL_DOCUMENT_ROOT.'/core/lib/ws.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
@@ -329,7 +329,7 @@ function createProject($authentication, $project)
  * @param	string		$ref		    	internal reference
  * @return	array							Array result
  */
-function getProject($authentication,$id='',$ref='')
+function getProject($authentication, $id = '', $ref = '')
 {
     global $db,$conf,$langs;
 

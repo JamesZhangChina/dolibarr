@@ -1,9 +1,10 @@
 <?php
 /* Copyright (C) 2005		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
  * Copyright (C) 2005-2015	Laurent Destailleur	<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2017	Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2017	Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2011		Herve Prot			<herve.prot@symeos.com>
  * Copyright (C) 2012		Florian Henry		<florian.henry@open-concept.pro>
+ * Copyright (C) 2018		Juanjo Menent		<jmenent@2byte.es>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,8 +110,8 @@ if (empty($reshook)) {
 		if ($caneditperms)
 		{
 			$object->fetch($id);
-			$object->delete();
-			header("Location: index.php?restore_lastsearch_values=1");
+			$object->delete($user);
+			header("Location: ".DOL_URL_ROOT."/user/group/list.php?restore_lastsearch_values=1");
 			exit;
 		}
 		else
@@ -472,7 +473,7 @@ else
 						print '<td>';
 						print $useringroup->getNomUrl(-1, '', 0, 0, 24, 0, 'login');
 						if ($useringroup->admin  && ! $useringroup->entity) print img_picto($langs->trans("SuperAdministrator"),'redstar');
-						else if ($useringroup->admin) print img_picto($langs->trans("Administrator"),'star');
+						elseif ($useringroup->admin) print img_picto($langs->trans("Administrator"),'star');
 						print '</td>';
 						print '<td>'.$useringroup->lastname.'</td>';
 						print '<td>'.$useringroup->firstname.'</td>';
@@ -586,5 +587,6 @@ else
     }
 }
 
+// End of page
 llxFooter();
 $db->close();

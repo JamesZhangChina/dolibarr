@@ -32,10 +32,12 @@ class ActionsMyModule
      * @var DoliDB Database handler.
      */
     public $db;
+
     /**
-     * @var string Error
+     * @var string Error code (or message)
      */
     public $error = '';
+
     /**
      * @var array Errors
      */
@@ -74,7 +76,7 @@ class ActionsMyModule
 	 *                           				=0 if OK but we want to process standard actions too,
 	 *                            				>0 if OK and we want to replace standard actions.
 	 */
-	function getNomUrl($parameters,&$object,&$action)
+	function getNomUrl($parameters, &$object, &$action)
 	{
 		global $db,$langs,$conf,$user;
 		$this->resprints = '';
@@ -135,7 +137,6 @@ class ActionsMyModule
 	        foreach($parameters['toselect'] as $objectid)
 	        {
 	            // Do action on each object id
-
 	        }
 	    }
 
@@ -240,5 +241,4 @@ class ActionsMyModule
 	}
 
 	/* Add here any other hooked methods... */
-
 }

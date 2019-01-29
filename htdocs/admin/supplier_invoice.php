@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003-2007 Rodolphe Quiedeville    <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2013 Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2011 Regis Houssin           <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2011 Regis Houssin           <regis.houssin@inodbox.com>
  * Copyright (C) 2004      Sebastien Di Cintio     <sdicintio@ressource-toi.org>
  * Copyright (C) 2004      Benoit Mortier          <benoit.mortier@opensides.be>
  * Copyright (C) 2010-2013 Juanjo Menent           <jmenent@2byte.es>
@@ -122,12 +122,12 @@ if ($action == 'specimen')  // For invoices
 }
 
 // Activate a model
-else if ($action == 'set')
+elseif ($action == 'set')
 {
 	$ret = addDocumentModel($value, $type, $label, $scandir);
 }
 
-else if ($action == 'del')
+elseif ($action == 'del')
 {
 	$ret = delDocumentModel($value, $type);
 	if ($ret > 0)
@@ -137,7 +137,7 @@ else if ($action == 'del')
 }
 
 // Set default model
-else if ($action == 'setdoc')
+elseif ($action == 'setdoc')
 {
     if (dolibarr_set_const($db, "INVOICE_SUPPLIER_ADDON_PDF",$value,'chaine',0,'',$conf->entity))
     {
@@ -153,7 +153,7 @@ else if ($action == 'setdoc')
         $ret = addDocumentModel($value, $type, $label, $scandir);
     }
 }
-else if ($action == 'unsetdoc')
+elseif ($action == 'unsetdoc')
 {
     dolibarr_del_const($db, "INVOICE_SUPPLIER_ADDON_PDF", $conf->entity);
 }
@@ -491,7 +491,7 @@ else
     $doleditor=new DolEditor($variablename, $conf->global->$variablename,'',80,'dolibarr_notes');
     print $doleditor->Create();
 }
-print '</td><td align="right">';
+print '</td><td class="right">';
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 
@@ -514,12 +514,11 @@ print "</tr>\n";
 
 print '<tr class="oddeven"><td colspan="2">';
 print $langs->trans("YouMayFindNotificationsFeaturesIntoModuleNotification").'<br>';
-print '</td><td align="right">';
+print '</td><td class="right">';
 print "</td></tr>\n";
 
 print '</table>';
 
-
+// End of page
 llxFooter();
-
 $db->close();

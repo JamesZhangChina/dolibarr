@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
  * Copyright (C) 2005-2009 Destailleur Laurent  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2011-2015 Philippe Grand       <philippe.grand@atoo-net.com>
  * Copyright (C) 2017      Ferran Marcet       	 <fmarcet@2byte.es>
  *
@@ -85,7 +85,7 @@ if ($action == 'addcontact' && $user->rights->facture->creer)
 }
 
 // Toggle the status of a contact
-else if ($action == 'swapstatut' && $user->rights->facture->creer)
+elseif ($action == 'swapstatut' && $user->rights->facture->creer)
 {
 	if ($object->fetch($id))
 	{
@@ -98,7 +98,7 @@ else if ($action == 'swapstatut' && $user->rights->facture->creer)
 }
 
 // Deletes a contact
-else if ($action == 'deletecontact' && $user->rights->facture->creer)
+elseif ($action == 'deletecontact' && $user->rights->facture->creer)
 {
 	$object->fetch($id);
 	$result = $object->delete_contact($lineid);
@@ -193,7 +193,7 @@ if ($id > 0 || ! empty($ref))
 
 		$object->totalpaye = $totalpaye;   // To give a chance to dol_banner_tab to use already paid amount to show correct status
 
-		dol_banner_tab($object, 'ref', $linkback, 1, 'facnumber', 'ref', $morehtmlref, '', 0, '', '', 1);
+		dol_banner_tab($object, 'ref', $linkback, 1, 'ref', 'ref', $morehtmlref, '', 0, '', '', 1);
 
 		dol_fiche_end();
 
@@ -206,7 +206,6 @@ if ($id > 0 || ! empty($ref))
 		    $res=@include dol_buildpath($reldir.'/contacts.tpl.php');
 		    if ($res) break;
 		}
-
 	}
 	else
 	{
@@ -215,6 +214,6 @@ if ($id > 0 || ! empty($ref))
 	}
 }
 
-
+// End of page
 llxFooter();
 $db->close();

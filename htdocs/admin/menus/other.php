@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@capnetworks.com>
+/* Copyright (C) 2010-2012 Regis Houssin  <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,8 @@
 require '../../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
 
-$langs->load("users");
-$langs->load("admin");
-$langs->load("other");
+// Load translation files required by the page
+$langs->loadLangs(array("user","other","admin"));
 
 if (! $user->admin) accessforbidden();
 
@@ -43,7 +42,7 @@ if ($action == 'activate_hidemenu')
 	header("Location: ".$_SERVER["PHP_SELF"]);
 	exit;
 }
-else if ($action == 'disable_hidemenu')
+elseif ($action == 'disable_hidemenu')
 {
 	dolibarr_del_const($db, "MAIN_MENU_HIDE_UNAUTHORIZED",$conf->entity);
 	header("Location: ".$_SERVER["PHP_SELF"]);
@@ -105,6 +104,6 @@ print '</tr>';
 
 print '</table>';
 
-
+// End of page
 llxFooter();
 $db->close();

@@ -1,5 +1,6 @@
 <?php
 /* Copyright (C) 2013-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
+ * Copyright (C) 2018       Frédéric France     <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +34,11 @@ class box_graph_product_distribution extends ModeleBoxes
 	var $boxlabel="BoxProductDistribution";
 	var $depends = array("product|service","facture|propal|commande");
 
-	var $db;
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+    
 	var $param;
 
 	var $info_box_head = array();
@@ -46,7 +51,7 @@ class box_graph_product_distribution extends ModeleBoxes
 	 * 	@param	DoliDB	$db			Database handler
 	 *  @param	string	$param		More parameters
 	 */
-	function __construct($db,$param)
+	function __construct($db, $param)
 	{
 		global $user, $conf;
 
@@ -65,7 +70,7 @@ class box_graph_product_distribution extends ModeleBoxes
 	 *  @param	int		$max        Maximum number of records to load
      *  @return	void
 	 */
-	function loadBox($max=5)
+	function loadBox($max = 5)
 	{
 		global $conf, $user, $langs, $db;
 
@@ -135,10 +140,10 @@ class box_graph_product_distribution extends ModeleBoxes
 
 		if (! empty($conf->facture->enabled) && ! empty($user->rights->facture->lire))
 		{
-
 			// Build graphic number of object. $data = array(array('Lib',val1,val2,val3),...)
 			if ($showinvoicenb)
 			{
+                $langs->load("bills");
 				include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facturestats.class.php';
 
 				$showpointvalue = 1; $nocolor = 0;
@@ -198,6 +203,7 @@ class box_graph_product_distribution extends ModeleBoxes
 			// Build graphic number of object. $data = array(array('Lib',val1,val2,val3),...)
 			if ($showpropalnb)
 			{
+                $langs->load("propal");
 				include_once DOL_DOCUMENT_ROOT.'/comm/propal/class/propalestats.class.php';
 
 				$showpointvalue = 1; $nocolor = 0;
@@ -254,11 +260,10 @@ class box_graph_product_distribution extends ModeleBoxes
 
 		if (! empty($conf->commande->enabled) && ! empty($user->rights->commande->lire))
 		{
-			$langs->load("orders");
-
 			// Build graphic number of object. $data = array(array('Lib',val1,val2,val3),...)
 			if ($showordernb)
 			{
+			    $langs->load("orders");
 				include_once DOL_DOCUMENT_ROOT.'/commande/class/commandestats.class.php';
 
 				$showpointvalue = 1; $nocolor = 0;
@@ -363,17 +368,17 @@ class box_graph_product_distribution extends ModeleBoxes
 			if ($nbofgraph == 1)
 			{
 				if ($showinvoicenb) $stringtoshow.=$px1->show();
-				else if ($showpropalnb) $stringtoshow.=$px2->show();
+				elseif ($showpropalnb) $stringtoshow.=$px2->show();
 				else $stringtoshow.=$px3->show();
 			}
 			if ($nbofgraph == 2)
 			{
 				$stringtoshow.='<div class="fichecenter"><div class="containercenter"><div class="fichehalfleft">';
 				if ($showinvoicenb) $stringtoshow.=$px1->show();
-				else if ($showpropalnb) $stringtoshow.=$px2->show();
+				elseif ($showpropalnb) $stringtoshow.=$px2->show();
 				$stringtoshow.='</div><div class="fichehalfright">';
 				if ($showordernb) $stringtoshow.=$px3->show();
-				else if ($showpropalnb) $stringtoshow.=$px2->show();
+				elseif ($showpropalnb) $stringtoshow.=$px2->show();
 				$stringtoshow.='</div></div></div>';
 			}
 			if ($nbofgraph == 3)
@@ -397,7 +402,6 @@ class box_graph_product_distribution extends ModeleBoxes
 				'text' => $mesg
 			);
 		}
-
 	}
 
 	/**
@@ -408,10 +412,9 @@ class box_graph_product_distribution extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
 		return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
 	}
-
 }
 

@@ -1,9 +1,10 @@
 <?php
 /* Copyright (C) 2003		Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2012	Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2012		Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013       Florian Henry		  	<florian.henry@open-concept.pro>
+ * Copyright (C) 2013       Florian Henry           <florian.henry@open-concept.pro>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +21,8 @@
  */
 
 /**
- *  \file       	htdocs/compta/deplacement/card.php
- *  \brief      	Page to show a trip card
+ *  \file       htdocs/compta/deplacement/card.php
+ *  \brief      Page to show a trip card
  */
 
 require '../../main.inc.php';
@@ -77,7 +78,7 @@ if ($action == 'validate' && $user->rights->deplacement->creer)
     }
 }
 
-else if ($action == 'classifyrefunded' && $user->rights->deplacement->creer)
+elseif ($action == 'classifyrefunded' && $user->rights->deplacement->creer)
 {
     $object->fetch($id);
     if ($object->statut == 1)
@@ -95,7 +96,7 @@ else if ($action == 'classifyrefunded' && $user->rights->deplacement->creer)
     }
 }
 
-else if ($action == 'confirm_delete' && $confirm == "yes" && $user->rights->deplacement->supprimer)
+elseif ($action == 'confirm_delete' && $confirm == "yes" && $user->rights->deplacement->supprimer)
 {
     $result=$object->delete($id);
     if ($result >= 0)
@@ -109,7 +110,7 @@ else if ($action == 'confirm_delete' && $confirm == "yes" && $user->rights->depl
     }
 }
 
-else if ($action == 'add' && $user->rights->deplacement->creer)
+elseif ($action == 'add' && $user->rights->deplacement->creer)
 {
     if (! GETPOST('cancel','alpha'))
     {
@@ -168,7 +169,7 @@ else if ($action == 'add' && $user->rights->deplacement->creer)
 }
 
 // Update record
-else if ($action == 'update' && $user->rights->deplacement->creer)
+elseif ($action == 'update' && $user->rights->deplacement->creer)
 {
     if (! GETPOST('cancel','alpha'))
     {
@@ -202,7 +203,7 @@ else if ($action == 'update' && $user->rights->deplacement->creer)
 }
 
 // Set into a project
-else if ($action == 'classin' && $user->rights->deplacement->creer)
+elseif ($action == 'classin' && $user->rights->deplacement->creer)
 {
     $object->fetch($id);
     $result=$object->setProject(GETPOST('projectid','int'));
@@ -210,14 +211,14 @@ else if ($action == 'classin' && $user->rights->deplacement->creer)
 }
 
 // Set fields
-else if ($action == 'setdated' && $user->rights->deplacement->creer)
+elseif ($action == 'setdated' && $user->rights->deplacement->creer)
 {
     $dated=dol_mktime(GETPOST('datedhour','int'), GETPOST('datedmin','int'), GETPOST('datedsec','int'), GETPOST('datedmonth','int'), GETPOST('datedday','int'), GETPOST('datedyear','int'));
     $object->fetch($id);
     $result=$object->setValueFrom('dated', $dated, '', '', 'date', '', $user, 'DEPLACEMENT_MODIFY');
     if ($result < 0) dol_print_error($db, $object->error);
 }
-else if ($action == 'setkm' && $user->rights->deplacement->creer)
+elseif ($action == 'setkm' && $user->rights->deplacement->creer)
 {
     $object->fetch($id);
     $result=$object->setValueFrom('km', GETPOST('km','int'), '', null, 'text', '', $user, 'DEPLACEMENT_MODIFY');
@@ -263,7 +264,7 @@ if ($action == 'create')
 
     print "<tr>";
     print '<td class="fieldrequired">'.$langs->trans("Date").'</td><td>';
-    print $form->select_date($datec?$datec:-1,'','','','','add',1,1,1);
+    print $form->selectDate($datec?$datec:-1, '', '', '', '', 'add', 1, 1);
     print '</td></tr>';
 
     // Km
@@ -313,7 +314,7 @@ if ($action == 'create')
 
     print '</form>';
 }
-else if ($id)
+elseif ($id)
 {
     $result = $object->fetch($id);
     if ($result > 0)
@@ -360,7 +361,7 @@ else if ($id)
 
             // Date
             print '<tr><td class="fieldrequired">'.$langs->trans("Date").'</td><td>';
-            print $form->select_date($object->date,'',0,0,0,'update',1,0,1);
+            print $form->selectDate($object->date, '', 0, 0, 0, 'update', 1, 0);
             print '</td></tr>';
 
             // Km
@@ -420,7 +421,6 @@ else if ($id)
             if ($action == 'delete')
             {
                 print $form->formconfirm($_SERVER["PHP_SELF"]."?id=".$id,$langs->trans("DeleteTrip"),$langs->trans("ConfirmDeleteTrip"),"confirm_delete");
-
             }
 
             $soc = new Societe($db);
@@ -531,7 +531,7 @@ else if ($id)
 	            }
 	            else
 	            {
-	                print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('Modify').'</a>';
+	                print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('Modify').'</a>';
 	            }
             }
 
@@ -543,7 +543,7 @@ else if ($id)
                 }
                 else
                 {
-                    print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('Validate').'</a>';
+                    print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('Validate').'</a>';
                 }
             }
 
@@ -555,7 +555,7 @@ else if ($id)
                 }
                 else
                 {
-                    print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('ClassifyRefunded').'</a>';
+                    print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('ClassifyRefunded').'</a>';
                 }
             }
 
@@ -565,7 +565,7 @@ else if ($id)
             }
             else
             {
-                print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('Delete').'</a>';
+                print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotAllowed")).'">'.$langs->trans('Delete').'</a>';
             }
 
             print '</div>';
@@ -577,7 +577,6 @@ else if ($id)
     }
 }
 
-
+// End of page
 llxFooter();
-
 $db->close();

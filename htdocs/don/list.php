@@ -1,8 +1,9 @@
 <?php
 /* Copyright (C) 2001-2003	Rodolphe Quiedeville	<rodolphe@quiedeville.org>
  * Copyright (C) 2004-2018	Laurent Destailleur		<eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2013		Cédric Salvador			<csalvador@gpcsolutions.fr>
+ * Copyright (C) 2019		Thibault FOUCART		<support@ptibogxiv.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +29,8 @@ require '../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/don/class/don.class.php';
 if (! empty($conf->projet->enabled)) require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
 
-$langs->load("companies");
-$langs->load("donations");
+// Load translation files required by the page
+$langs->loadLangs(array("companies","donations"));
 
 $sortfield = GETPOST("sortfield",'alpha');
 $sortorder = GETPOST("sortorder",'alpha');
@@ -85,7 +86,7 @@ llxHeader('',$langs->trans("Donations"),'EN:Module_Donations|FR:Module_Dons|ES:M
 $donationstatic=new Don($db);
 
 // Genere requete de liste des dons
-$sql = "SELECT d.rowid, d.datedon, d.firstname, d.lastname, d.societe,";
+$sql = "SELECT d.rowid, d.datedon, d.fk_soc, d.firstname, d.lastname, d.societe,";
 $sql.= " d.amount, d.fk_statut as statut, ";
 $sql.= " p.rowid as pid, p.ref, p.title, p.public";
 $sql.= " FROM ".MAIN_DB_PREFIX."don as d LEFT JOIN ".MAIN_DB_PREFIX."projet AS p";

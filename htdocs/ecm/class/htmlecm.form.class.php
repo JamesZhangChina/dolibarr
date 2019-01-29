@@ -27,8 +27,15 @@ require_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmdirectory.class.php';
  */
 class FormEcm
 {
-	var $db;
-	var $error;
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+	
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
 
 	/**
@@ -50,7 +57,7 @@ class FormEcm
 	 *  @param	string	$module				Module ('ecm', 'medias', ...)
 	 *  @return	string						String with HTML select
 	 */
-	function selectAllSections($selected=0, $select_name='', $module='ecm')
+	function selectAllSections($selected = 0, $select_name = '', $module = 'ecm')
 	{
 		global $conf, $langs;
 		$langs->load("ecm");

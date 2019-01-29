@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2002-2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2013      Florian Henry	    <florian.henry@open-concept.pro>
  * Copyright (C) 2013      Juanjo Menent	    <jmenent@2byte.es>
  * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
@@ -108,7 +108,7 @@ $extrafields = new ExtraFields($db);
 
 // fetch optionals attributes and labels
 $extralabels = $extrafields->fetch_name_optionals_label('facture_rec');
-$search_array_options=$extrafields->getOptionalsFromPost($extralabels,'','search_');
+$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
 
 $permissionnote = $user->rights->facture->creer; // Used by the include of actions_setnotes.inc.php
 $permissiondellink=$user->rights->facture->creer;	// Used by the include of actions_dellink.inc.php
@@ -190,7 +190,6 @@ if (empty($reshook))
     $permtodelete = $user->rights->mymodule->delete;
     $uploaddir = $conf->mymodule->dir_output;
     include DOL_DOCUMENT_ROOT.'/core/actions_massactions.inc.php';*/
-
 }
 
 
@@ -223,7 +222,7 @@ if (! $user->rights->societe->client->voir && ! $socid) {
 	$sql .= ", ".MAIN_DB_PREFIX."societe_commerciaux as sc";
 }
 $sql.= " WHERE f.fk_soc = s.rowid";
-$sql.= ' AND f.entity IN ('.getEntity('facture').')';
+$sql.= ' AND f.entity IN ('.getEntity('invoice').')';
 if (! $user->rights->societe->client->voir && ! $socid) {
 	$sql .= " AND s.rowid = sc.fk_soc AND sc.fk_user = ".$user->id;
 }
@@ -248,12 +247,12 @@ if ($search_month > 0)
 {
 	if ($search_year > 0 && empty($search_day))
 		$sql.= " AND f.date_last_gen BETWEEN '".$db->idate(dol_get_first_day($search_year,$search_month,false))."' AND '".$db->idate(dol_get_last_day($search_year,$search_month,false))."'";
-	else if ($search_year > 0 && ! empty($search_day))
+	elseif ($search_year > 0 && ! empty($search_day))
 		$sql.= " AND f.date_last_gen BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $search_month, $search_day, $search_year))."' AND '".$db->idate(dol_mktime(23, 59, 59, $search_month, $search_day, $search_year))."'";
 	else
 		$sql.= " AND date_format(f.date_last_gen, '%m') = '".$db->escape($search_month)."'";
 }
-else if ($search_year > 0)
+elseif ($search_year > 0)
 {
 	$sql.= " AND f.date_last_gen BETWEEN '".$db->idate(dol_get_first_day($search_year,1,false))."' AND '".$db->idate(dol_get_last_day($search_year,12,false))."'";
 }
@@ -261,12 +260,12 @@ if ($search_month_date_when > 0)
 {
 	if ($search_year_date_when > 0 && empty($search_day_date_when))
 		$sql.= " AND f.date_when BETWEEN '".$db->idate(dol_get_first_day($search_year_date_when,$search_month_date_when,false))."' AND '".$db->idate(dol_get_last_day($search_year_date_when,$search_month_date_when,false))."'";
-	else if ($search_year_date_when > 0 && ! empty($search_day_date_when))
+	elseif ($search_year_date_when > 0 && ! empty($search_day_date_when))
 		$sql.= " AND f.date_date_when_reglement BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $search_month_date_when, $search_day_date_when, $search_year_date_when))."' AND '".$db->idate(dol_mktime(23, 59, 59, $search_month_date_when, $search_day_date_when, $search_year_date_when))."'";
 	else
 		$sql.= " AND date_format(f.date_when, '%m') = '".$db->escape($search_month_date_when)."'";
 }
-else if ($search_year_date_when > 0)
+elseif ($search_year_date_when > 0)
 {
 	$sql.= " AND f.date_when BETWEEN '".$db->idate(dol_get_first_day($search_year_date_when,1,false))."' AND '".$db->idate(dol_get_last_day($search_year_date_when,12,false))."'";
 }
@@ -689,8 +688,8 @@ if ($resql)
 			{
 				if ($i == 1)
 				{
-					if ($num < $limit) print '<td align="left">'.$langs->trans("Total").'</td>';
-					else print '<td align="left">'.$langs->trans("Totalforthispage").'</td>';
+					if ($num < $limit) print '<td class="left">'.$langs->trans("Total").'</td>';
+					else print '<td class="left">'.$langs->trans("Totalforthispage").'</td>';
 				}
 				else print '<td></td>';
 			}
@@ -709,6 +708,6 @@ else
 	dol_print_error($db);
 }
 
+// End of page
 llxFooter();
-
 $db->close();

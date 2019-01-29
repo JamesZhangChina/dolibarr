@@ -27,8 +27,15 @@
  */
 class FormIntervention
 {
-    var $db;
-    var $error;
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+
+    /**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
 
     /**
@@ -42,6 +49,7 @@ class FormIntervention
     }
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Show a combo list with contracts qualified for a third party
 	 *
@@ -52,8 +60,9 @@ class FormIntervention
 	 *	@param	int		$showempty	Show empty line
 	 *	@return int         		Nbre of project if OK, <0 if KO
 	 */
-	function select_interventions($socid=-1, $selected='', $htmlname='interventionid', $maxlength=16, $showempty=1)
+	function select_interventions($socid = -1, $selected = '', $htmlname = 'interventionid', $maxlength = 16, $showempty = 1)
 	{
+        // phpcs:enable
 		global $db,$user,$conf,$langs;
 
 		$out='';

@@ -26,10 +26,17 @@
  */
 class GoogleAPI
 {
-	var $db;
-	var $error;
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
 
-	var $key;
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
+
+	public $key;
 
 	/**
 	 * Constructor
@@ -37,7 +44,7 @@ class GoogleAPI
 	 * @param 	DoliDB		$db			Database handler
 	 * @param	string		$key		Google key
 	 */
-	function __construct($db,$key)
+	function __construct($db, $key)
 	{
 		$this->db=$db;
 		$this->key=$key;

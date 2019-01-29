@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (c) 2005-2008 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2009 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@ include_once DOL_DOCUMENT_ROOT . '/compta/deplacement/class/deplacement.class.ph
  */
 class DeplacementStats extends Stats
 {
+    /**
+     * @var string Name of table without prefix where object is stored
+     */
     public $table_element;
 
     var $socid;
@@ -47,7 +50,7 @@ class DeplacementStats extends Stats
      * @param   mixed		$userid    Id user for filter or array of user ids
 	 * @return 	void
 	 */
-	function __construct($db, $socid=0, $userid=0)
+	function __construct($db, $socid = 0, $userid = 0)
 	{
 		global $conf;
 
@@ -66,7 +69,7 @@ class DeplacementStats extends Stats
 			$this->where.=" AND fk_soc = ".$this->socid;
 		}
 		if (is_array($this->userid) && count($this->userid) > 0) $this->where.=' AND fk_user IN ('.join(',',$this->userid).')';
-        else if ($this->userid > 0) $this->where.=' AND fk_user = '.$this->userid;
+        elseif ($this->userid > 0) $this->where.=' AND fk_user = '.$this->userid;
 	}
 
 
@@ -93,7 +96,7 @@ class DeplacementStats extends Stats
      *	@param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 *	@return	array			Array of values
 	 */
-	function getNbByMonth($year, $format=0)
+	function getNbByMonth($year, $format = 0)
 	{
 		$sql = "SELECT MONTH(dated) as dm, count(*)";
 		$sql.= " FROM ".$this->from;
@@ -115,7 +118,7 @@ class DeplacementStats extends Stats
      *	@param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 *	@return	array				Array of values
 	 */
-	function getAmountByMonth($year, $format=0)
+	function getAmountByMonth($year, $format = 0)
 	{
 		$sql = "SELECT date_format(dated,'%m') as dm, sum(".$this->field.")";
 		$sql.= " FROM ".$this->from;

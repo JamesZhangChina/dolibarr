@@ -34,7 +34,7 @@ require_once DOL_DOCUMENT_ROOT.'/accountancy/class/accountingjournal.class.php';
 // Load translation files required by the page
 $langs->loadLangs(array("admin","compta","accountancy"));
 
-$action=GETPOST('action','alpha')?GETPOST('action','alpha'):'view';
+$action=GETPOST('action','aZ09')?GETPOST('action','aZ09'):'view';
 $confirm=GETPOST('confirm','alpha');
 $id=35;
 $rowid=GETPOST('rowid','alpha');
@@ -51,8 +51,8 @@ $acts[1] = "disable";
 $actl[0] = img_picto($langs->trans("Disabled"),'switch_off');
 $actl[1] = img_picto($langs->trans("Activated"),'switch_on');
 
-$listoffset=GETPOST('listoffset');
-$listlimit=GETPOST('listlimit')>0?GETPOST('listlimit'):1000;
+$listoffset=GETPOST('listoffset', 'alpha');
+$listlimit=GETPOST('listlimit', 'int')>0?GETPOST('listlimit', 'int'):1000;
 $active = 1;
 
 $sortfield = GETPOST("sortfield",'alpha');
@@ -128,28 +128,28 @@ complete_dictionary_with_modules($taborder,$tabname,$tablib,$tabsql,$tabsqlsort,
 
 // Define elementList and sourceList (used for dictionary type of contacts "llx_c_type_contact")
 $elementList = array();
-	// Must match ids defined into eldy.lib.php
-	$sourceList = array(
-			'1' => $langs->trans('AccountingJournalType1'),
-			'2' => $langs->trans('AccountingJournalType2'),
-			'3' => $langs->trans('AccountingJournalType3'),
-			'4' => $langs->trans('AccountingJournalType4'),
-			'5' => $langs->trans('AccountingJournalType5'),
-			'8' => $langs->trans('AccountingJournalType8'),
-			'9' => $langs->trans('AccountingJournalType9')
-	);
+// Must match ids defined into eldy.lib.php
+$sourceList = array(
+	'1' => $langs->trans('AccountingJournalType1'),
+	'2' => $langs->trans('AccountingJournalType2'),
+	'3' => $langs->trans('AccountingJournalType3'),
+	'4' => $langs->trans('AccountingJournalType4'),
+	'5' => $langs->trans('AccountingJournalType5'),
+	'8' => $langs->trans('AccountingJournalType8'),
+	'9' => $langs->trans('AccountingJournalType9'),
+);
 
 /*
  * Actions
  */
 
-if (GETPOST('button_removefilter') || GETPOST('button_removefilter.x') || GETPOST('button_removefilter_x'))
+if (GETPOST('button_removefilter', 'alpha') || GETPOST('button_removefilter.x', 'alpha') || GETPOST('button_removefilter_x', 'alpha'))
 {
 	$search_country_id = '';
 }
 
 // Actions add or modify an entry into a dictionary
-if (GETPOST('actionadd') || GETPOST('actionmodify'))
+if (GETPOST('actionadd', 'alpha') || GETPOST('actionmodify', 'alpha'))
 {
 	$listfield=explode(',', str_replace(' ', '',$tabfield[$id]));
 	$listfieldinsert=explode(',',$tabfieldinsert[$id]);
@@ -190,7 +190,7 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
 	if ($_POST["accountancy_code_buy"] <= 0) $_POST["accountancy_code_buy"]='';	// If empty, we force to null
 
 	// Si verif ok et action add, on ajoute la ligne
-	if ($ok && GETPOST('actionadd'))
+	if ($ok && GETPOST('actionadd', 'alpha'))
 	{
 		if ($tabrowid[$id])
 		{
@@ -202,7 +202,6 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
 			{
 				$obj = $db->fetch_object($result);
 				$newid=($obj->newid + 1);
-
 			} else {
 				dol_print_error($db);
 			}
@@ -252,7 +251,7 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
 	}
 
 	// Si verif ok et action modify, on modifie la ligne
-	if ($ok && GETPOST('actionmodify'))
+	if ($ok && GETPOST('actionmodify', 'alpha'))
 	{
 		if ($tabrowid[$id]) { $rowidcol=$tabrowid[$id]; }
 		else { $rowidcol="rowid"; }
@@ -271,7 +270,7 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
 			if ($field == 'price' || preg_match('/^amount/i',$field) || $field == 'taux') {
 				$_POST[$listfieldvalue[$i]] = price2num($_POST[$listfieldvalue[$i]],'MU');
 			}
-			else if ($field == 'entity') {
+			elseif ($field == 'entity') {
 				$_POST[$listfieldvalue[$i]] = $conf->entity;
 			}
 			if ($i) $sql.=",";
@@ -294,10 +293,10 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
 	//$_GET["id"]=GETPOST('id', 'int');       // Force affichage dictionnaire en cours d'edition
 }
 
-if (GETPOST('actioncancel'))
-{
-	//$_GET["id"]=GETPOST('id', 'int');       // Force affichage dictionnaire en cours d'edition
-}
+//if (GETPOST('actioncancel', 'alpha'))
+//{
+//	$_GET["id"]=GETPOST('id', 'int');       // Force affichage dictionnaire en cours d'edition
+//}
 
 if ($action == 'confirm_delete' && $confirm == 'yes')       // delete
 {
@@ -442,7 +441,7 @@ if ($id)
 			{
 				print '<td align="'.$align.'">';
 				if (! empty($tabhelp[$id][$value]) && preg_match('/^http(s*):/i',$tabhelp[$id][$value])) print '<a href="'.$tabhelp[$id][$value].'" target="_blank">'.$valuetoshow.' '.img_help(1,$valuetoshow).'</a>';
-				else if (! empty($tabhelp[$id][$value])) print $form->textwithpicto($valuetoshow,$tabhelp[$id][$value]);
+				elseif (! empty($tabhelp[$id][$value])) print $form->textwithpicto($valuetoshow,$tabhelp[$id][$value]);
 				else print $valuetoshow;
 				print '</td>';
 			 }
@@ -462,7 +461,7 @@ if ($id)
 
 		$obj = new stdClass();
 		// If data was already input, we define them in obj to populate input fields.
-		if (GETPOST('actionadd'))
+		if (GETPOST('actionadd', 'alpha'))
 		{
 			foreach ($fieldlist as $key=>$val)
 			{
@@ -504,7 +503,7 @@ if ($id)
 		$paramwithsearch = $param;
 		if ($sortorder) $paramwithsearch.= '&sortorder='.$sortorder;
 		if ($sortfield) $paramwithsearch.= '&sortfield='.$sortfield;
-		if (GETPOST('from')) $paramwithsearch.= '&from='.GETPOST('from','alpha');
+		if (GETPOST('from', 'alpha')) $paramwithsearch.= '&from='.GETPOST('from','alpha');
 
 		// There is several pages
 		if ($num > $listlimit)
@@ -612,11 +611,11 @@ if ($id)
 							if ($valuetoshow=='all') {
 								$valuetoshow=$langs->trans('All');
 							}
-							else if ($fieldlist[$field]=='nature' && $tabname[$id]==MAIN_DB_PREFIX.'accounting_journal') {
+							elseif ($fieldlist[$field]=='nature' && $tabname[$id]==MAIN_DB_PREFIX.'accounting_journal') {
 								$key=$langs->trans("AccountingJournalType".strtoupper($obj->nature));
 								$valuetoshow=($obj->nature && $key != "AccountingJournalType".strtoupper($langs->trans($obj->nature))?$key:$obj->{$fieldlist[$field]});
 							}
-							else if ($fieldlist[$field]=='label' && $tabname[$id]==MAIN_DB_PREFIX.'accounting_journal') {
+							elseif ($fieldlist[$field]=='label' && $tabname[$id]==MAIN_DB_PREFIX.'accounting_journal') {
 								$valuetoshow=$langs->trans($obj->label);
                             }
 
@@ -631,8 +630,8 @@ if ($id)
 					if (isset($obj->code) && $id != 10)
 					{
 						if (($obj->code == '0' || $obj->code == '' || preg_match('/unknown/i',$obj->code))) { $iserasable = 0; $canbedisabled = 0; }
-						else if ($obj->code == 'RECEP') { $iserasable = 0; $canbedisabled = 0; }
-						else if ($obj->code == 'EF0')   { $iserasable = 0; $canbedisabled = 0; }
+						elseif ($obj->code == 'RECEP') { $iserasable = 0; $canbedisabled = 0; }
+						elseif ($obj->code == 'EF0')   { $iserasable = 0; $canbedisabled = 0; }
 					}
 
 					$canbemodified=$iserasable;
@@ -683,7 +682,7 @@ if ($id)
 
 print '<br>';
 
-
+// End of page
 llxFooter();
 $db->close();
 
@@ -697,7 +696,7 @@ $db->close();
  *  @param		string	$context		'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we dont want it to be rendered
  *	@return		void
  */
-function fieldListJournal($fieldlist, $obj='', $tabname='', $context='')
+function fieldListJournal($fieldlist, $obj = '', $tabname = '', $context = '')
 {
 	global $conf,$langs,$db;
 	global $form, $mysoc;

@@ -2,9 +2,10 @@
 /* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2003      Eric Seigne          <erics@rycks.com>
  * Copyright (C) 2004-2014 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2011      Juanjo Menent        <jmenent@2byte.es>
  * Copyright (C) 2014      Cedric GROSS         <c.gross@kreiz-it.fr>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -262,7 +263,7 @@ $nav.='<input type="hidden" name="begin_d" value="' . $begin_d . '">';
 $nav.='<input type="hidden" name="end_d" value="' . $end_d . '">';
 $nav.='<input type="hidden" name="showbirthday" value="' . $showbirthday . '">';
 
-$nav.=$form->select_date($dateselect, 'dateselect', 0, 0, 1, '', 1, 0, 1);
+$nav.= $form->selectDate($dateselect, 'dateselect', 0, 0, 1, '', 1, 0);
 $nav.=' <input type="submit" name="submitdateselect" class="button" value="'.$langs->trans("Refresh").'">';
 $nav.='</form>';
 
@@ -542,7 +543,6 @@ if ($resql)
             //print ' startincalendar='.dol_print_date($event->date_start_in_calendar).'-endincalendar='.dol_print_date($event->date_end_in_calendar).') was added in '.$j.' different index key of array<br>';
         }
         $i++;
-
     }
 }
 else
@@ -730,10 +730,8 @@ jQuery(document).ready(function() {
 });
 </script>';
 
-
-
+// End of page
 llxFooter();
-
 $db->close();
 
 
@@ -759,7 +757,7 @@ $db->close();
  * @param	bool	$var			true or false for alternat style on tr/td
  * @return	void
  */
-function show_day_events_pertype($username, $day, $month, $year, $monthshown, $style, &$eventarray, $maxprint=0, $maxnbofchar=16, $newparam='', $showinfo=0, $minheight=60, $showheader=false, $colorsbytype=array(), $var=false)
+function show_day_events_pertype($username, $day, $month, $year, $monthshown, $style, &$eventarray, $maxprint = 0, $maxnbofchar = 16, $newparam = '', $showinfo = 0, $minheight = 60, $showheader = false, $colorsbytype = array(), $var = false)
 {
 	global $db;
 	global $user, $conf, $langs, $hookmanager, $action;
@@ -811,7 +809,7 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
 					$nummytasks++; $cssclass='family_mytasks';
 					if (! empty($conf->global->AGENDA_USE_EVENT_TYPE)) $color=$event->type_color;
 				}
-				else if ($event->type_code == 'ICALEVENT')
+				elseif ($event->type_code == 'ICALEVENT')
 				{
 					$numical++;
 					if (! empty($event->icalname))
@@ -825,7 +823,7 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
 					$color=$event->icalcolor;
 					$cssclass=(! empty($event->icalname)?'family_ext'.md5($event->icalname):'family_other unsortable');
 				}
-				else if ($event->type_code == 'BIRTHDAY')
+				elseif ($event->type_code == 'BIRTHDAY')
 				{
 					$numbirthday++; $colorindex=2; $cssclass='family_birthday unsortable'; $color=sprintf("%02x%02x%02x",$theme_datacolor[$colorindex][0],$theme_datacolor[$colorindex][1],$theme_datacolor[$colorindex][2]);
 				}
@@ -1028,7 +1026,7 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
 			if ($output[0]['string']) $title1.=($title1?' - ':'').$output[0]['string'];
 			if ($output[0]['color']) $color1 = $output[0]['color'];
 		}
-		else if (count($cases1[$h]) > 1)
+		elseif (count($cases1[$h]) > 1)
 		{
 			$title1=$langs->trans("Ref").' '.$ids1.($title1?' - '.$title1:'');
 			$color1='222222';
@@ -1041,7 +1039,7 @@ function show_day_events_pertype($username, $day, $month, $year, $monthshown, $s
 			if ($output[0]['string']) $title2.=($title2?' - ':'').$output[0]['string'];
 			if ($output[0]['color']) $color2 = $output[0]['color'];
 		}
-		else if (count($cases2[$h]) > 1)
+		elseif (count($cases2[$h]) > 1)
 		{
 			$title2=$langs->trans("Ref").' '.$ids2.($title2?' - '.$title2:'');
 			$color2='222222';

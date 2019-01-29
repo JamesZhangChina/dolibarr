@@ -76,7 +76,7 @@ class mailing_xinputfile extends MailingTargets
 	 *  @param      string	$sql        Sql request to count
 	 *	@return		string				'' means NA
 	 */
-	function getNbOfRecipients($sql='')
+	function getNbOfRecipients($sql = '')
 	{
 		return '';
 	}
@@ -110,15 +110,16 @@ class mailing_xinputfile extends MailingTargets
 		return $s;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Ajoute destinataires dans table des cibles
 	 *
 	 *  @param	int		$mailing_id    	Id of emailing
-	 *  @param	array	$filtersarray   Requete sql de selection des destinataires
 	 *  @return int           			< 0 si erreur, nb ajout si ok
 	 */
-	function add_to_target($mailing_id,$filtersarray=array())
+	function add_to_target($mailing_id)
 	{
+        // phpcs:enable
 		global $conf,$langs,$_FILES;
 
 		require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
@@ -205,7 +206,7 @@ class mailing_xinputfile extends MailingTargets
 				{
 					$this->error = '<div class="error">'.$langs->trans("ErrorFileNotUploaded").'</div>';
 				}
-				else if (preg_match('/ErrorFileIsInfectedWithAVirus/',$resupload))	// Files infected by a virus
+				elseif (preg_match('/ErrorFileIsInfectedWithAVirus/',$resupload))	// Files infected by a virus
 				{
 					$this->error = '<div class="error">'.$langs->trans("ErrorFileIsInfectedWithAVirus").'</div>';
 				}
@@ -220,6 +221,4 @@ class mailing_xinputfile extends MailingTargets
 
 		return parent::add_to_target($mailing_id, $cibles);
 	}
-
 }
-

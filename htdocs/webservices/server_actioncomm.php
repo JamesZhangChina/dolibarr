@@ -25,12 +25,12 @@
 
 if (! defined("NOCSRFCHECK"))    define("NOCSRFCHECK",'1');
 
-require_once("../master.inc.php");
-require_once(NUSOAP_PATH.'/nusoap.php');		// Include SOAP
-require_once(DOL_DOCUMENT_ROOT."/core/lib/ws.lib.php");
+require "../master.inc.php";
+require_once NUSOAP_PATH.'/nusoap.php';		// Include SOAP
+require_once DOL_DOCUMENT_ROOT."/core/lib/ws.lib.php";
 
-require_once(DOL_DOCUMENT_ROOT."/comm/action/class/actioncomm.class.php");
-require_once(DOL_DOCUMENT_ROOT."/comm/action/class/cactioncomm.class.php");
+require_once DOL_DOCUMENT_ROOT."/comm/action/class/actioncomm.class.php";
+require_once DOL_DOCUMENT_ROOT."/comm/action/class/cactioncomm.class.php";
 require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
 
 
@@ -244,7 +244,7 @@ $server->register(
  * @param	int			$id					Id of object
  * @return	mixed
  */
-function getActionComm($authentication,$id)
+function getActionComm($authentication, $id)
 {
     global $db,$conf,$langs;
 
@@ -378,7 +378,6 @@ function getListActionCommType($authentication)
 				 $objectresp = array(
 			    	'result'=>array('result_code'=>'OK', 'result_label'=>''),
 			        'actioncommtypes'=>$resultarray);
-
 			}
 			else
 			{
@@ -409,7 +408,7 @@ function getListActionCommType($authentication)
  * @param	ActionComm	$actioncomm		    $actioncomm
  * @return	array							Array result
  */
-function createActionComm($authentication,$actioncomm)
+function createActionComm($authentication, $actioncomm)
 {
 	global $db,$conf,$langs;
 
@@ -492,7 +491,7 @@ function createActionComm($authentication,$actioncomm)
  * @param	ActionComm	$actioncomm		    $actioncomm
  * @return	array							Array result
  */
-function updateActionComm($authentication,$actioncomm)
+function updateActionComm($authentication, $actioncomm)
 {
 	global $db,$conf,$langs;
 

@@ -1,6 +1,6 @@
 <?php
 /* EXPERIMENTAL
- * 
+ *
  * Copyright (C) 2016		ATM Consulting			<support@atm-consulting.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
  *	\ingroup    core
  *	\brief      File of class to manage all object. Might be replace or merge into commonobject
  */
- 
+
 require_once DOL_DOCUMENT_ROOT.'/core/class/commonobject.class.php';
 
 class CoreObject extends CommonObject
@@ -54,7 +54,7 @@ class CoreObject extends CommonObject
 		$this->id = 0;
 		$this->datec = 0;
 		$this->tms = 0;
-		
+
 		if (!empty($this->fields))
 		{
 			foreach ($this->fields as $field=>$info)
@@ -68,14 +68,13 @@ class CoreObject extends CommonObject
 
             $this->to_delete=false;
             $this->is_clone=false;
-			
+
 			return true;
 		}
 		else
         {
 			return false;
 		}
-			
 	}
 
     /**
@@ -110,7 +109,7 @@ class CoreObject extends CommonObject
     	if($res>0) {
     		if ($loadChild) $this->fetchChild();
     	}
-    	
+
     	return $res;
 	}
 
@@ -124,7 +123,7 @@ class CoreObject extends CommonObject
      * @param   bool    $try_to_load    Force the fetch if an id is given
      * @return                          int
      */
-    public function addChild($tabName, $id=0, $key='id', $try_to_load = false)
+    public function addChild($tabName, $id = 0, $key = 'id', $try_to_load = false)
     {
 		if(!empty($id))
 		{
@@ -133,14 +132,14 @@ class CoreObject extends CommonObject
 				if($object->{$key} === $id) return $k;
 			}
 		}
-	
+
 		$k = count($this->{$tabName});
-	
+
 		$className = ucfirst($tabName);
 		$this->{$tabName}[$k] = new $className($this->db);
 		if($id>0 && $key==='id' && $try_to_load)
 		{
-			$this->{$tabName}[$k]->fetch($id); 
+			$this->{$tabName}[$k]->fetch($id);
 		}
 
 		return $k;
@@ -155,7 +154,7 @@ class CoreObject extends CommonObject
      * @param   string  $key            Attribute name of the object id
      * @return                          bool
      */
-    public function removeChild($tabName, $id, $key='id')
+    public function removeChild($tabName, $id, $key = 'id')
     {
 		foreach ($this->{$tabName} as &$object)
 		{
@@ -171,6 +170,8 @@ class CoreObject extends CommonObject
 
     /**
      * Function to fetch children objects
+     *
+     * @return void
      */
     public function fetchChild()
     {
@@ -207,6 +208,7 @@ class CoreObject extends CommonObject
      * Function to update children data
      *
      * @param   User    $user   user object
+     * @return void
      */
 	public function saveChild(User &$user)
     {
@@ -220,7 +222,7 @@ class CoreObject extends CommonObject
 					foreach($this->{$className} as $i => &$object)
 					{
 						$object->{$this->fk_element} = $this->id;
-						
+
 						$object->update($user);
 						if($this->unsetChildDeleted && isset($object->to_delete) && $object->to_delete==true) unset($this->{$className}[$i]);
 					}
@@ -268,7 +270,6 @@ class CoreObject extends CommonObject
             $this->db->rollback();
             return -1;
         }
-
 	}
 
     /**
@@ -369,7 +370,7 @@ class CoreObject extends CommonObject
      * @param   string  $format Output date format
      * @return          string
      */
-    public function getDate($field, $format='')
+    public function getDate($field, $format = '')
     {
 		if(empty($this->{$field})) return '';
 		else
@@ -415,15 +416,15 @@ class CoreObject extends CommonObject
 			{
 				$this->setDate($key, $value);
 			}
-			else if( $this->checkFieldType($key, 'array'))
+			elseif( $this->checkFieldType($key, 'array'))
 			{
 				$this->{$key} = $value;
 			}
-			else if( $this->checkFieldType($key, 'float') )
+			elseif( $this->checkFieldType($key, 'float') )
 			{
 				$this->{$key} = (double) price2num($value);
 			}
-			else if( $this->checkFieldType($key, 'int') ) {
+			elseif( $this->checkFieldType($key, 'int') ) {
 				$this->{$key} = (int) price2num($value);
 			}
 			else
@@ -434,5 +435,4 @@ class CoreObject extends CommonObject
 
 		return 1;
 	}
-
 }

@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2005      Patrick Rouillon     <patrick@rouillon.net>
  * Copyright (C) 2005-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2011-2015 Philippe Grand       <philippe.grand@atoo-net.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -79,7 +79,7 @@ if ($action == 'addcontact' && $user->rights->commande->creer)
 }
 
 // bascule du statut d'un contact
-else if ($action == 'swapstatut' && $user->rights->commande->creer)
+elseif ($action == 'swapstatut' && $user->rights->commande->creer)
 {
 	if ($object->fetch($id))
 	{
@@ -92,7 +92,7 @@ else if ($action == 'swapstatut' && $user->rights->commande->creer)
 }
 
 // Efface un contact
-else if ($action == 'deletecontact' && $user->rights->commande->creer)
+elseif ($action == 'deletecontact' && $user->rights->commande->creer)
 {
 	$object->fetch($id);
 	$result = $object->delete_contact($_GET["lineid"]);
@@ -214,5 +214,6 @@ if ($id > 0 || ! empty($ref))
 }
 
 
+// End of page
 llxFooter();
 $db->close();

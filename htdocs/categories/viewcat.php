@@ -2,7 +2,7 @@
 /* Copyright (C) 2005       Matthieu Valleton	<mv@seeschloss.org>
  * Copyright (C) 2006-2015  Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2007       Patrick Raguin		<patrick.raguin@gmail.com>
- * Copyright (C) 2005-2012  Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012  Regis Houssin		<regis.houssin@inodbox.com>
  * Copyright (C) 2015       Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -86,40 +86,40 @@ if ($id > 0 && $removeelem > 0)
 		$result = $tmpobject->fetch($removeelem);
 		$elementtype = 'product';
 	}
-	else if ($type == Categorie::TYPE_SUPPLIER && $user->rights->societe->creer)
+	elseif ($type == Categorie::TYPE_SUPPLIER && $user->rights->societe->creer)
 	{
 		$tmpobject = new Societe($db);
 		$result = $tmpobject->fetch($removeelem);
 		$elementtype = 'supplier';
 	}
-	else if ($type == Categorie::TYPE_CUSTOMER && $user->rights->societe->creer)
+	elseif ($type == Categorie::TYPE_CUSTOMER && $user->rights->societe->creer)
 	{
 		$tmpobject = new Societe($db);
 		$result = $tmpobject->fetch($removeelem);
 		$elementtype = 'customer';
 	}
-	else if ($type == Categorie::TYPE_MEMBER && $user->rights->adherent->creer)
+	elseif ($type == Categorie::TYPE_MEMBER && $user->rights->adherent->creer)
 	{
 		require_once DOL_DOCUMENT_ROOT.'/adherents/class/adherent.class.php';
 		$tmpobject = new Adherent($db);
 		$result = $tmpobject->fetch($removeelem);
 		$elementtype = 'member';
 	}
-	else if ($type == Categorie::TYPE_CONTACT && $user->rights->societe->creer) {
+	elseif ($type == Categorie::TYPE_CONTACT && $user->rights->societe->creer) {
 
 		require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
 		$tmpobject = new Contact($db);
 		$result = $tmpobject->fetch($removeelem);
 		$elementtype = 'contact';
     }
-    else if ($type == Categorie::TYPE_ACCOUNT && $user->rights->banque->configurer)
+    elseif ($type == Categorie::TYPE_ACCOUNT && $user->rights->banque->configurer)
     {
         require_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
         $tmpobject = new Account($db);
         $result = $tmpobject->fetch($removeelem);
         $elementtype = 'account';
     }
-    else if ($type == Categorie::TYPE_PROJECT && $user->rights->projet->creer)
+    elseif ($type == Categorie::TYPE_PROJECT && $user->rights->projet->creer)
     {
         require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
         $tmpobject = new Project($db);
@@ -168,7 +168,6 @@ if ($type == Categorie::TYPE_PRODUCT && $elemid && $action == 'addintocategory' 
 			setEventMessages($object->error,$object->errors,'errors');
 		}
 	}
-
 }
 
 
@@ -279,7 +278,7 @@ else
 {
 	print "<br>";
 	print "<table class='noborder' width='100%'>\n";
-	print "<tr class='liste_titre'><td colspan='2'>".$langs->trans("SubCats").'</td><td align="right">';
+	print "<tr class='liste_titre'><td colspan='2'>".$langs->trans("SubCats").'</td><td class="right">';
 	if ($user->rights->categorie->creer)
 	{
 		print "<a href='".DOL_URL_ROOT."/categories/card.php?action=create&amp;catorigin=".$object->id."&amp;socid=".$object->socid."&amp;type=".$type."&amp;urlfrom=".urlencode($_SERVER["PHP_SELF"].'?id='.$object->id.'&type='.$type)."'>";
@@ -367,7 +366,7 @@ if ($type == Categorie::TYPE_PRODUCT)
 				print "</td>\n";
 				print '<td class="tdtop">'.$prod->label."</td>\n";
 				// Link to delete from category
-				print '<td align="right">';
+				print '<td class="right">';
 				$permission=0;
 				if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
 				if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -414,7 +413,7 @@ if ($type == Categorie::TYPE_SUPPLIER)
 				print $soc->getNomUrl(1);
 				print "</td>\n";
 				// Link to delete from category
-				print '<td align="right">';
+				print '<td class="right">';
 				$permission=0;
 				if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
 				if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -467,7 +466,7 @@ if($type == Categorie::TYPE_CUSTOMER)
 				print $soc->getNomUrl(1);
 				print "</td>\n";
 				// Link to delete from category
-				print '<td align="right">';
+				print '<td class="right">';
 				$permission=0;
 				if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
 				if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -520,7 +519,7 @@ if ($type == Categorie::TYPE_MEMBER)
 				print '<td class="tdtop">'.$member->lastname."</td>\n";
 				print '<td class="tdtop">'.$member->firstname."</td>\n";
 				// Link to delete from category
-				print '<td align="right">';
+				print '<td class="right">';
 				$permission=0;
 				if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
 				if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -570,7 +569,7 @@ if ($type == Categorie::TYPE_CONTACT)
 				print $contact->getNomUrl(1,'category');
 				print "</td>\n";
 				// Link to delete from category
-				print '<td align="right">';
+				print '<td class="right">';
 				$permission=0;
 				if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
 				if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -622,7 +621,7 @@ if ($type == Categorie::TYPE_ACCOUNT)
                 print '<td class="tdtop">'.$account->bank."</td>\n";
                 print '<td class="tdtop">'.$account->number."</td>\n";
                 // Link to delete from category
-                print '<td align="right">';
+                print '<td class="right">';
                 $permission=0;
                 if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
                 if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -673,7 +672,7 @@ if ($type == Categorie::TYPE_PROJECT)
 				print '<td class="tdtop">'.$project->ref."</td>\n";
 				print '<td class="tdtop">'.$project->title."</td>\n";
 				// Link to delete from category
-				print '<td align="right">';
+				print '<td class="right">';
 				$permission=0;
 				if ($type == Categorie::TYPE_PRODUCT)     $permission=($user->rights->produit->creer || $user->rights->service->creer);
 				if ($type == Categorie::TYPE_SUPPLIER)    $permission=$user->rights->societe->creer;
@@ -697,6 +696,6 @@ if ($type == Categorie::TYPE_PROJECT)
 	}
 }
 
+// End of page
 llxFooter();
-
 $db->close();

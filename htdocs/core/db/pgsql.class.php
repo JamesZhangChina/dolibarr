@@ -4,7 +4,7 @@
  * Copyright (C) 2004-2014	Laurent Destailleur		<eldy@users.sourceforge.net>
  * Copyright (C) 2004		Sebastien Di Cintio		<sdicintio@ressource-toi.org>
  * Copyright (C) 2004		Benoit Mortier			<benoit.mortier@opensides.be>
- * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2012		Yann Droneaud			<yann@droneaud.fr>
  * Copyright (C) 2012		Florian Henry			<florian.henry@open-concept.pro>
  * Copyright (C) 2015       Marcos García           <marcosgdf@gmail.com>
@@ -62,7 +62,7 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	    string	$name		Nom de la database
 	 *	@param	    int		$port		Port of database server
 	 */
-	function __construct($type, $host, $user, $pass, $name='', $port=0)
+	function __construct($type, $host, $user, $pass, $name = '', $port = 0)
 	{
 		global $conf,$langs;
 
@@ -150,7 +150,7 @@ class DoliDBPgsql extends DoliDB
      *  @param	bool	$unescapeslashquot	Unescape slash quote with quote quote
      *  @return string   					SQL request line converted
      */
-	static function convertSQLFromMysql($line,$type='auto',$unescapeslashquot=false)
+	static function convertSQLFromMysql($line, $type = 'auto', $unescapeslashquot = false)
 	{
 		// Removed empty line if this is a comment line for SVN tagging
 		if (preg_match('/^--\s\$Id/i',$line)) {
@@ -173,8 +173,8 @@ class DoliDBPgsql extends DoliDB
 		    if ($type == 'auto')
 		    {
               if (preg_match('/ALTER TABLE/i',$line)) $type='dml';
-              else if (preg_match('/CREATE TABLE/i',$line)) $type='dml';
-              else if (preg_match('/DROP TABLE/i',$line)) $type='dml';
+              elseif (preg_match('/CREATE TABLE/i',$line)) $type='dml';
+              elseif (preg_match('/DROP TABLE/i',$line)) $type='dml';
 		    }
 
     		$line=preg_replace('/ as signed\)/i',' as integer)',$line);
@@ -359,8 +359,9 @@ class DoliDBPgsql extends DoliDB
 		return $line;
 	}
 
-	/**
-	 *	Select a database
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+    /**
+     *  Select a database
      *  Ici postgresql n'a aucune fonction equivalente de mysql_select_db
      *  On compare juste manuellement si la database choisie est bien celle activee par la connexion
 	 *
@@ -369,9 +370,13 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function select_db($database)
 	{
-		if ($database == $this->database_name) return true;
-		else return false;
-	}
+        // phpcs:enable
+        if ($database == $this->database_name) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	/**
 	 *	Connexion to server
@@ -384,7 +389,7 @@ class DoliDBPgsql extends DoliDB
 	 *	@return		false|resource			Database access handler
 	 *	@see		close
 	 */
-	function connect($host, $login, $passwd, $name, $port=0)
+	function connect($host, $login, $passwd, $name, $port = 0)
 	{
 		// use pg_pconnect() instead of pg_connect() if you want to use persistent connection costing 1ms, instead of 30ms for non persistent
 
@@ -478,7 +483,7 @@ class DoliDBPgsql extends DoliDB
      * @param   string	$type           Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
 	 * @return	false|resource			Resultset of answer
 	 */
-	function query($query,$usesavepoint=0,$type='auto')
+	function query($query, $usesavepoint = 0, $type = 'auto')
 	{
 		global $conf;
 
@@ -540,6 +545,7 @@ class DoliDBPgsql extends DoliDB
 		return $ret;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Renvoie la ligne courante (comme un objet) pour le curseur resultset
 	 *
@@ -548,12 +554,14 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function fetch_object($resultset)
 	{
+        // phpcs:enable
         // If resultset not provided, we take the last used by connexion
 		if (! is_resource($resultset)) { $resultset=$this->_results; }
 		return pg_fetch_object($resultset);
 	}
 
-	/**
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+    /**
      *	Return datas as an array
      *
      *	@param	resource	$resultset  Resultset of request
@@ -561,11 +569,13 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function fetch_array($resultset)
 	{
+        // phpcs:enable
         // If resultset not provided, we take the last used by connexion
 		if (! is_resource($resultset)) { $resultset=$this->_results; }
 		return pg_fetch_array($resultset);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      *	Return datas as an array
      *
@@ -574,25 +584,29 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function fetch_row($resultset)
 	{
+        // phpcs:enable
 		// Si le resultset n'est pas fourni, on prend le dernier utilise sur cette connexion
 		if (! is_resource($resultset)) { $resultset=$this->_results; }
 		return pg_fetch_row($resultset);
 	}
 
-	/**
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+    /**
      *	Return number of lines for result of a SELECT
      *
      *	@param	resourse	$resultset  Resulset of requests
      *	@return int		    			Nb of lines, -1 on error
      *	@see    affected_rows
-	 */
+     */
 	function num_rows($resultset)
 	{
+        // phpcs:enable
         // If resultset not provided, we take the last used by connexion
 		if (! is_resource($resultset)) { $resultset=$this->_results; }
 		return pg_num_rows($resultset);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Renvoie le nombre de lignes dans le resultat d'une requete INSERT, DELETE ou UPDATE
 	 *
@@ -602,6 +616,7 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function affected_rows($resultset)
 	{
+        // phpcs:enable
         // If resultset not provided, we take the last used by connexion
 		if (! is_resource($resultset)) { $resultset=$this->_results; }
 		// pgsql necessite un resultset pour cette fonction contrairement
@@ -616,7 +631,7 @@ class DoliDBPgsql extends DoliDB
 	 * @param	resource	$resultset  Result set of request
 	 * @return	void
 	 */
-	function free($resultset=null)
+	function free($resultset = null)
 	{
         // If resultset not provided, we take the last used by connexion
 		if (! is_resource($resultset)) { $resultset=$this->_results; }
@@ -632,7 +647,7 @@ class DoliDBPgsql extends DoliDB
      *	@param	int		$offset     Numero of line from where starting fetch
      *	@return	string      		String with SQL syntax to add a limit and offset
 	 */
-	function plimit($limit=0,$offset=0)
+	function plimit($limit = 0, $offset = 0)
 	{
 		global $conf;
         if (empty($limit)) return "";
@@ -673,7 +688,7 @@ class DoliDBPgsql extends DoliDB
 	 *  @param	string	$resko          resultat si test non egal
 	 *  @return	string          		chaine formate SQL
 	 */
-	function ifsql($test,$resok,$resko)
+	function ifsql($test, $resok, $resko)
 	{
 		return '(CASE WHEN '.$test.' THEN '.$resok.' ELSE '.$resko.' END)';
 	}
@@ -754,6 +769,7 @@ class DoliDBPgsql extends DoliDB
 		return pg_last_error($this->db);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Get last ID after an insert INSERT
 	 *
@@ -761,8 +777,9 @@ class DoliDBPgsql extends DoliDB
 	 * @param	string	$fieldid	Field name
 	 * @return  string     			Id of row
 	 */
-	function last_insert_id($tab,$fieldid='rowid')
+	function last_insert_id($tab, $fieldid = 'rowid')
 	{
+        // phpcs:enable
 		//$result = pg_query($this->db,"SELECT MAX(".$fieldid.") FROM ".$tab);
 		$result = pg_query($this->db,"SELECT currval('".$tab."_".$fieldid."_seq')");
 		if (! $result)
@@ -783,7 +800,7 @@ class DoliDBPgsql extends DoliDB
      *  @param	int		$withQuotes     Return string with quotes
      *  @return string          		XXX(field) or XXX('value') or field or 'value'
 	 */
-	function encrypt($fieldorvalue, $withQuotes=0)
+	function encrypt($fieldorvalue, $withQuotes = 0)
 	{
 		global $conf;
 
@@ -819,6 +836,7 @@ class DoliDBPgsql extends DoliDB
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Return connexion ID
 	 *
@@ -826,11 +844,13 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function DDLGetConnectId()
 	{
+        // phpcs:enable
 		return '?';
 	}
 
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Create a new database
 	 *	Do not use function xxx_create_db (xxx=mysql, ...) as they are deprecated
@@ -842,8 +862,9 @@ class DoliDBPgsql extends DoliDB
 	 * 	@param	string	$owner			Username of database owner
 	 * 	@return	false|resource				resource defined if OK, null if KO
 	 */
-	function DDLCreateDb($database,$charset='',$collation='',$owner='')
+	function DDLCreateDb($database, $charset = '', $collation = '', $owner = '')
 	{
+        // phpcs:enable
 	    if (empty($charset))   $charset=$this->forcecharset;
 		if (empty($collation)) $collation=$this->forcecollate;
 
@@ -856,6 +877,7 @@ class DoliDBPgsql extends DoliDB
 		return $ret;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  List tables into a database
 	 *
@@ -863,8 +885,9 @@ class DoliDBPgsql extends DoliDB
 	 *  @param	string		$table		Name of table filter ('xxx%')
 	 *  @return	array					List of tables in an array
 	 */
-	function DDLListTables($database, $table='')
-	{
+	function DDLListTables($database, $table = '')
+    {
+        // phpcs:enable
 		$listtables=array();
 
 		$like = '';
@@ -880,6 +903,7 @@ class DoliDBPgsql extends DoliDB
 		return $listtables;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	List information of columns into a table.
 	 *
@@ -889,6 +913,7 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function DDLInfoTable($table)
 	{
+        // phpcs:enable
 		$infotables=array();
 
 		$sql="SELECT ";
@@ -920,6 +945,7 @@ class DoliDBPgsql extends DoliDB
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Create a table into database
 	 *
@@ -932,8 +958,9 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	    array	$keys 			Tableau des champs cles noms => valeur
 	 *	@return	    int						<0 if KO, >=0 if OK
 	 */
-	function DDLCreateTable($table,$fields,$primary_key,$type,$unique_keys=null,$fulltext_keys=null,$keys=null)
+	function DDLCreateTable($table, $fields, $primary_key, $type, $unique_keys = null, $fulltext_keys = null, $keys = null)
 	{
+        // phpcs:enable
 		// FIXME: $fulltext_keys parameter is unused
 
 		// cles recherchees dans le tableau des descriptions (fields) : type,value,attribute,null,default,extra
@@ -946,19 +973,19 @@ class DoliDBPgsql extends DoliDB
 			$sqlfields[$i]  .= $field_desc['type'];
 			if( preg_match("/^[^\s]/i",$field_desc['value']))
 			$sqlfields[$i]  .= "(".$field_desc['value'].")";
-			else if( preg_match("/^[^\s]/i",$field_desc['attribute']))
+			elseif( preg_match("/^[^\s]/i",$field_desc['attribute']))
 			$sqlfields[$i]  .= " ".$field_desc['attribute'];
-			else if( preg_match("/^[^\s]/i",$field_desc['default']))
+			elseif( preg_match("/^[^\s]/i",$field_desc['default']))
 			{
 				if(preg_match("/null/i",$field_desc['default']))
 				$sqlfields[$i]  .= " default ".$field_desc['default'];
 				else
 				$sqlfields[$i]  .= " default '".$field_desc['default']."'";
 			}
-			else if( preg_match("/^[^\s]/i",$field_desc['null']))
+			elseif( preg_match("/^[^\s]/i",$field_desc['null']))
 			$sqlfields[$i]  .= " ".$field_desc['null'];
 
-			else if( preg_match("/^[^\s]/i",$field_desc['extra']))
+			elseif( preg_match("/^[^\s]/i",$field_desc['extra']))
 			$sqlfields[$i]  .= " ".$field_desc['extra'];
 			$i++;
 		}
@@ -999,6 +1026,7 @@ class DoliDBPgsql extends DoliDB
 		return 1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Drop a table into database
 	 *
@@ -1007,6 +1035,7 @@ class DoliDBPgsql extends DoliDB
 	 */
 	function DDLDropTable($table)
 	{
+        // phpcs:enable
 		$sql = "DROP TABLE ".$table;
 
 		if (! $this->query($sql))
@@ -1015,6 +1044,7 @@ class DoliDBPgsql extends DoliDB
 			return 1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Create a user to connect to database
 	 *
@@ -1024,8 +1054,9 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	string	$dolibarr_main_db_name		Database name where user must be granted
 	 *	@return	int									<0 if KO, >=0 if OK
 	 */
-	function DDLCreateUser($dolibarr_main_db_host,$dolibarr_main_db_user,$dolibarr_main_db_pass,$dolibarr_main_db_name)
+	function DDLCreateUser($dolibarr_main_db_host, $dolibarr_main_db_user, $dolibarr_main_db_pass, $dolibarr_main_db_name)
 	{
+        // phpcs:enable
 		// Note: using ' on user does not works with pgsql
 		$sql = "CREATE USER ".$this->escape($dolibarr_main_db_user)." with password '".$this->escape($dolibarr_main_db_pass)."'";
 
@@ -1039,6 +1070,7 @@ class DoliDBPgsql extends DoliDB
 		return 1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Return a pointer of line with description of a table or field
 	 *
@@ -1046,8 +1078,9 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	string		$field	Optionnel : Name of field if we want description of field
 	 *	@return	false|resource		Resultset x (x->attname)
 	 */
-	function DDLDescTable($table,$field="")
+	function DDLDescTable($table, $field = "")
 	{
+        // phpcs:enable
 		$sql ="SELECT attname FROM pg_attribute, pg_type WHERE typname = '".$table."' AND attrelid = typrelid";
 		$sql.=" AND attname NOT IN ('cmin', 'cmax', 'ctid', 'oid', 'tableoid', 'xmin', 'xmax')";
 		if ($field) $sql.= " AND attname = '".$field."'";
@@ -1057,6 +1090,7 @@ class DoliDBPgsql extends DoliDB
 		return $this->_results;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Create a new field into table
 	 *
@@ -1066,36 +1100,38 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	string	$field_position 	Optionnel ex.: "after champtruc"
 	 *	@return	int							<0 if KO, >0 if OK
 	 */
-	function DDLAddField($table,$field_name,$field_desc,$field_position="")
+	function DDLAddField($table, $field_name, $field_desc, $field_position = "")
 	{
+        // phpcs:enable
 		// cles recherchees dans le tableau des descriptions (field_desc) : type,value,attribute,null,default,extra
 		// ex. : $field_desc = array('type'=>'int','value'=>'11','null'=>'not null','extra'=> 'auto_increment');
 		$sql= "ALTER TABLE ".$table." ADD ".$field_name." ";
 		$sql .= $field_desc['type'];
-		if(preg_match("/^[^\s]/i",$field_desc['value']))
+		if (preg_match("/^[^\s]/i",$field_desc['value']))
 		    if (! in_array($field_desc['type'],array('int','date','datetime')))
 		    {
 		        $sql.= "(".$field_desc['value'].")";
 		    }
 		if (preg_match("/^[^\s]/i",$field_desc['attribute']))
-		$sql .= " ".$field_desc['attribute'];
+            $sql .= " ".$field_desc['attribute'];
 		if (preg_match("/^[^\s]/i",$field_desc['null']))
-		$sql .= " ".$field_desc['null'];
+            $sql .= " ".$field_desc['null'];
 		if (preg_match("/^[^\s]/i",$field_desc['default']))
-		if (preg_match("/null/i",$field_desc['default']))
-		$sql .= " default ".$field_desc['default'];
-		else
-		$sql .= " default '".$field_desc['default']."'";
+            if (preg_match("/null/i",$field_desc['default']))
+                $sql .= " default ".$field_desc['default'];
+		    else
+                $sql .= " default '".$field_desc['default']."'";
 		if (preg_match("/^[^\s]/i",$field_desc['extra']))
-		$sql .= " ".$field_desc['extra'];
+            $sql .= " ".$field_desc['extra'];
 		$sql .= " ".$field_position;
 
 		dol_syslog($sql,LOG_DEBUG);
-		if(! $this -> query($sql))
+		if (! $this -> query($sql))
 			return -1;
 		return 1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Update format of a field into a table
 	 *
@@ -1104,8 +1140,9 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	string	$field_desc 		Array with description of field format
 	 *	@return	int							<0 if KO, >0 if OK
 	 */
-	function DDLUpdateField($table,$field_name,$field_desc)
+	function DDLUpdateField($table, $field_name, $field_desc)
 	{
+        // phpcs:enable
 		$sql = "ALTER TABLE ".$table;
 		$sql .= " MODIFY COLUMN ".$field_name." ".$field_desc['type'];
 		if ($field_desc['type'] == 'double' || $field_desc['type'] == 'tinyint' || $field_desc['type'] == 'int' || $field_desc['type'] == 'varchar') {
@@ -1139,6 +1176,7 @@ class DoliDBPgsql extends DoliDB
 		return 1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Drop a field from table
 	 *
@@ -1146,8 +1184,9 @@ class DoliDBPgsql extends DoliDB
 	 *	@param	string	$field_name 	Name of field to drop
 	 *	@return	int						<0 if KO, >0 if OK
 	 */
-	function DDLDropField($table,$field_name)
+	function DDLDropField($table, $field_name)
 	{
+        // phpcs:enable
 		$sql= "ALTER TABLE ".$table." DROP COLUMN ".$field_name;
 		dol_syslog($sql,LOG_DEBUG);
 		if (! $this->query($sql))
@@ -1304,7 +1343,7 @@ class DoliDBPgsql extends DoliDB
 	 * @param	string	$filter		Filter list on a particular value
 	 * @return	array				Array of key-values (key=>value)
 	 */
-	function getServerParametersValues($filter='')
+	function getServerParametersValues($filter = '')
 	{
 		$result=array();
 
@@ -1325,7 +1364,7 @@ class DoliDBPgsql extends DoliDB
 	 * @param	string	$filter		Filter list on a particular value
 	 * @return  array				Array of key-values (key=>value)
 	 */
-	function getServerStatusValues($filter='')
+	function getServerStatusValues($filter = '')
 	{
 		/* This is to return current running requests.
 		$sql='SELECT datname,procpid,current_query FROM pg_stat_activity ORDER BY procpid';

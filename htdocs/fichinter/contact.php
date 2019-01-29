@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+/* Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2007-2009 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2012      Juanjo Menent        <jmenent@2byte.es>
  *
@@ -81,13 +81,13 @@ if ($action == 'addcontact' && $user->rights->ficheinter->creer)
 }
 
 // Toggle the status of a contact
-else if ($action == 'swapstatut' && $user->rights->ficheinter->creer)
+elseif ($action == 'swapstatut' && $user->rights->ficheinter->creer)
 {
     $result=$object->swapContactStatus(GETPOST('ligne','int'));
 }
 
 // Deletes a contact
-else if ($action == 'deletecontact' && $user->rights->ficheinter->creer)
+elseif ($action == 'deletecontact' && $user->rights->ficheinter->creer)
 {
 	$result = $object->delete_contact(GETPOST('lineid','int'));
 
@@ -185,7 +185,6 @@ if ($id > 0 || ! empty($ref))
 	    $res=@include dol_buildpath($reldir.'/contacts.tpl.php');
 	    if ($res) break;
 	}
-
 }
 
 

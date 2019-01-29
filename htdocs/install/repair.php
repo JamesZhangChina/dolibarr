@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2004      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2015      Raphaël Doursenaud   <rdoursenaud@gpcsolutions.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -549,11 +549,11 @@ if ($ok && GETPOST('clean_menus','alpha'))
 								dol_print_error($db);
 							}
 							else
-								print ' - <font class="warning">Cleaned</font>';
+								print ' - <span class="warning">Cleaned</span>';
 						}
 						else
 						{
-							print ' - <font class="warning">Canceled (test mode)</font>';
+							print ' - <span class="warning">Canceled (test mode)</span>';
 						}
 					}
 					else
@@ -617,38 +617,37 @@ if ($ok && GETPOST('clean_orphelin_dir','alpha'))
             include_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
             $object_instance=new Facture($db);
         }
-        else if ($modulepart == 'invoice_supplier')
+        elseif ($modulepart == 'invoice_supplier')
         {
             include_once DOL_DOCUMENT_ROOT.'/fourn/class/fournisseur.facture.class.php';
             $object_instance=new FactureFournisseur($db);
         }
-        else if ($modulepart == 'propal')
+        elseif ($modulepart == 'propal')
         {
             include_once DOL_DOCUMENT_ROOT.'/comm/propal/class/propal.class.php';
             $object_instance=new Propal($db);
         }
-        else if ($modulepart == 'order')
+        elseif ($modulepart == 'order')
         {
             include_once DOL_DOCUMENT_ROOT.'/commande/class/commande.class.php';
             $object_instance=new Commande($db);
         }
-        else if ($modulepart == 'order_supplier')
+        elseif ($modulepart == 'order_supplier')
         {
             include_once DOL_DOCUMENT_ROOT.'/fourn/class/fournisseur.commande.class.php';
             $object_instance=new CommandeFournisseur($db);
         }
-        else if ($modulepart == 'contract')
+        elseif ($modulepart == 'contract')
         {
             include_once DOL_DOCUMENT_ROOT.'/contrat/class/contrat.class.php';
             $object_instance=new Contrat($db);
         }
-        else if ($modulepart == 'tax')
+        elseif ($modulepart == 'tax')
         {
             include_once DOL_DOCUMENT_ROOT.'/compta/sociales/class/chargesociales.class.php';
             $object_instance=new ChargeSociales($db);
         }
 
-        $var=true;
         foreach($filearray as $key => $file)
         {
             if (!is_dir($file['name'])
@@ -703,7 +702,7 @@ if ($ok && GETPOST('clean_orphelin_dir','alpha'))
                         }
                         print "</td></tr>";
                     }
-                    else if ($result < 0) print 'Error in '.get_class($object_instance).'.fetch of id'.$id.' ref='.$ref.', result='.$result.'<br>';
+                    elseif ($result < 0) print 'Error in '.get_class($object_instance).'.fetch of id'.$id.' ref='.$ref.', result='.$result.'<br>';
                 }
             }
         }
@@ -898,7 +897,6 @@ if ($ok && GETPOST('set_empty_time_spent_amount','alpha'))
     {
         dol_print_error($db);
     }
-
 }
 
 
@@ -984,11 +982,11 @@ if ($ok && GETPOST('force_disable_of_modules_not_found','alpha'))
 	                                    dol_print_error($db);
 	                                }
 	                                else
-	                                    print ' - <font class="warning">Cleaned</font>';
+	                                    print ' - <span class="warning">Cleaned</span>';
 	                            }
 	                            else
 	                            {
-	                                print ' - <font class="warning">Canceled (test mode)</font>';
+	                                print ' - <span class="warning">Canceled (test mode)</span>';
 	                            }
 	                        }
 	                        else

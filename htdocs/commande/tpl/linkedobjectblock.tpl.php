@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2010-2011	Regis Houssin <regis.houssin@capnetworks.com>
+/* Copyright (C) 2010-2011	Regis Houssin <regis.houssin@inodbox.com>
  * Copyright (C) 2013		Juanjo Menent <jmenent@2byte.es>
  * Copyright (C) 2014       Marcos García <marcosgdf@gmail.com>
  *
@@ -81,9 +81,9 @@ if (count($linkedObjectBlock) > 1)
         <td></td>
     	<td align="center"></td>
     	<td align="center"></td>
-    	<td align="right"><?php echo price($total); ?></td>
-    	<td align="right"></td>
-    	<td align="right"></td>
+    	<td class="right"><?php echo price($total); ?></td>
+    	<td class="right"></td>
+    	<td class="right"></td>
     </tr>
     <?php
 }

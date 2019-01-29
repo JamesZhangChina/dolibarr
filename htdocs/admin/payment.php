@@ -83,7 +83,6 @@ if ($action == 'setparams')
 	{
 	    setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	}
-
 }
 
 
@@ -217,7 +216,6 @@ foreach ($dirmodels as $reldir)
                             print '</td>';
 
                             print "</tr>\n";
-
                         }
                     }
                 }
@@ -249,7 +247,7 @@ print '<tr class="oddeven"><td>';
 print $langs->trans("PaymentOnDifferentThirdBills");
 print '</td><td width="60" align="center">';
 print $form->selectyesno("FACTURE_PAYMENTS_ON_DIFFERENT_THIRDPARTIES_BILLS",$conf->global->FACTURE_PAYMENTS_ON_DIFFERENT_THIRDPARTIES_BILLS,1);
-print '</td><td align="right">';
+print '</td><td class="right">';
 print "</td></tr>\n";
 
 print '</table>';
@@ -262,7 +260,6 @@ print '</form>';
 
 dol_fiche_end();
 
-
+// End of page
 llxFooter();
-
 $db->close();

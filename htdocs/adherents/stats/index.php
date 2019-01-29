@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,8 +46,8 @@ $year = strftime("%Y", time());
 $startyear=$year-2;
 $endyear=$year;
 
-$langs->load("members");
-$langs->load("companies");
+// Load translation files required by the page
+$langs->loadLangs(array("companies","members"));
 
 
 /*
@@ -167,12 +167,13 @@ print '<br><br>';
 $data = $stats->getAllByYear();
 
 
+print '<div class="div-table-responsive-no-min">';
 print '<table class="noborder">';
 print '<tr class="liste_titre" height="24">';
 print '<td align="center">'.$langs->trans("Year").'</td>';
-print '<td align="right">'.$langs->trans("NbOfSubscriptions").'</td>';
-print '<td align="right">'.$langs->trans("AmountTotal").'</td>';
-print '<td align="right">'.$langs->trans("AmountAverage").'</td>';
+print '<td class="right">'.$langs->trans("NbOfSubscriptions").'</td>';
+print '<td class="right">'.$langs->trans("AmountTotal").'</td>';
+print '<td class="right">'.$langs->trans("AmountAverage").'</td>';
 print '</tr>';
 
 $oldyear=0;
@@ -188,9 +189,9 @@ foreach ($data as $val)
         print $oldyear;
         print '</a>';
         print '</td>';
-        print '<td align="right">0</td>';
-        print '<td align="right">0</td>';
-        print '<td align="right">0</td>';
+        print '<td class="right">0</td>';
+        print '<td class="right">0</td>';
+        print '<td class="right">0</td>';
         print '</tr>';
     }
     print '<tr class="oddeven" height="24">';
@@ -199,14 +200,15 @@ foreach ($data as $val)
     print $year;
     //print '</a>';
     print '</td>';
-    print '<td align="right">'.$val['nb'].'</td>';
-    print '<td align="right">'.price(price2num($val['total'],'MT'),1).'</td>';
-    print '<td align="right">'.price(price2num($val['avg'],'MT'),1).'</td>';
+    print '<td class="right">'.$val['nb'].'</td>';
+    print '<td class="right">'.price(price2num($val['total'],'MT'),1).'</td>';
+    print '<td class="right">'.price(price2num($val['avg'],'MT'),1).'</td>';
     print '</tr>';
     $oldyear=$year;
 }
 
 print '</table>';
+print '</div>';
 
 
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
@@ -229,7 +231,6 @@ print '<div style="clear:both"></div>';
 
 dol_fiche_end();
 
-
+// End of page
 llxFooter();
-
 $db->close();

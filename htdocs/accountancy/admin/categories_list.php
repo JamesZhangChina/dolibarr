@@ -34,7 +34,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formaccounting.class.php';
 // Load translation files required by the page
 $langs->loadLangs(array("errors","admin","companies","resource","holiday","accountancy","hrm"));
 
-$action=GETPOST('action','alpha')?GETPOST('action','alpha'):'view';
+$action=GETPOST('action','aZ09')?GETPOST('action','aZ09'):'view';
 $confirm=GETPOST('confirm','alpha');
 $id=32;
 $rowid=GETPOST('rowid','alpha');
@@ -51,8 +51,8 @@ $acts[1] = "disable";
 $actl[0] = img_picto($langs->trans("Disabled"),'switch_off');
 $actl[1] = img_picto($langs->trans("Activated"),'switch_on');
 
-$listoffset=GETPOST('listoffset');
-$listlimit=GETPOST('listlimit')>0?GETPOST('listlimit'):1000;
+$listoffset=GETPOST('listoffset','alpha');
+$listlimit=GETPOST('listlimit','int')>0?GETPOST('listlimit','int'):1000;
 $active = 1;
 
 $sortfield = GETPOST("sortfield",'aZ09comma');
@@ -134,13 +134,13 @@ $sourceList=array();
  * Actions
  */
 
-if (GETPOST('button_removefilter') || GETPOST('button_removefilter.x') || GETPOST('button_removefilter_x'))
+if (GETPOST('button_removefilter','alpha') || GETPOST('button_removefilter.x','alpha') || GETPOST('button_removefilter_x','alpha'))
 {
     $search_country_id = '';
 }
 
 // Actions add or modify an entry into a dictionary
-if (GETPOST('actionadd') || GETPOST('actionmodify'))
+if (GETPOST('actionadd','alpha') || GETPOST('actionmodify','alpha'))
 {
     $listfield=explode(',', str_replace(' ', '',$tabfield[$id]));
     $listfieldinsert=explode(',',$tabfieldinsert[$id]);
@@ -202,7 +202,6 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
             {
                 $obj = $db->fetch_object($result);
                 $newid=($obj->newid + 1);
-
             } else {
                 dol_print_error($db);
             }
@@ -250,7 +249,7 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
     }
 
     // Si verif ok et action modify, on modifie la ligne
-    if ($ok && GETPOST('actionmodify'))
+    if ($ok && GETPOST('actionmodify','alpha'))
     {
         if ($tabrowid[$id]) { $rowidcol=$tabrowid[$id]; }
         else { $rowidcol="rowid"; }
@@ -269,7 +268,7 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
             if ($field == 'fk_country' && $_POST['country'] > 0) {
             	$_POST[$listfieldvalue[$i]] = $_POST['country'];
             }
-            else if ($field == 'entity') {
+            elseif ($field == 'entity') {
             	$_POST[$listfieldvalue[$i]] = $conf->entity;
             }
             if ($i) $sql.=",";
@@ -291,7 +290,7 @@ if (GETPOST('actionadd') || GETPOST('actionmodify'))
     //$_GET["id"]=GETPOST('id', 'int');       // Force affichage dictionnaire en cours d'edition
 }
 
-if (GETPOST('actioncancel'))
+if (GETPOST('actioncancel','alpha'))
 {
     //$_GET["id"]=GETPOST('id', 'int');       // Force affichage dictionnaire en cours d'edition
 }
@@ -493,7 +492,7 @@ if ($id)
             {
                 print '<td align="'.$align.'">';
             	if (! empty($tabhelp[$id][$value]) && preg_match('/^http(s*):/i',$tabhelp[$id][$value])) print '<a href="'.$tabhelp[$id][$value].'" target="_blank">'.$valuetoshow.' '.img_help(1,$valuetoshow).'</a>';
-            	else if (! empty($tabhelp[$id][$value])) print $form->textwithpicto($valuetoshow,$tabhelp[$id][$value]);
+            	elseif (! empty($tabhelp[$id][$value])) print $form->textwithpicto($valuetoshow,$tabhelp[$id][$value]);
             	else print $valuetoshow;
                 print '</td>';
              }
@@ -513,7 +512,7 @@ if ($id)
 
         $obj = new stdClass();
         // If data was already input, we define them in obj to populate input fields.
-        if (GETPOST('actionadd'))
+        if (GETPOST('actionadd','alpha'))
         {
             foreach ($fieldlist as $key=>$val)
             {
@@ -700,10 +699,10 @@ if ($id)
                             {
                                 $valuetoshow = yn($valuetoshow);
                             }
-                            else if ($valuetoshow=='all') {
+                            elseif ($valuetoshow=='all') {
                                 $valuetoshow=$langs->trans('All');
                             }
-                            else if ($fieldlist[$field]=='country') {
+                            elseif ($fieldlist[$field]=='country') {
                                 if (empty($obj->country_code))
                                 {
                                     $valuetoshow='-';
@@ -714,20 +713,20 @@ if ($id)
                                     $valuetoshow=($key != "Country".strtoupper($obj->country_code)?$obj->country_code." - ".$key:$obj->country);
                                 }
                             }
-                            else if ($fieldlist[$field]=='label' && $tabname[$id]==MAIN_DB_PREFIX.'c_country') {
+                            elseif ($fieldlist[$field]=='label' && $tabname[$id]==MAIN_DB_PREFIX.'c_country') {
                                 $key=$langs->trans("Country".strtoupper($obj->code));
                                 $valuetoshow=($obj->code && $key != "Country".strtoupper($obj->code)?$key:$obj->{$fieldlist[$field]});
                             }
-                            else if ($fieldlist[$field]=='label' && $tabname[$id]==MAIN_DB_PREFIX.'c_availability') {
+                            elseif ($fieldlist[$field]=='label' && $tabname[$id]==MAIN_DB_PREFIX.'c_availability') {
                                 $langs->loadLangs(array("propal"));
                                 $key=$langs->trans("AvailabilityType".strtoupper($obj->code));
                                 $valuetoshow=($obj->code && $key != "AvailabilityType".strtoupper($obj->code)?$key:$obj->{$fieldlist[$field]});
                             }
-                            else if ($fieldlist[$field]=='libelle' && $tabname[$id]==MAIN_DB_PREFIX.'c_actioncomm') {
+                            elseif ($fieldlist[$field]=='libelle' && $tabname[$id]==MAIN_DB_PREFIX.'c_actioncomm') {
                                 $key=$langs->trans("Action".strtoupper($obj->code));
                                 $valuetoshow=($obj->code && $key != "Action".strtoupper($obj->code)?$key:$obj->{$fieldlist[$field]});
                             }
-                            else if ($fieldlist[$field]=='region_id' || $fieldlist[$field]=='country_id') {
+                            elseif ($fieldlist[$field]=='region_id' || $fieldlist[$field]=='country_id') {
                                 $showfield=0;
                             }
 
@@ -800,7 +799,7 @@ if ($id)
 
 print '<br>';
 
-
+// End of page
 llxFooter();
 $db->close();
 
@@ -814,7 +813,7 @@ $db->close();
  *  @param		string	$context		'add'=Output field for the "add form", 'edit'=Output field for the "edit form", 'hide'=Output field for the "add form" but we dont want it to be rendered
  *	@return		void
  */
-function fieldListAccountingCategories($fieldlist, $obj='', $tabname='', $context='')
+function fieldListAccountingCategories($fieldlist, $obj = '', $tabname = '', $context = '')
 {
 	global $conf,$langs,$db;
 	global $form, $mysoc;

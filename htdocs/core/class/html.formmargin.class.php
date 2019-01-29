@@ -28,8 +28,15 @@
  */
 class FormMargin
 {
-    var $db;
-    var $error;
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+
+    /**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
 
     /**
@@ -40,8 +47,6 @@ class FormMargin
     function __construct($db)
     {
         $this->db = $db;
-
-        return 1;
     }
 
 
@@ -54,7 +59,7 @@ class FormMargin
 	 * 	@param 	boolean			$force_price	True of not
 	 * 	@return array							Array with info
 	 */
-	function getMarginInfosArray($object, $force_price=false)
+	function getMarginInfosArray($object, $force_price = false)
 	{
 		global $conf, $db;
 
@@ -186,7 +191,7 @@ class FormMargin
 	 * 	@param 	boolean			$force_price	Force price
 	 * 	@return	void
 	 */
-	function displayMarginInfos($object, $force_price=false)
+	function displayMarginInfos($object, $force_price = false)
 	{
 		global $langs, $conf, $user;
 
@@ -275,6 +280,5 @@ class FormMargin
 		print '</table>';
 		print '</div>';
 	}
-
 }
 

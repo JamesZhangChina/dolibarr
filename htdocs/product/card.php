@@ -2,13 +2,13 @@
 /* Copyright (C) 2001-2007	Rodolphe Quiedeville	<rodolphe@quiedeville.org>
  * Copyright (C) 2004-2016	Laurent Destailleur		<eldy@users.sourceforge.net>
  * Copyright (C) 2005		Eric Seigne				<eric.seigne@ryxeo.com>
- * Copyright (C) 2005-2015	Regis Houssin			<regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2015	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2006		Andre Cianfarani		<acianfa@free.fr>
  * Copyright (C) 2006		Auguria SARL			<info@auguria.org>
  * Copyright (C) 2010-2015	Juanjo Menent			<jmenent@2byte.es>
  * Copyright (C) 2013-2016	Marcos García			<marcosgdf@gmail.com>
  * Copyright (C) 2012-2013	Cédric Salvador			<csalvador@gpcsolutions.fr>
- * Copyright (C) 2011-2017	Alexandre Spangaro		<aspangaro@zendsi.com>
+ * Copyright (C) 2011-2019	Alexandre Spangaro		<aspangaro@open-dsi.fr>
  * Copyright (C) 2014		Cédric Gross			<c.gross@kreiz-it.fr>
  * Copyright (C) 2014-2015	Ferran Marcet			<fmarcet@2byte.es>
  * Copyright (C) 2015		Jean-François Ferry		<jfefe@aternatik.fr>
@@ -112,7 +112,7 @@ if (! empty($canvas))
 // Security check
 $fieldvalue = (! empty($id) ? $id : (! empty($ref) ? $ref : ''));
 $fieldtype = (! empty($id) ? 'rowid' : 'ref');
-$result=restrictedArea($user,'produit|service',$fieldvalue,'product&product','','',$fieldtype,$objcanvas);
+$result=restrictedArea($user,'produit|service',$fieldvalue,'product&product','','',$fieldtype);
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('productcard','globalcard'));
@@ -175,8 +175,8 @@ if (empty($reshook))
 		{
 			$langs->load("errors");
         	if ($result == -1) $errors[] = 'ErrorBadBarCodeSyntax';
-        	else if ($result == -2) $errors[] = 'ErrorBarCodeRequired';
-        	else if ($result == -3) $errors[] = 'ErrorBarCodeAlreadyUsed';
+        	elseif ($result == -2) $errors[] = 'ErrorBarCodeRequired';
+        	elseif ($result == -3) $errors[] = 'ErrorBarCodeAlreadyUsed';
         	else $errors[] = 'FailedToValidateBarCode';
 
 			$error++;
@@ -477,7 +477,6 @@ if (empty($reshook))
                     $action = 'edit';
                 }
             }
-
         }
     }
 
@@ -689,7 +688,7 @@ if (empty($reshook))
                 if (($result = $propal->defineBuyPrice($pu_ht, GETPOST('remise_percent'), $object->id)) < 0)
                 {
                     dol_syslog($langs->trans('FailedToGetCostPrice'));
-                    setEventMessage($langs->trans('FailedToGetCostPrice'), 'errors');
+                    setEventMessages($langs->trans('FailedToGetCostPrice'), null, 'errors');
                 }
                 else
                 {
@@ -732,7 +731,7 @@ if (empty($reshook))
                 if (($result = $commande->defineBuyPrice($pu_ht, GETPOST('remise_percent'), $object->id)) < 0)
                 {
                     dol_syslog($langs->trans('FailedToGetCostPrice'));
-                    setEventMessage($langs->trans('FailedToGetCostPrice'), 'errors');
+                    setEventMessages($langs->trans('FailedToGetCostPrice'), null, 'errors');
                 }
                 else
                 {
@@ -775,7 +774,7 @@ if (empty($reshook))
                 if (($result = $facture->defineBuyPrice($pu_ht, GETPOST('remise_percent'), $object->id)) < 0)
                 {
                     dol_syslog($langs->trans('FailedToGetCostPrice'));
-                    setEventMessage($langs->trans('FailedToGetCostPrice'), 'errors');
+                    setEventMessages($langs->trans('FailedToGetCostPrice'), null, 'errors');
                 }
                 else
                 {
@@ -977,7 +976,7 @@ else
 	        }
 	        require_once DOL_DOCUMENT_ROOT.'/core/class/html.formbarcode.class.php';
             $formbarcode = new FormBarCode($db);
-	        print $formbarcode->select_barcode_type($fk_barcode_type, 'fk_barcode_type', 1);
+            print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
 	        print '</td><td>'.$langs->trans("BarcodeValue").'</td><td>';
 	        $tmpcode=isset($_POST['barcode'])?GETPOST('barcode'):$object->barcode;
 	        if (empty($tmpcode) && ! empty($modBarCodeProduct->code_auto)) $tmpcode=$modBarCodeProduct->getNextValue($object,$type);
@@ -1047,7 +1046,7 @@ else
             // Weight
             print '<tr><td>'.$langs->trans("Weight").'</td><td colspan="3">';
             print '<input name="weight" size="4" value="'.GETPOST('weight').'">';
-            print $formproduct->select_measuring_units("weight_units","weight");
+            print $formproduct->select_measuring_units("weight_units", "weight", (empty($conf->global->MAIN_WEIGHT_DEFAULT_UNIT)?0:$conf->global->MAIN_WEIGHT_DEFAULT_UNIT));
             print '</td></tr>';
             // Length
             if (empty($conf->global->PRODUCT_DISABLE_SIZE))
@@ -1067,11 +1066,14 @@ else
                 print $formproduct->select_measuring_units("surface_units","surface");
                 print '</td></tr>';
             }
-            // Volume
-            print '<tr><td>'.$langs->trans("Volume").'</td><td colspan="3">';
-            print '<input name="volume" size="4" value="'.GETPOST('volume').'">';
-            print $formproduct->select_measuring_units("volume_units","volume");
-            print '</td></tr>';
+            if (empty($conf->global->PRODUCT_DISABLE_VOLUME))
+            {
+                // Volume
+                print '<tr><td>'.$langs->trans("Volume").'</td><td colspan="3">';
+                print '<input name="volume" size="4" value="'.GETPOST('volume').'">';
+                print $formproduct->select_measuring_units("volume_units","volume");
+                print '</td></tr>';
+            }
         }
 
         // Units
@@ -1177,23 +1179,20 @@ else
 			print $formaccounting->select_account(GETPOST('accountancy_code_sell'), 'accountancy_code_sell', 1, null, 1, 1, '');
 			print '</td></tr>';
 
-			if ($conf->global->MAIN_FEATURES_LEVEL)
+			// Accountancy_code_sell_intra
+			if ($mysoc->isInEEC())
 			{
-				// Accountancy_code_sell_intra
-				if ($mysoc->isInEEC())
-				{
-					print '<tr><td class="titlefieldcreate">'.$langs->trans("ProductAccountancySellIntraCode").'</td>';
-					print '<td>';
-					print $formaccounting->select_account(GETPOST('accountancy_code_sell_intra'), 'accountancy_code_sell_intra', 1, null, 1, 1, '');
-					print '</td></tr>';
-				}
-
-				// Accountancy_code_sell_export
-				print '<tr><td class="titlefieldcreate">'.$langs->trans("ProductAccountancySellExportCode").'</td>';
+				print '<tr><td class="titlefieldcreate">'.$langs->trans("ProductAccountancySellIntraCode").'</td>';
 				print '<td>';
-				print $formaccounting->select_account(GETPOST('accountancy_code_sell_export'), 'accountancy_code_sell_export', 1, null, 1, 1, '');
+				print $formaccounting->select_account(GETPOST('accountancy_code_sell_intra'), 'accountancy_code_sell_intra', 1, null, 1, 1, '');
 				print '</td></tr>';
 			}
+
+			// Accountancy_code_sell_export
+			print '<tr><td class="titlefieldcreate">'.$langs->trans("ProductAccountancySellExportCode").'</td>';
+			print '<td>';
+			print $formaccounting->select_account(GETPOST('accountancy_code_sell_export'), 'accountancy_code_sell_export', 1, null, 1, 1, '');
+			print '</td></tr>';
 
 			// Accountancy_code_buy
 			print '<tr><td>'.$langs->trans("ProductAccountancyBuyCode").'</td>';
@@ -1246,7 +1245,7 @@ else
      * Product card
      */
 
-    else if ($object->id > 0)
+    elseif ($object->id > 0)
     {
         // Fiche en mode edition
 		if ($action == 'edit' && $usercancreate)
@@ -1340,7 +1339,7 @@ else
 		        }
 		        require_once DOL_DOCUMENT_ROOT.'/core/class/html.formbarcode.class.php';
 	            $formbarcode = new FormBarCode($db);
-		        print $formbarcode->select_barcode_type($fk_barcode_type, 'fk_barcode_type', 1);
+                print $formbarcode->selectBarcodeType($fk_barcode_type, 'fk_barcode_type', 1);
 		        print '</td><td>'.$langs->trans("BarcodeValue").'</td><td>';
 		        $tmpcode=isset($_POST['barcode'])?GETPOST('barcode'):$object->barcode;
 		        if (empty($tmpcode) && ! empty($modBarCodeProduct->code_auto)) $tmpcode=$modBarCodeProduct->getNextValue($object,$type);
@@ -1636,7 +1635,7 @@ else
 				}
                 if ($action == 'editbarcodetype')
                 {
-                    $formbarcode->form_barcode_type($_SERVER['PHP_SELF'].'?id='.$object->id,$object->barcode_type,'fk_barcode_type');
+                    print $formbarcode->formBarcodeType($_SERVER['PHP_SELF'].'?id='.$object->id, $object->barcode_type, 'fk_barcode_type');
                 }
                 else
                 {
@@ -1824,7 +1823,7 @@ else
                 {
                     $dur=array("i"=>$langs->trans("Minute"),"h"=>$langs->trans("Hours"),"d"=>$langs->trans("Days"),"w"=>$langs->trans("Weeks"),"m"=>$langs->trans("Months"),"y"=>$langs->trans("Years"));
                 }
-                else if ($object->duration_value > 0)
+                elseif ($object->duration_value > 0)
                 {
                     $dur=array("i"=>$langs->trans("Minute"),"h"=>$langs->trans("Hour"),"d"=>$langs->trans("Day"),"w"=>$langs->trans("Week"),"m"=>$langs->trans("Month"),"y"=>$langs->trans("Year"));
                 }
@@ -1940,9 +1939,8 @@ else
 
             dol_fiche_end();
         }
-
     }
-    else if ($action != 'create')
+    elseif ($action != 'create')
     {
         exit;
     }
@@ -2036,12 +2034,12 @@ if ($action != 'create' && $action != 'edit')
             }
             else
     		{
-                print '<div class="inline-block divButAction"><a class="butActionRefused" href="#" title="'.$langs->trans("ProductIsUsed").'">'.$langs->trans("Delete").'</a></div>';
+                print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("ProductIsUsed").'">'.$langs->trans("Delete").'</a></div>';
             }
         }
         else
     	{
-            print '<div class="inline-block divButAction"><a class="butActionRefused" href="#" title="'.$langs->trans("NotEnoughPermissions").'">'.$langs->trans("Delete").'</a></div>';
+            print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("NotEnoughPermissions").'">'.$langs->trans("Delete").'</a></div>';
         }
     }
 
@@ -2199,6 +2197,6 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete')
     print '</div></div></div>';
 }
 
-
+// End of page
 llxFooter();
 $db->close();

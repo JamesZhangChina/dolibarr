@@ -3,10 +3,10 @@
  * Copyright (C) 2004-2011 Laurent Destailleur          <eldy@users.sourceforge.net>
  * Copyright (C) 2004      Sebastien Di Cintio          <sdicintio@ressource-toi.org>
  * Copyright (C) 2004      Benoit Mortier               <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2014 Regis Houssin                <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2014 Regis Houssin                <regis.houssin@inodbox.com>
  * Copyright (C) 2008      Raphael Bertrand (Resultic)  <raphael.bertrand@resultic.fr>
  * Copyright (C) 2011-2013 Juanjo Menent			    <jmenent@2byte.es>
- * Copyright (C) 2011-2017 Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2011-2018 Philippe Grand			    <philippe.grand@atoo-net.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ if ($action == 'updateMask')
     }
 }
 
-else if ($action == 'specimen') // For fiche inter
+elseif ($action == 'specimen') // For fiche inter
 {
 	$modele= GETPOST('module','alpha');
 
@@ -116,12 +116,12 @@ else if ($action == 'specimen') // For fiche inter
 }
 
 // Activate a model
-else if ($action == 'set')
+elseif ($action == 'set')
 {
 	$ret = addDocumentModel($value, $type, $label, $scandir);
 }
 
-else if ($action == 'del')
+elseif ($action == 'del')
 {
 	$ret = delDocumentModel($value, $type);
 	if ($ret > 0)
@@ -131,7 +131,7 @@ else if ($action == 'del')
 }
 
 // Set default model
-else if ($action == 'setdoc')
+elseif ($action == 'setdoc')
 {
 	if (dolibarr_set_const($db, "FICHEINTER_ADDON_PDF",$value,'chaine',0,'',$conf->entity))
 	{
@@ -148,7 +148,7 @@ else if ($action == 'setdoc')
 	}
 }
 
-else if ($action == 'setmod')
+elseif ($action == 'setmod')
 {
 	// TODO Verifier si module numerotation choisi peut etre active
 	// par appel methode canBeActivated
@@ -156,7 +156,7 @@ else if ($action == 'setmod')
 	dolibarr_set_const($db, "FICHEINTER_ADDON",$value,'chaine',0,'',$conf->entity);
 }
 
-else if ($action == 'set_FICHINTER_FREE_TEXT')
+elseif ($action == 'set_FICHINTER_FREE_TEXT')
 {
 	$freetext= GETPOST('FICHINTER_FREE_TEXT','none');	// No alpha here, we want exact string
 	$res = dolibarr_set_const($db, "FICHINTER_FREE_TEXT",$freetext,'chaine',0,'',$conf->entity);
@@ -173,7 +173,7 @@ else if ($action == 'set_FICHINTER_FREE_TEXT')
     }
 }
 
-else if ($action == 'set_FICHINTER_DRAFT_WATERMARK')
+elseif ($action == 'set_FICHINTER_DRAFT_WATERMARK')
 {
 	$draft= GETPOST('FICHINTER_DRAFT_WATERMARK','alpha');
 	$res = dolibarr_set_const($db, "FICHINTER_DRAFT_WATERMARK",trim($draft),'chaine',0,'',$conf->entity);
@@ -554,13 +554,12 @@ else
     $doleditor=new DolEditor($variablename, $conf->global->$variablename,'',80,'dolibarr_notes');
     print $doleditor->Create();
 }
-print '</td><td align="right">';
+print '</td><td class="right">';
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 print '</form>';
 
 //Use draft Watermark
-
 print "<form method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">";
 print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 print "<input type=\"hidden\" name=\"action\" value=\"set_FICHINTER_DRAFT_WATERMARK\">";
@@ -568,7 +567,7 @@ print '<tr class="oddeven"><td>';
 print $form->textwithpicto($langs->trans("WatermarkOnDraftInterventionCards"), $htmltext, 1, 'help', '', 0, 2, 'watermarktooltip').'<br>';
 print '</td><td>';
 print '<input size="50" class="flat" type="text" name="FICHINTER_DRAFT_WATERMARK" value="'.$conf->global->FICHINTER_DRAFT_WATERMARK.'">';
-print '</td><td align="right">';
+print '</td><td class="right">';
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 print '</form>';
@@ -582,7 +581,7 @@ print '<td align="center"><input type="checkbox" name="FICHINTER_PRINT_PRODUCTS"
 if ($conf->global->FICHINTER_PRINT_PRODUCTS)
 	print 'checked ';
 print '/>';
-print '</td><td align="right">';
+print '</td><td class="right">';
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 print '</form>';
@@ -597,7 +596,7 @@ print '</td>';
 print '<td align="center">';
 print '<input type="checkbox" name="FICHINTER_USE_SERVICE_DURATION"' . ($conf->global->FICHINTER_USE_SERVICE_DURATION?' checked':'') . '>';
 print '</td>';
-print '<td align="right">';
+print '<td class="right">';
 print '<input type="submit" class="button" value="' . $langs->trans("Modify") . '">';
 print '</td>';
 print '</tr>';
@@ -613,7 +612,7 @@ print '</td>';
 print '<td align="center">';
 print '<input type="checkbox" name="FICHINTER_WITHOUT_DURATION"' . ($conf->global->FICHINTER_WITHOUT_DURATION?' checked':'') . '>';
 print '</td>';
-print '<td align="right">';
+print '<td class="right">';
 print '<input type="submit" class="button" value="' . $langs->trans("Modify") . '">';
 print '</td>';
 print '</tr>';
@@ -629,18 +628,16 @@ print '</td>';
 print '<td align="center">';
 print '<input type="checkbox" name="FICHINTER_DATE_WITHOUT_HOUR"' . ($conf->global->FICHINTER_DATE_WITHOUT_HOUR?' checked':'') . '>';
 print '</td>';
-print '<td align="right">';
+print '<td class="right">';
 print '<input type="submit" class="button" value="' . $langs->trans("Modify") . '">';
 print '</td>';
 print '</tr>';
 print '</form>';
 
-
-
-
 print '</table>';
 
 print '<br>';
 
+// End of page
 llxFooter();
 $db->close();

@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2004		Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004		Benoit Mortier       <benoit.mortier@opensides.be>
- * Copyright (C) 2005-2017	Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2017	Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2006-2015	Laurent Destailleur  <eldy@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,12 +29,21 @@
  */
 class Ldap
 {
-	var $error;
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
+
+	/**
+	 * @var string[]	Array of error strings
+	 */
+	public $errors = array();
 
 	/**
 	 * Tableau des serveurs (IP addresses ou nom d'hotes)
 	 */
 	var $server=array();
+
 	/**
 	 * Base DN (e.g. "dc=foo,dc=com")
 	 */
@@ -140,6 +149,7 @@ class Ldap
 
 	// Connection handling methods -------------------------------------------
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Connect and bind
 	 * 	Use this->server, this->serverPort, this->ldapProtocolVersion, this->serverType, this->searchUser, this->searchPassword
@@ -149,6 +159,7 @@ class Ldap
 	 */
 	function connect_bind()
 	{
+        // phpcs:enable
 		global $langs, $conf;
 
 		$connected=0;
@@ -322,7 +333,7 @@ class Ldap
 	 * @param	string	$pass			Password
 	 * @return	boolean					true or false
 	 */
-	function bindauth($bindDn,$pass)
+	function bindauth($bindDn, $pass)
 	{
 		if (! $this->result = @ldap_bind($this->connection, $bindDn, $pass))
 		{
@@ -370,7 +381,8 @@ class Ldap
 	 *
 	 * @return	boolean					version
 	 */
-	function setVersion() {
+    function setVersion()
+    {
 		// LDAP_OPT_PROTOCOL_VERSION est une constante qui vaut 17
 		$ldapsetversion = ldap_set_option($this->connection, LDAP_OPT_PROTOCOL_VERSION, $this->ldapProtocolVersion);
 		return $ldapsetversion;
@@ -381,7 +393,8 @@ class Ldap
 	 *
 	 * @return	boolean					referrals
 	 */
-	function setReferrals() {
+    function setReferrals()
+    {
 		// LDAP_OPT_REFERRALS est une constante qui vaut ?
 		$ldapreferrals = ldap_set_option($this->connection, LDAP_OPT_REFERRALS, 0);
 		return $ldapreferrals;
@@ -556,7 +569,7 @@ class Ldap
 	 *	@param	string	$newparent	New parent (ou=xxx,dc=aaa,dc=bbb) (for ldap_rename)
 	 *	@return	int					<0 if KO, >0 if OK
 	 */
-	function update($dn, $info, $user, $olddn, $newrdn=false, $newparent=false)
+	function update($dn, $info, $user, $olddn, $newrdn = false, $newparent = false)
 	{
 		global $conf;
 
@@ -643,6 +656,7 @@ class Ldap
 		return -1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * 	Build a LDAP message
 	 *
@@ -652,6 +666,7 @@ class Ldap
 	 */
 	function dump_content($dn, $info)
 	{
+        // phpcs:enable
 		$content='';
 
 		// Create file content
@@ -726,7 +741,7 @@ class Ldap
 	 * @param int		$timeout		Timeout in second (default 1s)
 	 * @return boolean				true or false
 	 */
-	function serverPing($host, $port=389, $timeout=1)
+	function serverPing($host, $port = 389, $timeout = 1)
 	{
 		// Replace ldaps:// by ssl://
 		if (preg_match('/^ldaps:\/\/([^\/]+)\/?$/',$host, $regs)) {
@@ -910,7 +925,7 @@ class Ldap
 	 *	@param	string	$filter		Filter
 	 *	@return	int|array			<0 or false if KO, array if OK
 	 */
-	function getAttribute($dn,$filter)
+	function getAttribute($dn, $filter)
 	{
 		// Check parameters
 		if (! $this->connection)
@@ -955,7 +970,7 @@ class Ldap
 	 * 	@param	string	$attribute			Attributes
 	 * 	@return void
 	 */
-	function getAttributeValues($filterrecord,$attribute)
+	function getAttributeValues($filterrecord, $attribute)
 	{
 		$attributes=array();
 		$attributes[0] = $attribute;
@@ -1000,7 +1015,7 @@ class Ldap
 	 *	@param	array	$attributeAsArray 	Array of fields wanted as an array not a string
 	 *	@return	array						Array of [id_record][ldap_field]=value
 	 */
-	function getRecords($search, $userDn, $useridentifier, $attributeArray, $activefilter=0, $attributeAsArray=array())
+	function getRecords($search, $userDn, $useridentifier, $attributeArray, $activefilter = 0, $attributeAsArray = array())
 	{
 		$fulllist=array();
 
@@ -1245,7 +1260,7 @@ class Ldap
 	 *                       	       	Examples: &(objectClass=inetOrgPerson) &(objectClass=user)(objectCategory=person) &(isMemberOf=cn=Sales,ou=Groups,dc=opencsi,dc=com)
 	 *		@return	int					>0 if OK, <0 if KO
 	 */
-	function fetch($user,$filter)
+	function fetch($user, $filter)
 	{
 		// Perform the search and get the entry handles
 
@@ -1423,6 +1438,7 @@ class Ldap
 		return($retval);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Convertit le temps ActiveDirectory en Unix timestamp
 	 *
@@ -1431,6 +1447,7 @@ class Ldap
 	 */
 	function convert_time($value)
 	{
+        // phpcs:enable
 		$dateLargeInt=$value; // nano secondes depuis 1601 !!!!
 		$secsAfterADEpoch = $dateLargeInt / (10000000); // secondes depuis le 1 jan 1601
 		$ADToUnixConvertor=((1970-1601) * 365.242190) * 86400; // UNIX start date - AD start date * jours * secondes
@@ -1446,7 +1463,7 @@ class Ldap
 	 *  @param	string	$pagecodefrom	Page code of src string
 	 *  @return string         			Converted string
 	 */
-	private function convToOutputCharset($str,$pagecodefrom='UTF-8')
+	private function convToOutputCharset($str, $pagecodefrom = 'UTF-8')
 	{
 		global $conf;
 		if ($pagecodefrom == 'ISO-8859-1' && $conf->file->character_set_client == 'UTF-8')  $str=utf8_encode($str);
@@ -1461,7 +1478,7 @@ class Ldap
 	 *  @param	string	$pagecodeto		Page code for result string
 	 *  @return string         			Converted string
 	 */
-	function convFromOutputCharset($str,$pagecodeto='UTF-8')
+	function convFromOutputCharset($str, $pagecodeto = 'UTF-8')
 	{
 		global $conf;
 		if ($pagecodeto == 'ISO-8859-1' && $conf->file->character_set_client == 'UTF-8') $str=utf8_decode($str);
@@ -1476,7 +1493,7 @@ class Ldap
 	 *	@param	string	$keygroup	Key of group
 	 *	@return	int					gid number
 	 */
-	function getNextGroupGid($keygroup='LDAP_KEY_GROUPS')
+	function getNextGroupGid($keygroup = 'LDAP_KEY_GROUPS')
 	{
 		global $conf;
 

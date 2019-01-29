@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2006-2016	Laurent Destailleur	<eldy@users.sourceforge.net>
  * Copyright (C) 2012		JF FERRY			<jfefe@aternatik.fr>
- * Copyright (C) 2012		Regis Houssin		<regis.houssin@capnetworks.com>
+ * Copyright (C) 2012		Regis Houssin		<regis.houssin@inodbox.com>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -22,14 +22,13 @@
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (! defined("NOCSRFCHECK"))    define("NOCSRFCHECK",'1');
+if (! defined("NOCSRFCHECK")) define("NOCSRFCHECK",'1');
 
-require_once '../master.inc.php';
+require '../master.inc.php';
 require_once NUSOAP_PATH.'/nusoap.php';        // Include SOAP
 require_once DOL_DOCUMENT_ROOT.'/core/lib/ws.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
-
-require_once(DOL_DOCUMENT_ROOT."/commande/class/commande.class.php");
+require_once DOL_DOCUMENT_ROOT."/commande/class/commande.class.php";
 
 
 dol_syslog("Call Dolibarr webservices interfaces");
@@ -345,7 +344,7 @@ $server->register(
  * @param	string		$ref_ext			Ref_ext
  * @return	array							Array result
  */
-function getOrder($authentication,$id='',$ref='',$ref_ext='')
+function getOrder($authentication, $id = '', $ref = '', $ref_ext = '')
 {
 	global $db,$conf,$langs;
 
@@ -497,7 +496,7 @@ function getOrder($authentication,$id='',$ref='',$ref_ext='')
  * @param	int			$idthirdparty		Id of thirdparty
  * @return	array							Array result
  */
-function getOrdersForThirdParty($authentication,$idthirdparty)
+function getOrdersForThirdParty($authentication, $idthirdparty)
 {
 	global $db,$conf,$langs;
 
@@ -656,11 +655,11 @@ function getOrdersForThirdParty($authentication,$idthirdparty)
  * @param	array		$order				Order info
  * @return	int								Id of new order
  */
-function createOrder($authentication,$order)
+function createOrder($authentication, $order)
 {
 	global $db,$conf,$langs;
 
-	require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
+	include_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 
 	$now=dol_now();
 
@@ -750,7 +749,6 @@ function createOrder($authentication,$order)
 		{
 			dol_syslog("Webservice server_order:: order creation failed", LOG_ERR);
 			$error++;
-
 		}
 
 		if ($order['status'] == 1)   // We want order to have status validated
@@ -778,7 +776,6 @@ function createOrder($authentication,$order)
 			$errorcode='KO';
 			$errorlabel=$newobject->error;
 		}
-
 	}
 
 	if ($error)
@@ -798,7 +795,7 @@ function createOrder($authentication,$order)
  * @param	int			$id_warehouse		Id of warehouse to use for stock decrease
  * @return	array							Array result
  */
-function validOrder($authentication,$id='',$id_warehouse=0)
+function validOrder($authentication, $id = '', $id_warehouse = 0)
 {
 	global $db,$conf,$langs;
 
@@ -832,7 +829,6 @@ function validOrder($authentication,$id='',$id_warehouse=0)
 					// Define output language
 					$outputlangs = $langs;
 					$order->generateDocument($order->modelpdf, $outputlangs);
-
 				}
 				else
 				{
@@ -849,7 +845,6 @@ function validOrder($authentication,$id='',$id_warehouse=0)
 				$errorcode='KO';
 				$errorlabel=$newobject->error;
 			}
-
 		}
 		else
 		{
@@ -858,7 +853,6 @@ function validOrder($authentication,$id='',$id_warehouse=0)
 			$errorcode='KO';
 			$errorlabel=$newobject->error;
 		}
-
 	}
 
 	if ($error)
@@ -881,7 +875,7 @@ function validOrder($authentication,$id='',$id_warehouse=0)
  * @param	array		$order				Order info
  * @return	array							Array result
  */
-function updateOrder($authentication,$order)
+function updateOrder($authentication, $order)
 {
 	global $db,$conf,$langs;
 
@@ -927,7 +921,6 @@ function updateOrder($authentication,$order)
 						// Define output language
 						$outputlangs = $langs;
 						$object->generateDocument($order->modelpdf, $outputlangs);
-
 					}
 				}
 				if ($order['status'] == 0)  $result=$object->set_reopen($fuser);

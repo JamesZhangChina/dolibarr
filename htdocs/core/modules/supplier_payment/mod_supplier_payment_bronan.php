@@ -29,10 +29,30 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/supplier_payment/modules_supplier
  */
 class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 {
-	var $version='dolibarr';		// 'development', 'experimental', 'dolibarr'
-	var $prefix='SPAY';
-	var $error='';
-	var $nom='Bronan';
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';		// 'development', 'experimental', 'dolibarr'
+
+	public $prefix='SPAY';
+
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
+
+	/**
+	 * @var string Nom du modele
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Bronan';
+
+	/**
+	 * @var string model name
+	 */
+	public $name='Bronan';
 
 
     /**
@@ -99,7 +119,7 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 	 *  @param  Object		$object		Object we need next value for
 	 *  @return string      			Value if KO, <0 if KO
 	 */
-	function getNextValue($objsoc,$object)
+	function getNextValue($objsoc, $object)
 	{
 		global $db,$conf;
 
@@ -135,6 +155,7 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return next free value
 	 *
@@ -142,9 +163,9 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 	 * 	@param	string		$objforref	Object for number to search
 	 *  @return string      			Next free value
 	 */
-	function payment_get_num($objsoc,$objforref)
+	function payment_get_num($objsoc, $objforref)
 	{
+        // phpcs:enable
 		return $this->getNextValue($objsoc,$objforref);
 	}
-
 }

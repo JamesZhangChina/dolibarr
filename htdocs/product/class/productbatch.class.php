@@ -22,7 +22,7 @@
  *  \brief      Manage record and specific data for batch number management
  */
 
-require_once(DOL_DOCUMENT_ROOT."/core/class/commonobject.class.php");
+require_once DOL_DOCUMENT_ROOT."/core/class/commonobject.class.php";
 
 
 /**
@@ -30,16 +30,24 @@ require_once(DOL_DOCUMENT_ROOT."/core/class/commonobject.class.php");
  */
 class Productbatch extends CommonObject
 {
-	var $element='productbatch';			//!< Id that identify managed objects
+	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='productbatch';
+
 	private static $_table_element='product_batch';		//!< Name of table without prefix where object is stored
 
-	var $tms='';
-	var $fk_product_stock;
-	var $sellby='';
-	var $eatby='';
-	var $batch='';
-	var $qty;
+	public $tms='';
+	public $fk_product_stock;
+	public $sellby='';
+	public $eatby='';
+	public $batch='';
+	public $qty;
 	public $warehouseid;
+
+	/**
+     * @var int ID
+     */
 	public $fk_product;
 
 
@@ -52,7 +60,6 @@ class Productbatch extends CommonObject
     function __construct($db)
     {
         $this->db = $db;
-        return 1;
     }
 
 
@@ -63,13 +70,13 @@ class Productbatch extends CommonObject
      *  @param  int		$notrigger   0=launch triggers after, 1=disable triggers
      *  @return int      		   	 <0 if KO, Id of created object if OK
      */
-    function create($user, $notrigger=0)
+    function create($user, $notrigger = 0)
     {
 		global $conf, $langs;
 		$error=0;
 
 		// Clean parameters
-		$this->clean_param();
+		$this->cleanParam();
 
 		// Check parameters
 		// Put here code to add control on parameters values
@@ -194,13 +201,13 @@ class Productbatch extends CommonObject
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
      *  @return int     		   	 <0 if KO, >0 if OK
      */
-    function update($user=null, $notrigger=0)
+    function update($user = null, $notrigger = 0)
     {
     	global $conf, $langs;
 		$error=0;
 
 		// Clean parameters
-		$this->clean_param();
+		$this->cleanParam();
 
 		// TODO Check qty is ok for stock move. Negative may not be allowed.
 		if ($this->qty < 0)
@@ -264,7 +271,7 @@ class Productbatch extends CommonObject
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
 	 *  @return	int					 <0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -331,8 +338,6 @@ class Productbatch extends CommonObject
 
 		$object=new Productbatch($this->db);
 
-		$object->context['createfromclone']='createfromclone';
-
  		$this->db->begin();
 
 		// Load source object
@@ -344,6 +349,7 @@ class Productbatch extends CommonObject
 		// ...
 
 		// Create clone
+		$object->context['createfromclone']='createfromclone';
 		$result=$object->create($user);
 
 		// Other options
@@ -355,7 +361,6 @@ class Productbatch extends CommonObject
 
 		if (! $error)
 		{
-
 
 		}
 
@@ -391,16 +396,14 @@ class Productbatch extends CommonObject
 		$this->eatby='';
 		$this->batch='';
 		$this->import_key='';
-
-
 	}
 
 	/**
 	 *  Clean fields (triming)
 	 *
-	 *	@return	void
+	 *  @return	void
 	 */
-	private function clean_param()
+	private function cleanParam()
 	{
 		if (isset($this->fk_product_stock)) $this->fk_product_stock=(int) trim($this->fk_product_stock);
 		if (isset($this->batch)) $this->batch=trim($this->batch);
@@ -417,7 +420,7 @@ class Productbatch extends CommonObject
      *  @param	string		$batch_number   	batch number for object
      *  @return int          					<0 if KO, >0 if OK
      */
-    function find($fk_product_stock=0, $eatby='',$sellby='',$batch_number='')
+    function find($fk_product_stock = 0, $eatby = '', $sellby = '', $batch_number = '')
     {
     	global $langs;
 		$where = array();
@@ -477,7 +480,7 @@ class Productbatch extends CommonObject
      *  @param  int         $fk_product         If set to a product id, get eatby and sellby from table llx_product_lot
      *  @return array         					<0 if KO, array of batch
      */
-    public static function findAll($db, $fk_product_stock, $with_qty=0, $fk_product=0)
+    public static function findAll($db, $fk_product_stock, $with_qty = 0, $fk_product = 0)
     {
     	global $langs;
 		$ret = array();
@@ -539,5 +542,4 @@ class Productbatch extends CommonObject
             return -1;
         }
     }
-
 }

@@ -28,7 +28,11 @@
  */
 class ExpeditionLineBatch extends CommonObject
 {
-	var $element='expeditionlignebatch';			//!< Id that identify managed objects
+	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='expeditionlignebatch';
+
 	private static $_table_element='expeditiondet_batch';		//!< Name of table without prefix where object is stored
 
 	var $sellby;
@@ -48,7 +52,6 @@ class ExpeditionLineBatch extends CommonObject
     function __construct($db)
     {
         $this->db = $db;
-        return 1;
     }
 
 	/**
@@ -152,7 +155,7 @@ class ExpeditionLineBatch extends CommonObject
 	 * @param	int		$id_expedition	rowid of shipment
 	 * @return 	int						-1 if KO, 1 if OK
 	 */
-	static function deletefromexp($db,$id_expedition)
+	static function deletefromexp($db, $id_expedition)
 	{
 		$id_expedition = (int) $id_expedition;
 
@@ -178,7 +181,7 @@ class ExpeditionLineBatch extends CommonObject
 	 * @param	int			$fk_product			If provided, load also detailed information of lot
 	 * @return	int|array						-1 if KO, array of ExpeditionLineBatch if OK
 	 */
-	static function fetchAll($db, $id_line_expdet, $fk_product=0)
+	static function fetchAll($db, $id_line_expdet, $fk_product = 0)
 	{
 		$sql="SELECT";
 		$sql.= " eb.rowid,";
@@ -234,5 +237,4 @@ class ExpeditionLineBatch extends CommonObject
 			return -1;
 		}
 	}
-
 }

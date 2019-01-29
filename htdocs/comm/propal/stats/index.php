@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2003      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2012 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2012      Marcos García        <marcosgdf@gmail.com>
  * Copyright (C) 2015      Jean-François Ferry	<jfefe@aternatik.fr>
  *
@@ -65,9 +65,7 @@ $langs->loadLangs(array('orders', 'companies', 'other', 'suppliers', 'supplier_p
 $form=new Form($db);
 $formpropal=new FormPropal($db);
 
-$langs->load('propal');
-$langs->load('other');
-$langs->load("companies");
+$langs->loadLangs(array('propal', 'other', 'companies'));
 
 if ($mode == 'customer')
 {
@@ -253,20 +251,20 @@ print '<div class="fichecenter"><div class="fichethirdleft">';
 	print '<table class="noborder" width="100%">';
 	print '<tr class="liste_titre"><td class="liste_titre" colspan="2">'.$langs->trans("Filter").'</td></tr>';
 	// Company
-	print '<tr><td align="left">'.$langs->trans("ThirdParty").'</td><td align="left">';
+	print '<tr><td class="left">'.$langs->trans("ThirdParty").'</td><td class="left">';
 	$filter='s.client in (1,2,3)';
 	print $form->select_company($socid,'socid',$filter,1,0,0,array(),0,'','style="width: 95%"');
 	print '</td></tr>';
 	// User
-	print '<tr><td align="left">'.$langs->trans("CreatedBy").'</td><td align="left">';
+	print '<tr><td class="left">'.$langs->trans("CreatedBy").'</td><td class="left">';
 	print $form->select_dolusers($userid, 'userid', 1, '', 0, '', '', 0, 0, 0, '', 0, '', 'maxwidth300');
 	print '</td></tr>';
 	// Status
-	print '<tr><td align="left">'.$langs->trans("Status").'</td><td align="left">';
+	print '<tr><td class="left">'.$langs->trans("Status").'</td><td class="left">';
     $formpropal->selectProposalStatus(($object_status!=''?$object_status:-1),0,0,1,$mode,'object_status');
 	print '</td></tr>';
 	// Year
-	print '<tr><td align="left">'.$langs->trans("Year").'</td><td align="left">';
+	print '<tr><td class="left">'.$langs->trans("Year").'</td><td class="left">';
 	if (! in_array($year,$arrayyears)) $arrayyears[$year]=$year;
 	if (! in_array($nowyear,$arrayyears)) $arrayyears[$nowyear]=$nowyear;
 	arsort($arrayyears);
@@ -278,15 +276,16 @@ print '<div class="fichecenter"><div class="fichethirdleft">';
 	print '<br><br>';
 //}
 
+print '<div class="div-table-responsive-no-min">';
 print '<table class="noborder" width="100%">';
 print '<tr class="liste_titre" height="24">';
 print '<td align="center">'.$langs->trans("Year").'</td>';
-print '<td align="right">'.$langs->trans("NbOfProposals").'</td>';
-print '<td align="right">%</td>';
-print '<td align="right">'.$langs->trans("AmountTotal").'</td>';
-print '<td align="right">%</td>';
-print '<td align="right">'.$langs->trans("AmountAverage").'</td>';
-print '<td align="right">%</td>';
+print '<td class="right">'.$langs->trans("NbOfProposals").'</td>';
+print '<td class="right">%</td>';
+print '<td class="right">'.$langs->trans("AmountTotal").'</td>';
+print '<td class="right">%</td>';
+print '<td class="right">'.$langs->trans("AmountAverage").'</td>';
+print '<td class="right">%</td>';
 print '</tr>';
 
 $oldyear=0;
@@ -299,28 +298,28 @@ foreach ($data as $val)
 
         print '<tr class="oddeven" height="24">';
         print '<td align="center"><a href="'.$_SERVER["PHP_SELF"].'?year='.$oldyear.'&amp;mode='.$mode.($socid>0?'&socid='.$socid:'').($userid>0?'&userid='.$userid:'').'">'.$oldyear.'</a></td>';
-        print '<td align="right">0</td>';
-        print '<td align="right"></td>';
-        print '<td align="right">0</td>';
-        print '<td align="right"></td>';
-        print '<td align="right">0</td>';
-        print '<td align="right"></td>';
+        print '<td class="right">0</td>';
+        print '<td class="right"></td>';
+        print '<td class="right">0</td>';
+        print '<td class="right"></td>';
+        print '<td class="right">0</td>';
+        print '<td class="right"></td>';
         print '</tr>';
     }
     print '<tr class="oddeven" height="24">';
     print '<td align="center"><a href="'.$_SERVER["PHP_SELF"].'?year='.$year.($socid>0?'&socid='.$socid:'').($userid>0?'&userid='.$userid:'').'">'.$year.'</a></td>';
-    print '<td align="right">'.$val['nb'].'</td>';
-	print '<td align="right" style="'.(($val['nb_diff'] >= 0) ? 'color: green;':'color: red;').'">'.round($val['nb_diff']).'</td>';
-    print '<td align="right">'.price(price2num($val['total'],'MT'),1).'</td>';
-	print '<td align="right" style="'.(($val['total_diff'] >= 0) ? 'color: green;':'color: red;').'">'.round($val['total_diff']).'</td>';
-    print '<td align="right">'.price(price2num($val['avg'],'MT'),1).'</td>';
-	print '<td align="right" style="'.(($val['avg_diff'] >= 0) ? 'color: green;':'color: red;').'">'.round($val['avg_diff']).'</td>';
+    print '<td class="right">'.$val['nb'].'</td>';
+	print '<td class="right" style="'.(($val['nb_diff'] >= 0) ? 'color: green;':'color: red;').'">'.round($val['nb_diff']).'</td>';
+    print '<td class="right">'.price(price2num($val['total'],'MT'),1).'</td>';
+	print '<td class="right" style="'.(($val['total_diff'] >= 0) ? 'color: green;':'color: red;').'">'.round($val['total_diff']).'</td>';
+    print '<td class="right">'.price(price2num($val['avg'],'MT'),1).'</td>';
+	print '<td class="right" style="'.(($val['avg_diff'] >= 0) ? 'color: green;':'color: red;').'">'.round($val['avg_diff']).'</td>';
     print '</tr>';
     $oldyear=$year;
 }
 
 print '</table>';
-
+print '</div>';
 
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
 
@@ -344,7 +343,6 @@ print '<div style="clear:both"></div>';
 
 dol_fiche_end();
 
-
+// End of page
 llxFooter();
-
 $db->close();

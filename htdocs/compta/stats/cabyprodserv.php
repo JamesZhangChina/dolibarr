@@ -1,7 +1,8 @@
 <?php
-/* Copyright (C) 2013      Antoine Iauch	   <aiauch@gpcsolutions.fr>
- * Copyright (C) 2013-2016 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2015      Raphaël Doursenaud  <rdoursenaud@gpcsolutions.fr>
+/* Copyright (C) 2013       Antoine Iauch	        <aiauch@gpcsolutions.fr>
+ * Copyright (C) 2013-2016  Laurent Destailleur     <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,7 +178,7 @@ if ($modecompta=="CREANCES-DETTES") {
 
 	$builddate=dol_now();
 }
-else if ($modecompta=="RECETTES-DEPENSES")
+elseif ($modecompta=="RECETTES-DEPENSES")
 {
 	$name=$langs->trans("TurnoverCollected").', '.$langs->trans("ByProductsAndServices");
 	$calcmode=$langs->trans("CalcModeEngagement");
@@ -188,18 +189,18 @@ else if ($modecompta=="RECETTES-DEPENSES")
 
 	$builddate=dol_now();
 }
-else if ($modecompta=="BOOKKEEPING")
+elseif ($modecompta=="BOOKKEEPING")
 {
 
 
 }
-else if ($modecompta=="BOOKKEEPINGCOLLECTED")
+elseif ($modecompta=="BOOKKEEPINGCOLLECTED")
 {
 
 
 }
 
-$period=$form->select_date($date_start,'date_start',0,0,0,'',1,0,1).' - '.$form->select_date($date_end,'date_end',0,0,0,'',1,0,1);
+$period=$form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0).' - '.$form->selectDate($date_end, 'date_end', 0, 0, 0, '', 1, 0);
 if ($date_end == dol_time_plus_duree($date_start, 1, 'y') - 1) $periodlink='<a href="'.$_SERVER["PHP_SELF"].'?year='.($year_start-1).'&modecompta='.$modecompta.'">'.img_previous().'</a> <a href="'.$_SERVER["PHP_SELF"].'?year='.($year_start+1).'&modecompta='.$modecompta.'">'.img_next().'</a>';
 else $periodlink = '';
 
@@ -230,7 +231,7 @@ if ($modecompta == 'CREANCES-DETTES')
 	{
 		$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."categorie_product as cp ON p.rowid = cp.fk_product";
 	}
-	else if ($selected_cat) 	// Into a specific category
+	elseif ($selected_cat) 	// Into a specific category
 	{
 		$sql.= ", ".MAIN_DB_PREFIX."categorie as c, ".MAIN_DB_PREFIX."categorie_product as cp";
 	}
@@ -252,13 +253,13 @@ if ($modecompta == 'CREANCES-DETTES')
 	{
 		$sql.=" AND cp.fk_product is null";
 	}
-	else if ($selected_cat) {	// Into a specific category
+	elseif ($selected_cat) {	// Into a specific category
 		$sql.= " AND (c.rowid = ".$selected_cat;
 		if ($subcat) $sql.=" OR c.fk_parent = " . $selected_cat;
 		$sql.= ")";
 		$sql.= " AND cp.fk_categorie = c.rowid AND cp.fk_product = p.rowid";
 	}
-	$sql.= " AND f.entity = ".$conf->entity;
+	$sql.= " AND f.entity IN (".getEntity('invoice').")";
 	$sql.= " GROUP BY p.rowid, p.ref, p.label, p.fk_product_type";
 	$sql.= $db->order($sortfield,$sortorder);
 
@@ -461,5 +462,6 @@ if ($modecompta == 'CREANCES-DETTES')
 	print '<br>'.$langs->trans("TurnoverPerProductInCommitmentAccountingNotRelevant") . '<br>';
 }
 
+// End of page
 llxFooter();
 $db->close();

@@ -28,14 +28,35 @@
  */
 class AdvanceTargetingMailing extends CommonObject
 {
+    /**
+     * @var DoliDB Database handler.
+     */
+    public $db;
 
-	var $db; //!< To store db handler
-	var $error; //!< To return error code (or message)
-	var $errors = array(); //!< To return several error codes (or messages)
-	var $element='advtargetemailing';			//!< Id that identify managed objects
-	var $table_element='advtargetemailing';	//!< Name of table without prefix where object is stored
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
 
-	var $id;
+	/**
+	 * @var string[] Error codes (or messages)
+	 */
+	public $errors = array();
+
+	/**
+	 * @var string ID to identify managed object
+	 */
+	public $element='advtargetemailing';
+
+	/**
+	 * @var string Name of table without prefix where object is stored
+	 */
+	public $table_element='advtargetemailing';
+
+	/**
+	 * @var int ID
+	 */
+	public $id;
 
 	var $name;
 	var $entity;
@@ -54,9 +75,9 @@ class AdvanceTargetingMailing extends CommonObject
 
 
 	/**
-	 * Constructor
+	 *  Constructor
 	 *
-	 * 	@param	DoliDb		$db		Database handler
+	 *  @param  DoliDb		$db		Database handler
 	 */
 	function __construct($db)
 	{
@@ -87,7 +108,7 @@ class AdvanceTargetingMailing extends CommonObject
 	 *  @param  int		$notrigger   0=launch triggers after, 1=disable triggers
 	 *  @return int      		   	 <0 if KO, Id of created object if OK
 	 */
-	function create($user, $notrigger=0)
+	function create($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -219,7 +240,6 @@ class AdvanceTargetingMailing extends CommonObject
 				$this->datec = $this->db->jdate($obj->datec);
 				$this->fk_user_mod = $obj->fk_user_mod;
 				$this->tms = $this->db->jdate($obj->tms);
-
 			}
 			$this->db->free($resql);
 
@@ -233,14 +253,16 @@ class AdvanceTargetingMailing extends CommonObject
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Load object in memory from the database
 	 *
 	 *  @param	int		$id    Id object
 	 *  @return int          	<0 if KO, >0 if OK
 	 */
-	function fetch_by_mailing($id=0)
+	function fetch_by_mailing($id = 0)
 	{
+        // phpcs:enable
 		global $langs;
 		$sql = "SELECT";
 		$sql.= " t.rowid,";
@@ -281,7 +303,6 @@ class AdvanceTargetingMailing extends CommonObject
 				$this->datec = $this->db->jdate($obj->datec);
 				$this->fk_user_mod = $obj->fk_user_mod;
 				$this->tms = $this->db->jdate($obj->tms);
-
 			}
 			$this->db->free($resql);
 
@@ -298,6 +319,7 @@ class AdvanceTargetingMailing extends CommonObject
 
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Load object in memory from the database
 	 *
@@ -305,8 +327,9 @@ class AdvanceTargetingMailing extends CommonObject
 	 *  @param	string	$type_element	Type target
 	 *  @return int          			<0 if KO, >0 if OK
 	 */
-	function fetch_by_element($id=0, $type_element='mailing')
+	function fetch_by_element($id = 0, $type_element = 'mailing')
 	{
+        // phpcs:enable
 		global $langs;
 		$sql = "SELECT";
 		$sql.= " t.rowid,";
@@ -347,7 +370,6 @@ class AdvanceTargetingMailing extends CommonObject
 				$this->datec = $this->db->jdate($obj->datec);
 				$this->fk_user_mod = $obj->fk_user_mod;
 				$this->tms = $this->db->jdate($obj->tms);
-
 			}
 			$this->db->free($resql);
 
@@ -368,7 +390,7 @@ class AdvanceTargetingMailing extends CommonObject
 	 *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
 	 *  @return int     		   	 <0 if KO, >0 if OK
 	 */
-	function update($user, $notrigger=0)
+	function update($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -444,7 +466,7 @@ class AdvanceTargetingMailing extends CommonObject
 	 *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
 	 *  @return	int					 <0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -503,7 +525,7 @@ class AdvanceTargetingMailing extends CommonObject
 	 * 	@param		array		$arrayquery		All element to Query
 	 * 	@return		int			<0 if KO, >0 if OK
 	 */
-	function savequery($user,$arrayquery)
+	function savequery($user, $arrayquery)
 	{
 		global $langs,$conf;
 
@@ -523,6 +545,7 @@ class AdvanceTargetingMailing extends CommonObject
 
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Load object in memory from database
 	 *
@@ -531,6 +554,7 @@ class AdvanceTargetingMailing extends CommonObject
 	 */
 	function query_thirdparty($arrayquery)
 	{
+        // phpcs:enable
 		global $langs,$conf;
 
 		$sql = "SELECT";
@@ -621,30 +645,26 @@ class AdvanceTargetingMailing extends CommonObject
 						if (!empty($arrayquery['options_'.$key.'_max'])) {
 							$sqlwhere[]= " (te.".$key." >= ".$arrayquery['options_'.$key.'_max']." AND te.".$key." <= ".$arrayquery['options_'.$key.'_min'].")";
 						}
-					} else if (($extrafields->attribute_type[$key] == 'date') ||
+					} elseif (($extrafields->attribute_type[$key] == 'date') ||
 						($extrafields->attribute_type[$key] == 'datetime')) {
 						if (!empty($arrayquery['options_'.$key.'_end_dt'])){
 							$sqlwhere[]= " (te.".$key." >= '".$this->db->idate($arrayquery['options_'.$key.'_st_dt'])."' AND te.".$key." <= '".$this->db->idate($arrayquery['options_'.$key.'_end_dt'])."')";
 						}
-					}else if ($extrafields->attribute_type[$key] == 'boolean') {
+					} elseif ($extrafields->attribute_type[$key] == 'boolean') {
 						if ($arrayquery['options_'.$key]!=''){
 							$sqlwhere[]= " (te.".$key." = ".$arrayquery['options_'.$key].")";
 						}
-					}else{
+					} else {
 						if (is_array($arrayquery['options_'.$key])) {
 							$sqlwhere[]= " (te.".$key." IN ('".implode("','",$arrayquery['options_'.$key])."'))";
 						} elseif (!empty($arrayquery['options_'.$key])) {
 							$sqlwhere[]= " (te.".$key." LIKE '".$arrayquery['options_'.$key]."')";
 						}
 					}
-
 				}
-
-
 			}
 
 			if (count($sqlwhere)>0)	$sql.= " WHERE ".implode(" AND ",$sqlwhere);
-
 		}
 
 
@@ -676,6 +696,7 @@ class AdvanceTargetingMailing extends CommonObject
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Load object in memory from database
 	 *
@@ -685,6 +706,7 @@ class AdvanceTargetingMailing extends CommonObject
 	 */
 	function query_contact($arrayquery, $withThirdpartyFilter = 0)
 	{
+        // phpcs:enable
 		global $langs,$conf;
 
 		$sql = "SELECT";
@@ -723,7 +745,16 @@ class AdvanceTargetingMailing extends CommonObject
 				$sqlwhere[]= " (t.civility IN ('".$this->db->escape(implode("','",$arrayquery['contact_civility']))."'))";
 			}
 			if ($arrayquery['contact_no_email']!='') {
-				$sqlwhere[]= " (t.no_email='".$this->db->escape($arrayquery['contact_no_email'])."')";
+				$tmpwhere = '';
+				if (! empty($arrayquery['contact_no_email']))
+				{
+					$tmpwhere.= "(t.email IN (SELECT email FROM ".MAIN_DB_PREFIX."mailing_unsubscribe WHERE t.entity IN (".getEntity('mailing').") AND email = '".$this->db->escape($arrayquery['contact_no_email'])."'))";
+				}
+				else
+				{
+					$tmpwhere.= "(t.email NOT IN (SELECT email FROM ".MAIN_DB_PREFIX."mailing_unsubscribe WHERE t.entity IN (".getEntity('mailing').") AND email = '".$this->db->escape($arrayquery['contact_no_email'])."'))";
+				}
+				$sqlwhere[]= $tmpwhere;
 			}
 			if ($arrayquery['contact_update_st_dt']!='') {
 				$sqlwhere[]= " (t.tms >= '".$this->db->idate($arrayquery['contact_update_st_dt'])."' AND t.tms <= '".$this->db->idate($arrayquery['contact_update_end_dt'])."')";
@@ -754,12 +785,12 @@ class AdvanceTargetingMailing extends CommonObject
 						if (!empty($arrayquery['options_'.$key.'_max'.'_cnct'])) {
 							$sqlwhere[]= " (te.".$key." >= ".$arrayquery['options_'.$key.'_max'.'_cnct']." AND te.".$key." <= ".$arrayquery['options_'.$key.'_min'.'_cnct'].")";
 						}
-					} else if (($extrafields->attribute_type[$key] == 'date') ||
+					} elseif (($extrafields->attribute_type[$key] == 'date') ||
 					($extrafields->attribute_type[$key] == 'datetime')) {
 						if (!empty($arrayquery['options_'.$key.'_end_dt'.'_cnct'])){
 							$sqlwhere[]= " (te.".$key." >= '".$this->db->idate($arrayquery['options_'.$key.'_st_dt'.'_cnct'])."' AND te.".$key." <= '".$this->db->idate($arrayquery['options_'.$key.'_end_dt'.'_cnct'])."')";
 						}
-					}else if ($extrafields->attribute_type[$key] == 'boolean') {
+					}elseif ($extrafields->attribute_type[$key] == 'boolean') {
 						if ($arrayquery['options_'.$key.'_cnct']!=''){
 							if ($arrayquery['options_'.$key.'_cnct']==0) {
 								$sqlwhere[]= " (te.".$key." = ".$arrayquery['options_'.$key.'_cnct']." OR ((te.".$key." IS NULL) AND (te.fk_object IS NOT NULL)))";
@@ -774,7 +805,6 @@ class AdvanceTargetingMailing extends CommonObject
 							$sqlwhere[]= " (te.".$key." LIKE '".$arrayquery['options_'.$key.'_cnct']."')";
 						}
 					}
-
 				}
 
 				if (! empty($withThirdpartyFilter)) {
@@ -855,12 +885,12 @@ class AdvanceTargetingMailing extends CommonObject
 												if (!empty($arrayquery['options_'.$key.'_max'])) {
 													$sqlwhere[]= " (tse.".$key." >= ".$arrayquery['options_'.$key.'_max']." AND tse.".$key." <= ".$arrayquery['options_'.$key.'_min'].")";
 												}
-									} else if (($extrafields->attribute_type[$key] == 'date') ||
+									} elseif (($extrafields->attribute_type[$key] == 'date') ||
 											($extrafields->attribute_type[$key] == 'datetime')) {
 												if (!empty($arrayquery['options_'.$key.'_end_dt'])){
 													$sqlwhere[]= " (tse.".$key." >= '".$this->db->idate($arrayquery['options_'.$key.'_st_dt'])."' AND tse.".$key." <= '".$this->db->idate($arrayquery['options_'.$key.'_end_dt'])."')";
 												}
-											}else if ($extrafields->attribute_type[$key] == 'boolean') {
+											}elseif ($extrafields->attribute_type[$key] == 'boolean') {
 												if ($arrayquery['options_'.$key]!=''){
 													$sqlwhere[]= " (tse.".$key." = ".$arrayquery['options_'.$key].")";
 												}
@@ -916,7 +946,8 @@ class AdvanceTargetingMailing extends CommonObject
 	 *  									For exemple  jean;joe;jim%%;!jimo;!jima%> will target all jean, joe, start with jim but not jimo and not everythnig taht start by jima
 	 * 	@return		string		Sql to use for the where condition
 	 */
-	public function transformToSQL($column_to_test,$criteria) {
+    public function transformToSQL($column_to_test, $criteria)
+    {
 		$return_sql_criteria = '(';
 
 		//This is a multiple value test
@@ -939,7 +970,6 @@ class AdvanceTargetingMailing extends CommonObject
 			if (count($return_sql_not_like)>0) {
 				$return_sql_criteria .= ' AND (' . implode (' AND ', $return_sql_not_like).')';
 			}
-
 		}else {
 			$return_sql_criteria .= $column_to_test . ' LIKE \''.$this->db->escape($criteria).'\'';
 		}
@@ -948,6 +978,4 @@ class AdvanceTargetingMailing extends CommonObject
 
 		return $return_sql_criteria;
 	}
-
-
 }

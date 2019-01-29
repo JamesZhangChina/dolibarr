@@ -1,6 +1,6 @@
 <?php
 /* Copyright (C) 2010-2016 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2010-2014 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2010-2014 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2010-2011 Juanjo Menent        <jmenent@2byte.es>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,9 +29,20 @@
  */
 class HookManager
 {
-	var $db;
-	var $error;
-	var $errors=array();
+	/**
+     * @var DoliDB Database handler.
+     */
+    public $db;
+
+	/**
+	 * @var string Error code (or message)
+	 */
+	public $error='';
+
+	/**
+	 * @var string[] Error codes (or messages)
+	 */
+	public $errors = array();
 
     // Context hookmanager was created for ('thirdpartycard', 'thirdpartydao', ...)
     var $contextarray=array();
@@ -125,7 +136,7 @@ class HookManager
      *                                          All types can also return some values into an array ->results that will be finaly merged into this->resArray for caller.
      * 											$this->error or this->errors are also defined by class called by this function if error.
      */
-	function executeHooks($method, $parameters=array(), &$object='', &$action='')
+	function executeHooks($method, $parameters = array(), &$object = '', &$action = '')
 	{
         if (! is_array($this->hooks) || empty($this->hooks)) return '';
 
@@ -157,6 +168,8 @@ class HookManager
 				'getFormMail',
 				'getIdProfUrl',
 				'getDirList',
+			    'getFormatedCustomerRef',
+			    'getFormatedSupplierRef',
 				'moveUploadedFile',
 				'moreHtmlStatus',
 				'pdf_build_address',
@@ -272,5 +285,4 @@ class HookManager
 
         return ($error?-1:$resaction);
 	}
-
 }

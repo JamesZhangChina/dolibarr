@@ -34,11 +34,18 @@ class CdavLib
 
 	private $langs;
 
+    /**
+     * Constructor
+     *
+     * @param   User        $user   user
+     * @param   DoliDB      $db     Database handler
+     * @param   Translate   $langs  translation
+     */
 	function __construct($user, $db, $langs)
 	{
-		$this->user 	= $user;
-		$this->db 		= $db;
-		$this->langs 	= $langs;
+		$this->user = $user;
+		$this->db = $db;
+		$this->langs = $langs;
 	}
 
 	/**
@@ -49,7 +56,7 @@ class CdavLib
 	 * @param	int|boolean	$ouri			Ouri
 	 * @return string
 	 */
-	public function getSqlCalEvents($calid, $oid=false, $ouri=false)
+	public function getSqlCalEvents($calid, $oid = false, $ouri = false)
 	{
 		// TODO : replace GROUP_CONCAT by
 		$sql = 'SELECT
@@ -106,7 +113,6 @@ class CdavLib
 		}
 
 		return $sql;
-
 	}
 
 	/**
@@ -295,5 +301,4 @@ class CdavLib
 		}
 		return $calevents;
 	}
-
 }
