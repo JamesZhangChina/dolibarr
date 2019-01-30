@@ -1235,7 +1235,7 @@ class pdf_einstein extends ModelePDFCommandes
 		if (empty($hidetop))
 		{
 			$pdf->SetXY($this->postotalht-1, $tab_top+1);
-			$pdf->MultiCell(30,2, $outputlangs->transnoentities("TotalTTC"),'','C');
+			$pdf->MultiCell(30,2, $outputlangs->transnoentities("TotalHT"),'','C');
 		}
 	}
 
