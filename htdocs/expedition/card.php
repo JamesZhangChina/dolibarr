@@ -1374,7 +1374,7 @@ if ($action == 'create')
 				else
 				{
 					// ship from multiple locations
-					if (empty($conf->productbatch->enabled) || ! $product->hasbatch())
+					if (empty($conf->productbatch->enabled) || ! ($product->hasbatch()))
 					{
 					    print '<!-- Case warehouse not already known and product does not need lot -->';
 					    print '<td></td><td></td></tr>'."\n";	// end line and start a new one for each warehouse
