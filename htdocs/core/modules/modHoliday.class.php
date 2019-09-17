@@ -41,7 +41,7 @@ class modHoliday extends DolibarrModules
 	 *
 	 *  @param	DoliDB	$db		Database handler
 	 */
-	function __construct($db)
+	public function __construct($db)
 	{
 		$this->db = $db;
 
@@ -54,9 +54,9 @@ class modHoliday extends DolibarrModules
 		// Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
 		// It is used to group modules in module setup page
 		$this->family = "hr";
-		$this->module_position = '30';
+		$this->module_position = '42';
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
-		$this->name = preg_replace('/^mod/i','',get_class($this));
+		$this->name = preg_replace('/^mod/i', '', get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
 		$this->description = "Leave requests";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
@@ -206,6 +206,12 @@ class modHoliday extends DolibarrModules
 			'd.date_valid'=>'DateApprove','d.fk_validator'=>"UserForApprovalID",'ua.lastname'=>"UserForApprovalLastname",'ua.firstname'=>"UserForApprovalFirstname",
 			'ua.login'=>"UserForApprovalLogin",'d.description'=>'Description','d.statut'=>'Status'
 		);
+		$this->export_TypeFields_array[$r]=array(
+			'd.rowid'=>"Numeric",'t.code'=>'Text', 't.label'=>'Text','d.fk_user'=>'Numeric',
+			'u.lastname'=>'Text','u.firstname'=>'Text','u.login'=>"Text",'d.date_debut'=>'Date','d.date_fin'=>'Date',
+			'd.date_valid'=>'Date','d.fk_validator'=>"Numeric",'ua.lastname'=>"Text",'ua.firstname'=>"Text",
+			'ua.login'=>"Text",'d.description'=>'Text','d.statut'=>'Numeric'
+		);
 		$this->export_entities_array[$r]=array(
 			'u.lastname'=>'user','u.firstname'=>'user','u.login'=>'user','ua.lastname'=>'user','ua.firstname'=>'user','ua.login'=>'user'
 		);
@@ -257,4 +263,3 @@ class modHoliday extends DolibarrModules
 		// $r++;
 	}
 }
-

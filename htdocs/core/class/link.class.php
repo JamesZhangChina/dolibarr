@@ -111,7 +111,7 @@ class Link extends CommonObject
 
             if ($this->id > 0) {
                 // Call trigger
-                $result=$this->call_trigger('LINK_CREATE',$user);
+                $result=$this->call_trigger('LINK_CREATE', $user);
                 if ($result < 0) $error++;
                 // End call triggers
             } else {
@@ -136,7 +136,7 @@ class Link extends CommonObject
             if ($this->db->errno() == 'DB_ERROR_RECORD_ALREADY_EXISTS')
             {
 
-                $this->error=$langs->trans("ErrorCompanyNameAlreadyExists",$this->name);
+                $this->error=$langs->trans("ErrorCompanyNameAlreadyExists", $this->name);
                 $result=-1;
             }
             else
@@ -150,11 +150,11 @@ class Link extends CommonObject
     }
 
     /**
-     *      Update parameters of third party
+     *  Update parameters of third party
      *
-     *      @param  User	$user            			User executing update
-     *      @param  int		$call_trigger    			0=no, 1=yes
-     *      @return int  			           			<0 if KO, >=0 if OK
+     *  @param  User	$user            			User executing update
+     *  @param  int		$call_trigger    			0=no, 1=yes
+     *  @return int  			           			<0 if KO, >=0 if OK
      */
     public function update($user = '', $call_trigger = 1)
     {
@@ -174,7 +174,7 @@ class Link extends CommonObject
         }
 
         // Clean parameters
-        $this->url       = clean_url($this->url,1);
+        $this->url       = clean_url($this->url, 1);
         if (empty($this->label)) $this->label = basename($this->url);
         $this->label     = trim($this->label);
 
@@ -197,7 +197,7 @@ class Link extends CommonObject
             if ($call_trigger)
             {
                 // Call trigger
-                $result=$this->call_trigger('LINK_MODIFY',$user);
+                $result=$this->call_trigger('LINK_MODIFY', $user);
                 if ($result < 0) $error++;
                 // End call triggers
             }
@@ -334,6 +334,7 @@ class Link extends CommonObject
             if($this->db->num_rows($resql) > 0)
             {
                 $obj = $this->db->fetch_object($resql);
+	            $this->id=$obj->rowid;
                 $this->entity = $obj->entity;
                 $this->datea = $this->db->jdate($obj->datea);
                 $this->url = $obj->url;
@@ -355,21 +356,26 @@ class Link extends CommonObject
     /**
      *    Delete a link from database
      *
-     *    @return	int				<0 if KO, 0 if nothing done, >0 if OK
+     *	  @param	User		$user		Object suer
+     *    @return	int						<0 if KO, 0 if nothing done, >0 if OK
      */
-    public function delete()
+    public function delete($user)
     {
-        global $user, $langs, $conf;
+        global $langs, $conf;
 
         dol_syslog(get_class($this)."::delete", LOG_DEBUG);
         $error = 0;
 
-        // Call trigger
-        $result=$this->call_trigger('LINK_DELETE',$user);
-        if ($result < 0) return -1;
-        // End call triggers
-
         $this->db->begin();
+
+        // Call trigger
+        $result=$this->call_trigger('LINK_DELETE', $user);
+        if ($result < 0)
+        {
+        	$this->db->rollback();
+        	return -1;
+        }
+        // End call triggers
 
         // Remove link
         $sql = "DELETE FROM " . MAIN_DB_PREFIX . "links";
