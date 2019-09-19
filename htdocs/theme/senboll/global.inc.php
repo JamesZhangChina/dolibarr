@@ -1480,7 +1480,7 @@ div.tmenudiv {
     border-<?php print $right; ?>: 0px;
     padding: 0px 0px 0px 0px;	/* t r b l */
     margin: 0px 0px 0px 0px;	/* t r b l */
-	font-size: 13px;
+	font-size: 16px;
     font-weight: normal;
 	color: #000000;
     text-decoration: none;
@@ -1586,7 +1586,7 @@ div.tmenucenter
 	padding-right: 3px;
 	<?php if ($disableimages) { ?>
 	padding-top: 8px;
-	height: 26px;
+	height: 32px;
 	<?php } else { ?>
 	padding-top: 2px;
     height: <?php print $heightmenu; ?>px;
@@ -5676,7 +5676,7 @@ div.tabsElem a.tab {
 @media only screen and (max-width: <?php echo empty($conf->global->THEME_ELDY_WITDHOFFSET_FOR_REDUC1) ? round($nbtopmenuentries * 90, 0) + 340 : $conf->global->THEME_ELDY_WITDHOFFSET_FOR_REDUC1; ?>px)	/* reduction 1 */
 {
 	div.tmenucenter {
-	    width: <?php echo round(52); ?>px;	/* size of viewport */
+	    /*width: <?php echo round(52); ?>px;	/* size of viewport */
     	white-space: nowrap;
   		overflow: hidden;
   		text-overflow: ellipsis;
@@ -5715,7 +5715,7 @@ div.tabsElem a.tab {
 		height: 23px;
 	}
 	div.tmenucenter {
-	    max-width: <?php echo round(26); ?>px;	/* size of viewport */
+	    /*max-width: <?php echo round(26); ?>px;	/* size of viewport */
   		text-overflow: clip;
 	}
 	span.mainmenuaspan {
