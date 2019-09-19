@@ -2550,14 +2550,10 @@ if ($action == 'create' && $usercancreate)
 				}
 
 				// Valid
-<<<<<<< HEAD
-				if ($object->statut == Commande::STATUS_DRAFT && $numlines > 0 &&
+				if ($object->statut == Commande::STATUS_DRAFT && $numlines > 0 && $object->total_ttc >= 0 && $usercanvalidate &&
 					((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->creer))
 				   	|| (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->order_advance->validate)))
 				)
-=======
-				if ($object->statut == Commande::STATUS_DRAFT && $object->total_ttc >= 0 && $numlines > 0 && $usercanvalidate)
->>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 				{
 					print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&amp;action=validate">' . $langs->trans('Validate') . '</a></div>';
 				}
