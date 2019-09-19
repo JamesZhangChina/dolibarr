@@ -96,11 +96,11 @@ else
 
 	<tr>
 		<td class="label1"><?php echo $langs->trans("Login"); ?></td>
-		<td><input name="txtUsername" class="texte_login" type="text" value="<?php echo $usertxt; ?>" /></td>
+		<td><input name="txtUsername" class="texte_login maxwidth150onsmartphoneimp" type="text" value="<?php echo $usertxt; ?>" /></td>
 	</tr>
 	<tr>
 		<td class="label1"><?php echo $langs->trans("Password"); ?></td>
-		<td><input name="pwdPassword" class="texte_login" type="password" value="" /></td>
+		<td><input name="pwdPassword" class="texte_login maxwidth150onsmartphoneimp" type="password" value="" /></td>
 	</tr>
 
 <?php
@@ -157,7 +157,11 @@ print '<td class="label1">'.$langs->trans("CashDeskBankAccountForSell").'</td>';
 print '<td>';
 $defaultknown=0;
 if (! empty($conf->global->CASHDESK_ID_BANKACCOUNT_CASH) && $conf->global->CASHDESK_ID_BANKACCOUNT_CASH > 0) $defaultknown=1;	// If a particular stock is defined, we disable choice
+<<<<<<< HEAD
 print $form->select_comptes(((GETPOST('bankid_cash') > 0)?GETPOST('bankid_cash'):$conf->global->CASHDESK_ID_BANKACCOUNT_CASH), 'CASHDESK_ID_BANKACCOUNT_CASH', 0, "courant=2", ($defaultknown?0:2));
+=======
+$form->select_comptes(((GETPOST('bankid_cash') > 0)?GETPOST('bankid_cash'):$conf->global->CASHDESK_ID_BANKACCOUNT_CASH), 'CASHDESK_ID_BANKACCOUNT_CASH', 0, "courant=2", ($defaultknown?0:2));
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 print '</td>';
 print "</tr>\n";
 
@@ -166,7 +170,11 @@ print '<td class="label1">'.$langs->trans("CashDeskBankAccountForCheque").'</td>
 print '<td>';
 $defaultknown=0;
 if (! empty($conf->global->CASHDESK_ID_BANKACCOUNT_CHEQUE) && $conf->global->CASHDESK_ID_BANKACCOUNT_CHEQUE > 0) $defaultknown=1;	// If a particular stock is defined, we disable choice
+<<<<<<< HEAD
 print $form->select_comptes(((GETPOST('bankid_cheque') > 0)?GETPOST('bankid_cheque'):$conf->global->CASHDESK_ID_BANKACCOUNT_CHEQUE), 'CASHDESK_ID_BANKACCOUNT_CHEQUE', 0, "courant=1", ($defaultknown?0:2));
+=======
+$form->select_comptes(((GETPOST('bankid_cheque') > 0)?GETPOST('bankid_cheque'):$conf->global->CASHDESK_ID_BANKACCOUNT_CHEQUE), 'CASHDESK_ID_BANKACCOUNT_CHEQUE', 0, "courant=1", ($defaultknown?0:2));
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 print '</td>';
 print "</tr>\n";
 
@@ -175,7 +183,11 @@ print '<td class="label1">'.$langs->trans("CashDeskBankAccountForCB").'</td>';
 print '<td>';
 $defaultknown=0;
 if (! empty($conf->global->CASHDESK_ID_BANKACCOUNT_CB) && $conf->global->CASHDESK_ID_BANKACCOUNT_CB > 0) $defaultknown=1;	// If a particular stock is defined, we disable choice
+<<<<<<< HEAD
 print $form->select_comptes(((GETPOST('bankid_cb') > 0)?GETPOST('bankid_cb'):$conf->global->CASHDESK_ID_BANKACCOUNT_CB), 'CASHDESK_ID_BANKACCOUNT_CB', 0, "courant=1", ($defaultknown?0:2));
+=======
+$form->select_comptes(((GETPOST('bankid_cb') > 0)?GETPOST('bankid_cb'):$conf->global->CASHDESK_ID_BANKACCOUNT_CB), 'CASHDESK_ID_BANKACCOUNT_CB', 0, "courant=1", ($defaultknown?0:2));
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 print '</td>';
 print "</tr>\n";
 
@@ -191,7 +203,7 @@ print "</tr>\n";
 </table>
 <br>
 
-<div align="center"><span class="bouton_login"><input class="button" name="sbmtConnexion" type="submit" value=<?php echo $langs->trans("Connection"); ?> /></span></div>
+<div align="center"><span class="bouton_login"><input class="button" name="sbmtConnexion" type="submit" value="<?php echo dol_escape_htmltag($langs->trans("Connection")); ?>" /></span></div>
 
 </form>
 </fieldset>

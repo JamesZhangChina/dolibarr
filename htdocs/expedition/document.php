@@ -163,8 +163,12 @@ if ($id > 0 || ! empty($ref)){
 		print '<table class="border tableforfield centpercent">';
 
 		print '<tr><td class="titlefield">'.$langs->trans("NbOfAttachedFiles").'</td><td colspan="3">'.count($filearray).'</td></tr>';
+<<<<<<< HEAD
 
 		print '<tr><td>'.$langs->trans("TotalSizeOfAttachedFiles").'</td><td colspan="3">'.$totalsize.' '.$langs->trans("bytes").'</td></tr>';
+=======
+		print '<tr><td>'.$langs->trans("TotalSizeOfAttachedFiles").'</td><td colspan="3">'.dol_print_size($totalsize, 1, 1).'</td></tr>';
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 
 		print "</table>\n";
 

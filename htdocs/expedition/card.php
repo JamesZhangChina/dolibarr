@@ -251,9 +251,15 @@ if (empty($reshook))
     				while (isset($_POST[$batch]))
     				{
     					// save line of detail into sub_qty
+<<<<<<< HEAD
     				    $sub_qty[$j]['q'] = abs(GETPOST($qty,'int'));				// the qty we want to move for this stock record
     				    $sub_qty[$j]['id_batch']=GETPOST($batch,'int');		// the id into llx_product_batch of stock record to move
     					$subtotalqty+=$sub_qty[$j]['q']; 
+=======
+    				    $sub_qty[$j]['q']=GETPOST($qty, 'int');				// the qty we want to move for this stock record
+    				    $sub_qty[$j]['id_batch']=GETPOST($batch, 'int');		// the id into llx_product_batch of stock record to move
+    					$subtotalqty+=$sub_qty[$j]['q'];
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 
     					//var_dump($qty);var_dump($batch);var_dump($sub_qty[$j]['q']);var_dump($sub_qty[$j]['id_batch']);
 
@@ -291,7 +297,11 @@ if (empty($reshook))
 			        $stockLine[$i][$j]['warehouse_id']=GETPOST($stockLocation, 'int');
 			        $stockLine[$i][$j]['ix_l']=GETPOST($idl, 'int');
 
+<<<<<<< HEAD
 			        $totalqty += abs(GETPOST($qty,'int'));
+=======
+			        $totalqty+=GETPOST($qty, 'int');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 
 			        $j++;
 			        $stockLocation="ent1".$i."_".$j;
@@ -302,7 +312,11 @@ if (empty($reshook))
 			{
 			    //var_dump(GETPOST($qty,'int')); var_dump($_POST); var_dump($batch);exit;
 				//shipment line for product with no batch management and no multiple stock location
+<<<<<<< HEAD
 				if (GETPOST($qty,'int') != 0) $totalqty += abs(GETPOST($qty,'int'));
+=======
+				if (GETPOST($qty, 'int') > 0) $totalqty+=GETPOST($qty, 'int');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 			}
 
 			// Extrafields
@@ -347,7 +361,11 @@ if (empty($reshook))
 					}
 					else
 					{
+<<<<<<< HEAD
 						if (GETPOST($qty,'int') != 0 || (GETPOST($qty,'int') == 0 && $conf->global->SHIPMENT_GETS_ALL_ORDER_PRODUCTS))
+=======
+						if (GETPOST($qty, 'int') > 0 || (GETPOST($qty, 'int') == 0 && $conf->global->SHIPMENT_GETS_ALL_ORDER_PRODUCTS))
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 						{
 							$ent = "entl".$i;
 							$idl = "idl".$i;
@@ -1226,6 +1244,7 @@ if ($action == 'create')
 					{
 						$quantityToBeDelivered = $quantityAsked - $quantityDelivered;
 					}
+<<<<<<< HEAD
 					$warehouse_id = GETPOST('entrepot_id', 'int');
 				}
 
@@ -1238,6 +1257,12 @@ if ($action == 'create')
 					$deliverableQty=min($quantityToBeDelivered, $stock);
 					//if ($deliverableQty < 0) $deliverableQty = 0;
 					if (empty($conf->productbatch->enabled) || ! $product->hasbatch())
+=======
+	                $warehouse_id = GETPOST('entrepot_id', 'int');
+
+					$warehouseObject = null;
+					if ($warehouse_id > 0 || ! ($line->fk_product > 0) || empty($conf->stock->enabled))     // If warehouse was already selected or if product is not a predefined, we go into this part with no multiwarehouse selection
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 					{
 					    print '<!-- Case warehouse already known or product not a predefined product -->';
 						//ship from preselected location
@@ -1365,6 +1390,7 @@ if ($action == 'create')
 									$detail.= ' - '.$langs->trans("Qty").': '.$dbatch->qty;
 									$detail.= '<br>';
 									print $detail;
+<<<<<<< HEAD
 								}
 
 								$quantityToBeDelivered -= $deliverableQty;
@@ -1375,6 +1401,17 @@ if ($action == 'create')
 								}*/
 								$subj++;
 								print '</td></tr>';
+=======
+
+									$quantityToBeDelivered -= $deliverableQty;
+									if ($quantityToBeDelivered < 0)
+									{
+										$quantityToBeDelivered = 0;
+									}
+									$subj++;
+									print '</td></tr>';
+								}
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 							}
 							else
 							{
@@ -1389,11 +1426,15 @@ if ($action == 'create')
 							}
 						}
 					}
+<<<<<<< HEAD
 				}
 				else
 				{
 					// ship from multiple locations
 					if (empty($conf->productbatch->enabled) || ! ($product->hasbatch()))
+=======
+					else
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 					{
 						// ship from multiple locations
 						if (empty($conf->productbatch->enabled) || ! $product->hasbatch())
@@ -1431,6 +1472,7 @@ if ($action == 'create')
 									}
 									else print $langs->trans("NA");
 									print '</td>';
+<<<<<<< HEAD
 
 									// Stock
 									if (! empty($conf->stock->enabled))
@@ -1440,6 +1482,17 @@ if ($action == 'create')
 										{
 											print $tmpwarehouseObject->getNomUrl(0).' ';
 
+=======
+
+									// Stock
+									if (! empty($conf->stock->enabled))
+									{
+										print '<td class="left">';
+										if ($line->product_type == Product::TYPE_PRODUCT || ! empty($conf->global->STOCK_SUPPORTS_SERVICES))
+										{
+											print $tmpwarehouseObject->getNomUrl(0).' ';
+
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 											print '<!-- Show details of stock -->';
 											print '('.$stock.')';
 										}
@@ -1454,6 +1507,7 @@ if ($action == 'create')
 									{
 										$quantityToBeDelivered = 0;
 									}
+<<<<<<< HEAD
 									print '</td>';
 								}
 								$quantityToBeDelivered -= $deliverableQty;
@@ -1464,6 +1518,11 @@ if ($action == 'create')
 								}*/
 								$subj++;
 								print "</tr>\n";
+=======
+									$subj++;
+									print "</tr>\n";
+								}
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 							}
 							// Show subproducts of product (not recommanded)
 							if (! empty($conf->global->PRODUIT_SOUSPRODUITS) && $line->fk_product > 0)
@@ -1492,6 +1551,7 @@ if ($action == 'create')
 						}
 						else
 						{
+<<<<<<< HEAD
 							$tmpwarehouseObject->fetch($warehouse_id);
 							if (($stock_warehouse->real > 0) && (count($stock_warehouse->detail_batch))) {
 						        foreach ($stock_warehouse->detail_batch as $dbatch)
@@ -1507,10 +1567,15 @@ if ($action == 'create')
 									print '<td class="left">';
 
 									print $tmpwarehouseObject->getNomUrl(0).' / ';
+=======
+						    print '<!-- Case warehouse not already known and product need lot -->';
+						    print '<td></td><td></td></tr>';	// end line and start a new one for lot/serial
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 
 							$subj=0;
 							print '<input name="idl'.$indiceAsked.'" type="hidden" value="'.$line->id.'">';
 
+<<<<<<< HEAD
 									//print '|'.$line->fk_product.'|'.$dbatch->batch.'|<br>';
 									print $langs->trans("Batch").': ';
 									$result = $productlotObject->fetch(0, $line->fk_product, $dbatch->batch);
@@ -1526,6 +1591,57 @@ if ($action == 'create')
 									//dol_syslog('deliverableQty = '.$deliverableQty.' batchStock = '.$batchStock);
 									$subj++;
 									print '</td></tr>';
+=======
+							$tmpwarehouseObject=new Entrepot($db);
+							$productlotObject=new Productlot($db);
+							// Define nb of lines suggested for this order line
+							$nbofsuggested=0;
+							foreach ($product->stock_warehouse as $warehouse_id=>$stock_warehouse)
+							{
+							    if (($stock_warehouse->real > 0) && (count($stock_warehouse->detail_batch))) {
+							        foreach ($stock_warehouse->detail_batch as $dbatch)
+									{
+	                                    $nbofsuggested++;
+									}
+							    }
+							}
+							foreach ($product->stock_warehouse as $warehouse_id=>$stock_warehouse)
+							{
+								$tmpwarehouseObject->fetch($warehouse_id);
+								if (($stock_warehouse->real > 0) && (count($stock_warehouse->detail_batch))) {
+							        foreach ($stock_warehouse->detail_batch as $dbatch)
+									{
+										//var_dump($dbatch);
+										$batchStock = + $dbatch->qty;		// To get a numeric
+										$deliverableQty = min($quantityToBeDelivered, $batchStock);
+										if ($deliverableQty < 0) $deliverableQty = 0;
+										print '<!-- subj='.$subj.'/'.$nbofsuggested.' --><tr '.((($subj + 1) == $nbofsuggested)?$bc[$var]:'').'><td colspan="3"></td><td class="center">';
+										print '<input name="qtyl'.$indiceAsked.'_'.$subj.'" id="qtyl'.$indiceAsked.'_'.$subj.'" type="text" size="4" value="'.$deliverableQty.'">';
+										print '</td>';
+
+										print '<td class="left">';
+
+										print $tmpwarehouseObject->getNomUrl(0).' / ';
+
+										print '<!-- Show details of lot -->';
+										print '<input name="batchl'.$indiceAsked.'_'.$subj.'" type="hidden" value="'.$dbatch->id.'">';
+
+										//print '|'.$line->fk_product.'|'.$dbatch->batch.'|<br>';
+										print $langs->trans("Batch").': ';
+										$result = $productlotObject->fetch(0, $line->fk_product, $dbatch->batch);
+										if ($result > 0) print $productlotObject->getNomUrl(1);
+										else print 'TableLotIncompleteRunRepairWithParamStandardEqualConfirmed';
+										print ' ('.$dbatch->qty.')';
+										$quantityToBeDelivered -= $deliverableQty;
+										if ($quantityToBeDelivered < 0)
+										{
+											$quantityToBeDelivered = 0;
+										}
+										//dol_syslog('deliverableQty = '.$deliverableQty.' batchStock = '.$batchStock);
+										$subj++;
+										print '</td></tr>';
+									}
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 								}
 							}
 						}
@@ -1972,8 +2088,13 @@ elseif ($id || $ref)
 			if ($object->shipping_method_id > 0)
 			{
 				// Get code using getLabelFromKey
+<<<<<<< HEAD
 				$code=$langs->getLabelFromKey($db,$object->shipping_method_id,'c_shipment_mode','rowid','code');
 				print $langs->trans(strtoupper($code));
+=======
+				$code=$langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
+				print $langs->trans("SendingMethod".strtoupper($code));
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 			}
 		}
 		print '</td>';

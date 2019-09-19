@@ -383,8 +383,13 @@ class pdf_einstein extends ModelePDFCommandes
 					$notetoshow = make_substitutions($notetoshow, $substitutionarray, $outputlangs);
 					$notetoshow = convertBackOfficeMediasLinksToPublicLinks($notetoshow);
 
+<<<<<<< HEAD
 					$pdf->SetFont('','', $default_font_size - 1);
 					$pdf->writeHTMLCell(190, 30, $this->posxdesc-1, $tab_top-1, dol_htmlentitiesbr($notetoshow), 0, 1);
+=======
+					$pdf->SetFont('', '', $default_font_size - 1);
+					$pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top-1, dol_htmlentitiesbr($notetoshow), 0, 1);
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 					$nexY = $pdf->GetY();
 					$height_note=$nexY-$tab_top;
 
@@ -488,6 +493,7 @@ class pdf_einstein extends ModelePDFCommandes
 					// Quantity
 					$qty = pdf_getlineqty($object, $i, $outputlangs, $hidedetails);
 					$pdf->SetXY($this->posxqty, $curY);
+<<<<<<< HEAD
 					// Enough for 6 chars
 					if($conf->global->PRODUCT_USE_UNITS)
 					{
@@ -497,6 +503,9 @@ class pdf_einstein extends ModelePDFCommandes
 					{
 						$pdf->MultiCell($this->posxdiscount-$this->posxqty-0.8, 4, $qty, 0, 'C');
 					}
+=======
+					$pdf->MultiCell($this->posxunit-$this->posxqty-0.8, 4, $qty, 0, 'R');  // Enough for 6 chars
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 
 					// Unit
 					if($conf->global->PRODUCT_USE_UNITS)
@@ -891,7 +900,11 @@ class pdf_einstein extends ModelePDFCommandes
 
 		$tab2_top = $posy;
 		$tab2_hl = 4;
+<<<<<<< HEAD
 		$pdf->SetFont('','', $default_font_size + 1);
+=======
+		$pdf->SetFont('', '', $default_font_size - 1);
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 
 		// Tableau total
         $col1x = 120; $col2x = 170;
@@ -905,8 +918,12 @@ class pdf_einstein extends ModelePDFCommandes
 		$index = 0;
 
 		// Total HT
+<<<<<<< HEAD
 		/*
 		$pdf->SetFillColor(255,255,255);
+=======
+		$pdf->SetFillColor(255, 255, 255);
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 		$pdf->SetXY($col1x, $tab2_top + 0);
 		$pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("TotalHT"), 0, 'L', 1);
 
@@ -999,6 +1016,7 @@ class pdf_einstein extends ModelePDFCommandes
 				{
 					if ($tvakey != 0)    // On affiche pas taux 0
 					{
+<<<<<<< HEAD
 						// $this->atleastoneratenotnull++;
 
 						// $index++;
@@ -1016,6 +1034,25 @@ class pdf_einstein extends ModelePDFCommandes
 
 						// $pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
 						// $pdf->MultiCell($largcol2, $tab2_hl, price($tvaval, 0, $outputlangs), 0, 'R', 1);
+=======
+						$this->atleastoneratenotnull++;
+
+						$index++;
+						$pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+						$tvacompl='';
+						if (preg_match('/\*/', $tvakey))
+						{
+							$tvakey=str_replace('*', '', $tvakey);
+							$tvacompl = " (".$outputlangs->transnoentities("NonPercuRecuperable").")";
+						}
+						$totalvat =$outputlangs->transcountrynoentities("TotalVAT", $mysoc->country_code).' ';
+						$totalvat.=vatrate($tvakey, 1).$tvacompl;
+						$pdf->MultiCell($col2x-$col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+						$pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+						$pdf->MultiCell($largcol2, $tab2_hl, price($tvaval, 0, $outputlangs), 0, 'R', 1);
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 					}
 				}
 
@@ -1089,8 +1126,13 @@ class pdf_einstein extends ModelePDFCommandes
 				
 				$index++;
 				$pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+<<<<<<< HEAD
 				$pdf->SetTextColor(255,48,48);
 				$pdf->SetFillColor(255,255,255);
+=======
+				$pdf->SetTextColor(0, 0, 60);
+				$pdf->SetFillColor(224, 224, 224);
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 				$pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("TotalTTC"), $useborder, 'L', 1);
 
 				$pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
@@ -1194,7 +1236,11 @@ class pdf_einstein extends ModelePDFCommandes
 			if (empty($hidetop))
 			{
 				$pdf->SetXY($this->posxtva-3, $tab_top+1);
+<<<<<<< HEAD
 				$pdf->MultiCell($this->posxup-$this->posxtva,2, $outputlangs->transnoentities("VAT"),'','C');
+=======
+				$pdf->MultiCell($this->posxup-$this->posxtva+3, 2, $outputlangs->transnoentities("VAT"), '', 'C');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 			}
 		}
 
@@ -1202,13 +1248,18 @@ class pdf_einstein extends ModelePDFCommandes
 		if (empty($hidetop))
 		{
 			$pdf->SetXY($this->posxup-1, $tab_top+1);
+<<<<<<< HEAD
 			$pdf->MultiCell($this->posxqty-$this->posxup,2, $outputlangs->transnoentities("PriceUHT"),'','C');
+=======
+			$pdf->MultiCell($this->posxqty-$this->posxup-1, 2, $outputlangs->transnoentities("PriceUHT"), '', 'C');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 		}
 
 		$pdf->line($this->posxqty-1, $tab_top, $this->posxqty-1, $tab_top + $tab_height);
 		if (empty($hidetop))
 		{
 			$pdf->SetXY($this->posxqty-1, $tab_top+1);
+<<<<<<< HEAD
 			if($conf->global->PRODUCT_USE_UNITS)
 			{
 				$pdf->MultiCell($this->posxunit-$this->posxqty,2, $outputlangs->transnoentities("Qty"),'','C');
@@ -1217,14 +1268,21 @@ class pdf_einstein extends ModelePDFCommandes
 			{
 				$pdf->MultiCell($this->posxdiscount-$this->posxqty,2, $outputlangs->transnoentities("Qty"),'','C');
 			}
+=======
+			$pdf->MultiCell($this->posxunit-$this->posxqty-1, 2, $outputlangs->transnoentities("Qty"), '', 'C');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 		}
 
 		if($conf->global->PRODUCT_USE_UNITS) {
 			$pdf->line($this->posxunit - 1, $tab_top, $this->posxunit - 1, $tab_top + $tab_height);
 			if (empty($hidetop)) {
 				$pdf->SetXY($this->posxunit - 1, $tab_top + 1);
+<<<<<<< HEAD
 				$pdf->MultiCell($this->posxdiscount - $this->posxunit, 2, $outputlangs->transnoentities("Unit"), '',
 					'C');
+=======
+				$pdf->MultiCell($this->posxdiscount - $this->posxunit - 1, 2, $outputlangs->transnoentities("Unit"), '', 'C');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 			}
 		}
 
@@ -1234,7 +1292,11 @@ class pdf_einstein extends ModelePDFCommandes
 			if ($this->atleastonediscount)
 			{
 				$pdf->SetXY($this->posxdiscount-1, $tab_top+1);
+<<<<<<< HEAD
 				$pdf->MultiCell($this->postotalht-$this->posxdiscount,2, $outputlangs->transnoentities("ReductionShort"),'','C');
+=======
+				$pdf->MultiCell($this->postotalht-$this->posxdiscount+1, 2, $outputlangs->transnoentities("ReductionShort"), '', 'C');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 			}
 		}
 

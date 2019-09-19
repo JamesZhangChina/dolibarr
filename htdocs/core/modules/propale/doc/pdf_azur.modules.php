@@ -1075,8 +1075,12 @@ class pdf_azur extends ModelePDFPropales
 		$index = 0;
 
 		// Total HT
+<<<<<<< HEAD
 		/*
 		$pdf->SetFillColor(255,255,255);
+=======
+		$pdf->SetFillColor(255, 255, 255);
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 		$pdf->SetXY($col1x, $tab2_top + 0);
 		$pdf->MultiCell($col2x-$col1x, $tab2_hl, $outputlangs->transnoentities("TotalHT"), 0, 'L', 1);
 
@@ -1169,6 +1173,7 @@ class pdf_azur extends ModelePDFPropales
 				// VAT
 				foreach($this->tva as $tvakey => $tvaval)
 				{
+<<<<<<< HEAD
 					// if ($tvakey != 0)    // On affiche pas taux 0
 					// {
 					// 	$this->atleastoneratenotnull++;
@@ -1189,6 +1194,28 @@ class pdf_azur extends ModelePDFPropales
 					// 	$pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
 					// 	$pdf->MultiCell($largcol2, $tab2_hl, price($tvaval, 0, $outputlangs), 0, 'R', 1);
 					//  }
+=======
+					if ($tvakey != 0)    // On affiche pas taux 0
+					{
+						$this->atleastoneratenotnull++;
+
+						$index++;
+						$pdf->SetXY($col1x, $tab2_top + $tab2_hl * $index);
+
+						$tvacompl='';
+						if (preg_match('/\*/', $tvakey))
+						{
+							$tvakey=str_replace('*', '', $tvakey);
+							$tvacompl = " (".$outputlangs->transnoentities("NonPercuRecuperable").")";
+						}
+						$totalvat =$outputlangs->transcountrynoentities("TotalVAT", $mysoc->country_code).' ';
+						$totalvat.=vatrate($tvakey, 1).$tvacompl;
+						$pdf->MultiCell($col2x-$col1x, $tab2_hl, $totalvat, 0, 'L', 1);
+
+						$pdf->SetXY($col2x, $tab2_top + $tab2_hl * $index);
+						$pdf->MultiCell($largcol2, $tab2_hl, price($tvaval, 0, $outputlangs), 0, 'R', 1);
+					}
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 				}
 
 				//Local tax 1 after VAT
@@ -1433,7 +1460,11 @@ class pdf_azur extends ModelePDFPropales
 		if (empty($hidetop))
 		{
 			$pdf->SetXY($this->postotalht-1, $tab_top+1);
+<<<<<<< HEAD
 			$pdf->MultiCell(30,2, $outputlangs->transnoentities("TotalTTC"),'','C');
+=======
+			$pdf->MultiCell(30, 2, $outputlangs->transnoentities("TotalHT"), '', 'C');
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 		}
 	}
 

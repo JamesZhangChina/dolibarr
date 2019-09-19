@@ -614,6 +614,7 @@ if (empty($conf->global->MAIN_DISABLE_GLOBAL_WORKBOARD)) {
             $totaltodo += $board->nbtodo;
             $totallate += $board->nbtodolate;
         }
+<<<<<<< HEAD
     }
 
     $openedDashBoardSize = 'info-box-sm'; // use sm by default
@@ -630,6 +631,24 @@ if (empty($conf->global->MAIN_DISABLE_GLOBAL_WORKBOARD)) {
         $totallate = $totallatePercentage;
     }
 
+=======
+    }
+
+    $openedDashBoardSize = 'info-box-sm'; // use sm by default
+    foreach ($dashboardgroup as $dashbordelement) {
+        if (is_array($dashbordelement['stats']) && count($dashbordelement['stats']) > 2) {
+            $openedDashBoardSize = ''; // use default info box size : big
+            break;
+        }
+    }
+
+    $totalLateNumber = $totallate;
+    $totallatePercentage = ((!empty($totaltodo)) ? round($totallate / $totaltodo * 100, 2) : 0);
+    if (!empty($conf->global->MAIN_USE_METEO_WITH_PERCENTAGE)) {
+        $totallate = $totallatePercentage;
+    }
+
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
     $boxwork = '';
     $boxwork .= '<div class="box">';
     $boxwork .= '<table summary="' . dol_escape_htmltag($langs->trans("WorkingBoard")) . '" class="noborder boxtable boxtablenobottom boxworkingboard" width="100%">' . "\n";
@@ -822,6 +841,7 @@ if (empty($conf->global->MAIN_DISABLE_GLOBAL_WORKBOARD)) {
     }
 
     $boxwork .= '</td></tr>';
+<<<<<<< HEAD
 
     $boxwork .= '</table>';   // End table array of working board
     $boxwork .= '</div>';
@@ -834,6 +854,20 @@ if (empty($conf->global->MAIN_DISABLE_GLOBAL_WORKBOARD)) {
 }
 
 
+=======
+
+    $boxwork .= '</table>';   // End table array of working board
+    $boxwork .= '</div>';
+
+    if (!empty($isIntopOpenedDashBoard)) {
+        print '<div class="fichecenter">';
+        print '<div class="opened-dash-board-wrap"><div class="box-flex-container">' . $openedDashBoard . '</div></div>';
+        print '</div>';
+    }
+}
+
+
+>>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
 print '<div class="clearboth"></div>';
 
 print '<div class="fichecenter fichecenterbis">';
