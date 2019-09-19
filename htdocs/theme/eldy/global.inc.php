@@ -921,10 +921,7 @@ select.selectarrowonleft option {
     .maxwidth75onsmartphone { max-width: 50px; }
     .maxwidth100onsmartphone { max-width: 70px; }
     .maxwidth150onsmartphone { max-width: 120px; }
-<<<<<<< HEAD
-=======
     .maxwidth150onsmartphoneimp { max-width: 120px !important; }
->>>>>>> 2286cc2a5f8c815462a3319c60e1549bd8ef8257
     .maxwidth200onsmartphone { max-width: 200px; }
     .maxwidth300onsmartphone { max-width: 300px; }
     .maxwidth400onsmartphone { max-width: 400px; }
