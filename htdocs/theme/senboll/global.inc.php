@@ -1135,6 +1135,10 @@ body.sidebar-collapse .login_block {
 	display: none;
 }
 
+ul.tmenu {
+	height: 48px !important;
+}
+
 .menuhider { display: block !important; }
 .dropdown-user-image { display: none; }
 .user-header { height: auto !important; color: rgb(<?php echo $colorbackbody; ?>); }
@@ -1148,7 +1152,7 @@ body.sidebar-collapse .login_block {
 	padding-left: 20px;
 	padding-right: 20px;
 	position: absolute;
-    	z-index: 90;
+    z-index: 90;
 }
 div.blockvmenulogo
 {
@@ -1480,7 +1484,7 @@ div.tmenudiv {
     border-<?php print $right; ?>: 0px;
     padding: 0px 0px 0px 0px;	/* t r b l */
     margin: 0px 0px 0px 0px;	/* t r b l */
-	font-size: 16px;
+	font-size: 18px;
     font-weight: normal;
 	color: #000000;
     text-decoration: none;
@@ -1507,7 +1511,7 @@ a.tmenu:link, a.tmenu:visited, a.tmenu:hover, a.tmenu:active {
     text-decoration: none;
 }
 a.tmenusel:link, a.tmenusel:visited, a.tmenusel:hover, a.tmenusel:active {
-	padding: 0px 4px 0px 4px;
+	padding: 0px 8px 0px 8px;
 	margin: 0px 0px 0px 0px;
 	white-space: nowrap;
 	color: #<?php echo $colortextbackhmenu; ?>;
@@ -1519,7 +1523,13 @@ ul.tmenu {	/* t r b l */
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 	list-style: none;
-	display: table;
+	/* display: table;  */
+
+	height: 60px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
 }
 ul.tmenu li {	/* We need this to have background color when menu entry wraps on new lines */
 }
@@ -1542,8 +1552,8 @@ li.menuhider:hover {
 
 li.tmenusel::after, li.tmenu:hover::after{
 	content: "";
-	position:absolute;
-	bottom:0px;
+	position: absolute;
+	bottom: -10px;
 	left: 50%;
 	left: calc(50% - 6px);
 	width: 0;
@@ -1585,8 +1595,8 @@ div.tmenucenter
 	padding-left: 0px;
 	padding-right: 3px;
 	<?php if ($disableimages) { ?>
-	padding-top: 8px;
-	height: 32px;
+	/* padding-top: 8px; */
+	/* height: 32px; */
 	<?php } else { ?>
 	padding-top: 2px;
     height: <?php print $heightmenu; ?>px;
@@ -1955,12 +1965,16 @@ div.login_block {
 	position: absolute;
 	text-align: <?php print $right; ?>;
 	<?php print $right; ?>: 0;
-	top: <?php print $disableimages?'4px':'0'; ?>;
-	line-height: 10px;
+	top: <?php print $disableimages?'0px':'0'; ?>;
+	/* line-height: 10px; */
 	<?php // echo (empty($disableimages) && $maxwidthloginblock)?'max-width: '.$maxwidthloginblock.'px;':''; ?>
 	<?php if (GETPOST('optioncss', 'aZ09') == 'print') { ?>
 	display: none;
 	<?php } ?>
+	height: 60px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
 }
 div.login_block a {
 	color: #<?php echo $colortextbackhmenu; ?>;
@@ -5691,9 +5705,6 @@ div.tabsElem a.tab {
     	margin-top: 0px;
 	}
 
-    li.tmenu, li.tmenusel {
-    	min-width: 36px;
-    }
     div.mainmenu {
     	min-width: auto;
     }
