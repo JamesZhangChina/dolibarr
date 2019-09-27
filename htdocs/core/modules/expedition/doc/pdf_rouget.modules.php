@@ -332,7 +332,7 @@ class pdf_rouget extends ModelePdfExpedition
 				$pdf->SetTextColor(0, 0, 0);
 
 				$tab_top = 90;
-				$tab_top_newpage = (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)?42:10);
+				$tab_top_newpage = (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)?99:10);
 				$tab_height = 130;
 				$tab_height_newpage = 150;
 
@@ -364,11 +364,11 @@ class pdf_rouget extends ModelePdfExpedition
 					$tab_top = 88 + $height_incoterms;
 					$tab_top_alt = $tab_top;
 
-					$pdf->SetFont('', 'B', $default_font_size - 2);
-					$pdf->writeHTMLCell(60, 4, $this->posxdesc-1, $tab_top-1, $outputlangs->transnoentities("TrackingNumber")." : " . $object->tracking_number, 0, 1, false, true, 'L');
+					// $pdf->SetFont('', 'B', $default_font_size - 1);
+					// $pdf->writeHTMLCell(60, 4, $this->posxdesc+1, $tab_top+1, $outputlangs->transnoentities("TrackingNumber")." : " . $object->tracking_number, 0, 1, false, true, 'L');
 
-					$tab_top_alt = $pdf->GetY();
-					//$tab_top_alt += 1;
+					// $tab_top_alt = $pdf->GetY();
+					// $tab_top_alt += 1;
 
 					// Tracking number
 					if (! empty($object->tracking_number))
@@ -382,26 +382,28 @@ class pdf_rouget extends ModelePdfExpedition
 								$code=$outputlangs->getLabelFromKey($this->db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
 								$label='';
 								if ($object->tracking_url != $object->tracking_number) $label.=$outputlangs->trans("LinkToTrackYourPackage")."<br>";
-								$label.=$outputlangs->trans("SendingMethod").": ".$outputlangs->trans("SendingMethod".strtoupper($code));
+								$label.=$outputlangs->trans("SendingMethod").": ".$outputlangs->trans(strtoupper($code))."<br>";
 								//var_dump($object->tracking_url != $object->tracking_number);exit;
 								if ($object->tracking_url != $object->tracking_number)
 								{
-									$label.=" : ";
+									$label.=$outputlangs->transnoentities("TrackingNumber")." : ";
 									$label.=$object->tracking_url;
 								}
 								$pdf->SetFont('', 'B', $default_font_size - 2);
-								$pdf->writeHTMLCell(60, 4, $this->posxdesc-1, $tab_top_alt, $label, 0, 1, false, true, 'L');
+								$pdf->writeHTMLCell(60, 14, $this->posxdesc+1, $tab_top_alt+1, $label, 0, 1, false, true, 'L');
 
 								$tab_top_alt = $pdf->GetY();
 							}
 						}
 					}
 
-					// Notes
+					// Notes 
 					if (! empty($object->note_public))
 					{
-						$pdf->SetFont('', '', $default_font_size - 1);   // Dans boucle pour gerer multi-page
-						$pdf->writeHTMLCell(190, 3, $this->posxdesc-1, $tab_top_alt, dol_htmlentitiesbr($object->note_public), 0, 1);
+						$pdf->SetFont('', '', $default_font_size - 2);   // Dans boucle pour gerer multi-page
+						$label='';
+						$label = $outputlangs->transnoentities("NotePublic")." : <br>".dol_htmlentitiesbr($object->note_public);
+						$pdf->writeHTMLCell(190, 4, $this->posxdesc+1, $tab_top_alt+1, $label, 0, 1);
 					}
 
 					$nexY = $pdf->GetY();
@@ -409,7 +411,7 @@ class pdf_rouget extends ModelePdfExpedition
 
 					// Rect prend une longueur en 3eme param
 					$pdf->SetDrawColor(192, 192, 192);
-					$pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note+1);
+					$pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note+3);
 
 					$tab_height = $tab_height - $height_note;
 					$tab_top = $nexY+6;
@@ -447,7 +449,9 @@ class pdf_rouget extends ModelePdfExpedition
 					{
 						$pdf->AddPage('', '', true);
 						if (! empty($tplidx)) $pdf->useTemplate($tplidx);
-						if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) $this->_pagehead($pdf, $object, 0, $outputlangs);
+						// if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) {
+							$this->_pagehead($pdf, $object, 1, $outputlangs);
+						// }
 						$pdf->setPage($pageposbefore+1);
 
 						$curY = $tab_top_newpage;
@@ -486,7 +490,9 @@ class pdf_rouget extends ModelePdfExpedition
 							{
 								$pdf->AddPage('', '', true);
 								if (! empty($tplidx)) $pdf->useTemplate($tplidx);
-								if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) $this->_pagehead($pdf, $object, 0, $outputlangs);
+								// if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) {
+									$this->_pagehead($pdf, $object, 1, $outputlangs);
+								// }
 								$pdf->setPage($pageposafter+1);
 							}
 						}
@@ -564,12 +570,13 @@ class pdf_rouget extends ModelePdfExpedition
 					if ($weighttxt && $voltxt) $nexY+=2;
 
 					// Add line
-					if (! empty($conf->global->MAIN_PDF_DASH_BETWEEN_LINES) && $i < ($nblines - 1))
+					if (! empty($conf->global->MAIN_PDF_DASH_BETWEEN_LINES) && $i < ($nblines))
 					{
 						$pdf->setPage($pageposafter);
 						$pdf->SetLineStyle(array('dash'=>'1,1','color'=>array(80,80,80)));
 						//$pdf->SetDrawColor(190,190,200);
-						$pdf->line($this->marge_gauche, $nexY-1, $this->page_largeur - $this->marge_droite, $nexY-1);
+						$pdf->line($this->marge_gauche, $curY - 1, $this->page_largeur - $this->marge_droite, $curY - 1);
+						$pdf->line($this->marge_gauche, $nexY - 1, $this->page_largeur - $this->marge_droite, $nexY - 1);
 						$pdf->SetLineStyle(array('dash'=>0));
 					}
 
@@ -579,34 +586,38 @@ class pdf_rouget extends ModelePdfExpedition
 						$pdf->setPage($pagenb);
 						if ($pagenb == 1)
 						{
-							$this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 1);
+							$this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 0);
 						}
 						else
 						{
-							$this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, 1, 1);
+							$this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, 0, 0);
 						}
 						$this->_pagefoot($pdf, $object, $outputlangs, 1);
 						$pagenb++;
 						$pdf->setPage($pagenb);
 						$pdf->setPageOrientation('', 1, 0);	// The only function to edit the bottom margin of current page to set it.
-						if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) $this->_pagehead($pdf, $object, 0, $outputlangs);
+						// if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) {
+							$this->_pagehead($pdf, $object, 1, $outputlangs);
+						// }
 					}
 					if (isset($object->lines[$i+1]->pagebreak) && $object->lines[$i+1]->pagebreak)
 					{
 						if ($pagenb == 1)
 						{
-							$this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 1);
+							$this->_tableau($pdf, $tab_top, $this->page_hauteur - $tab_top - $heightforfooter, 0, $outputlangs, 0, 0);
 						}
 						else
 						{
-							$this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, 1, 1);
+							$this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforfooter, 0, $outputlangs, 0, 0);
 						}
 						$this->_pagefoot($pdf, $object, $outputlangs, 1);
 						// New page
 						$pdf->AddPage();
 						if (! empty($tplidx)) $pdf->useTemplate($tplidx);
 						$pagenb++;
-						if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) $this->_pagehead($pdf, $object, 0, $outputlangs);
+						// if (empty($conf->global->MAIN_PDF_DONOTREPEAT_HEAD)) {
+							$this->_pagehead($pdf, $object, 1, $outputlangs);
+						// }
 					}
 				}
 
@@ -618,12 +629,13 @@ class pdf_rouget extends ModelePdfExpedition
 				}
 				else
 				{
-					$this->_tableau($pdf, $tab_top_newpage, $this->page_hauteur - $tab_top_newpage - $heightforinfotot - $heightforfreetext - $heightforfooter, 0, $outputlangs, 1, 0);
+					$this->_tableau($pdf, $tab_top_newpage - 7, $this->page_hauteur - $tab_top_newpage - $heightforinfotot - $heightforfreetext - $heightforfooter, 0, $outputlangs, 0, 0);
 					$bottomlasttab=$this->page_hauteur - $heightforinfotot - $heightforfreetext - $heightforfooter + 1;
 				}
 
 				// Affiche zone totaux
-				$posy=$this->_tableau_tot($pdf, $object, 0, $bottomlasttab, $outputlangs);
+				$posy=$this->_tableau_tot($pdf, $object, 0, $nexY, $outputlangs);
+				$pdf->line($this->marge_gauche, $nexY+6, $this->page_largeur-$this->marge_droite, $nexY+6);
 
 				// Pied de page
 				$this->_pagefoot($pdf, $object, $outputlangs);
@@ -800,13 +812,14 @@ class pdf_rouget extends ModelePdfExpedition
 		$pdf->SetFont('', '', $default_font_size - 2);
 
 		// Output Rect
-		$this->printRect($pdf, $this->marge_gauche, $tab_top, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $tab_height, $hidetop, $hidebottom);	// Rect prend une longueur en 3eme param et 4eme param
+		// $this->printRect($pdf, $this->marge_gauche, $tab_top, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $tab_height, $hidetop, $hidebottom);	// Rect prend une longueur en 3eme param et 4eme param
 
 		$pdf->SetDrawColor(128, 128, 128);
 		$pdf->SetFont('', '', $default_font_size - 1);
 
 		if (empty($hidetop))
 		{
+			$pdf->line($this->marge_gauche, $tab_top, $this->page_largeur-$this->marge_droite, $tab_top);
 			$pdf->line($this->marge_gauche, $tab_top+6, $this->page_largeur-$this->marge_droite, $tab_top+6);
 
 			$pdf->SetXY($this->posxdesc-1, $tab_top+1);
@@ -815,7 +828,7 @@ class pdf_rouget extends ModelePdfExpedition
 
 		if (empty($conf->global->SHIPPING_PDF_HIDE_WEIGHT_AND_VOLUME))
 		{
-			$pdf->line($this->posxweightvol-1, $tab_top, $this->posxweightvol-1, $tab_top + $tab_height);
+			// $pdf->line($this->posxweightvol-1, $tab_top, $this->posxweightvol-1, $tab_top + $tab_height);
 			if (empty($hidetop))
 			{
 				$pdf->SetXY($this->posxweightvol-1, $tab_top+1);
@@ -825,7 +838,7 @@ class pdf_rouget extends ModelePdfExpedition
 
         if (empty($conf->global->SHIPPING_PDF_HIDE_ORDERED))
         {
-            $pdf->line($this->posxqtyordered-1, $tab_top, $this->posxqtyordered-1, $tab_top + $tab_height);
+            // $pdf->line($this->posxqtyordered-1, $tab_top, $this->posxqtyordered-1, $tab_top + $tab_height);
     		if (empty($hidetop))
     		{
     			$pdf->SetXY($this->posxqtyordered-1, $tab_top+1);
@@ -835,7 +848,7 @@ class pdf_rouget extends ModelePdfExpedition
 
         if (empty($conf->global->SHIPPING_PDF_HIDE_QTYTOSHIP))
         {
-			$pdf->line($this->posxqtytoship-1, $tab_top, $this->posxqtytoship-1, $tab_top + $tab_height);
+			// $pdf->line($this->posxqtytoship-1, $tab_top, $this->posxqtytoship-1, $tab_top + $tab_height);
 			if (empty($hidetop))
 			{
 				$pdf->SetXY($this->posxqtytoship, $tab_top+1);
@@ -845,14 +858,14 @@ class pdf_rouget extends ModelePdfExpedition
 
 		if (!empty($conf->global->SHIPPING_PDF_DISPLAY_AMOUNT_HT)) {
 
-			$pdf->line($this->posxpuht-1, $tab_top, $this->posxpuht-1, $tab_top + $tab_height);
+			// $pdf->line($this->posxpuht-1, $tab_top, $this->posxpuht-1, $tab_top + $tab_height);
 			if (empty($hidetop))
 			{
 				$pdf->SetXY($this->posxpuht-1, $tab_top+1);
 				$pdf->MultiCell(($this->posxtotalht - $this->posxpuht), 2, $outputlangs->transnoentities("PriceUHT"), '', 'C');
 			}
 
-			$pdf->line($this->posxtotalht-1, $tab_top, $this->posxtotalht-1, $tab_top + $tab_height);
+			// $pdf->line($this->posxtotalht-1, $tab_top, $this->posxtotalht-1, $tab_top + $tab_height);
 			if (empty($hidetop))
 			{
 				$pdf->SetXY($this->posxtotalht-1, $tab_top+1);
@@ -1091,6 +1104,7 @@ class pdf_rouget extends ModelePdfExpedition
 			$pdf->SetTextColor(0, 0, 0);
 			$pdf->SetFont('', '', $default_font_size - 2);
 			$pdf->SetXY($posx+2, $posy-5);
+			$pdf->SetFillColor(230, 230, 230);
 			$pdf->MultiCell($widthrecbox, 5, $outputlangs->transnoentities("Recipient").":", 0, 'L');
 			$pdf->Rect($posx, $posy, $widthrecbox, $hautcadre);
 
