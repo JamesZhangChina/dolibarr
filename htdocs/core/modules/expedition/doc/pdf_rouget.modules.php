@@ -351,8 +351,11 @@ class pdf_rouget extends ModelePdfExpedition
 						$height_incoterms=$nexY-$tab_top;
 
 						// Rect prend une longueur en 3eme param
-						$pdf->SetDrawColor(192, 192, 192);
-						$pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_incoterms+1);
+						$pdf->SetFillColor(230, 230, 230);
+						$pdf->SetXY($this->marge_gauche, $tab_top-1);
+						$pdf->MultiCell($this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_incoterms + 1, "", 0, 'L', 1);
+						// $pdf->SetDrawColor(192, 192, 192);
+						// $pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_incoterms+1);
 
 						$tab_top = $nexY+6;
 						$height_incoterms += 4;
@@ -410,11 +413,14 @@ class pdf_rouget extends ModelePdfExpedition
 					$height_note=$nexY-$tab_top;
 
 					// Rect prend une longueur en 3eme param
-					$pdf->SetDrawColor(192, 192, 192);
-					$pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note+3);
+					$pdf->SetFillColor(230, 230, 230);
+					$pdf->SetXY($this->marge_gauche, $tab_top-1);
+					$pdf->MultiCell($this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note + 3, "", 0, 'L', 1);
+					// $pdf->SetDrawColor(192, 192, 192);
+					// $pdf->Rect($this->marge_gauche, $tab_top-1, $this->page_largeur-$this->marge_gauche-$this->marge_droite, $height_note+3);
 
 					$tab_height = $tab_height - $height_note;
-					$tab_top = $nexY+6;
+					$tab_top = $nexY + 12;
 				}
 				else
 				{
@@ -1106,7 +1112,10 @@ class pdf_rouget extends ModelePdfExpedition
 			$pdf->SetXY($posx+2, $posy-5);
 			$pdf->SetFillColor(230, 230, 230);
 			$pdf->MultiCell($widthrecbox, 5, $outputlangs->transnoentities("Recipient").":", 0, 'L');
-			$pdf->Rect($posx, $posy, $widthrecbox, $hautcadre);
+			$pdf->SetFillColor(230, 230, 230);
+			$pdf->SetXY($posx, $posy);
+			$pdf->MultiCell($widthrecbox, $hautcadre, "", 0, 'L', 1);
+			// $pdf->Rect($posx, $posy, $widthrecbox, $hautcadre);
 
 			// Show recipient name
 			$pdf->SetXY($posx+2, $posy+3);
