@@ -2550,7 +2550,7 @@ if ($action == 'create' && $usercancreate)
 				}
 
 				// Valid
-				if ($object->statut == Commande::STATUS_DRAFT && $numlines > 0 && $object->total_ttc >= 0 && $usercanvalidate &&
+				if ($object->statut == Commande::STATUS_DRAFT && $numlines > 0 && $usercanvalidate &&
 					((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->creer))
 				   	|| (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->order_advance->validate)))
 				)
