@@ -1562,6 +1562,7 @@ li.tmenusel::after, li.tmenu:hover::after{
 	border-style: solid;
 	border-width: 0px 6px 5px 6px;
 	border-color:  transparent transparent #ffffff transparent;
+	display: none;
 }
 /*
 // Add a bottom arrow
