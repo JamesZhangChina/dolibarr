@@ -1087,6 +1087,7 @@ li#mainmenutd_companylogo {
 <?php if ($disableimages) { ?>
 	li#mainmenutd_home {
 		min-width: unset !important;
+		padding-left: 20px;
 	}
 	li#mainmenutd_home .tmenucenter {
 		width: unset;
@@ -1484,7 +1485,7 @@ div.tmenudiv {
     border-<?php print $right; ?>: 0px;
     padding: 0px 0px 0px 0px;	/* t r b l */
     margin: 0px 0px 0px 0px;	/* t r b l */
-	font-size: 18px;
+	font-size: 15px;
     font-weight: normal;
 	color: #000000;
     text-decoration: none;
@@ -1525,7 +1526,7 @@ ul.tmenu {	/* t r b l */
 	list-style: none;
 	/* display: table;  */
 
-	height: 60px;
+	height: 48px;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -1542,7 +1543,7 @@ li.tmenu, li.tmenusel {
     <?php } ?>
 	position:relative;
 	display: block;
-	padding: 0 0 0 0;
+	padding: 0 5px 0 5px;
 	margin: 0 0 0 0;
 	font-weight: normal;
 }
@@ -1971,7 +1972,7 @@ div.login_block {
 	<?php if (GETPOST('optioncss', 'aZ09') == 'print') { ?>
 	display: none;
 	<?php } ?>
-	height: 60px;
+	height: 48px;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
