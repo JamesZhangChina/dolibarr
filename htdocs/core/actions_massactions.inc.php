@@ -1032,7 +1032,8 @@ if (! $error && $massaction == "builddoc" && $permtoread && ! GETPOST('button_se
 		dol_mkdir($diroutputmassaction);
 
 		// Defined name of merged file
-		$filename=strtolower(dol_sanitizeFileName($langs->transnoentities($objectlabel)));
+		//$filename=strtolower(dol_sanitizeFileName($langs->transnoentities($objectlabel)));
+		$filename=strtolower(dol_sanitizeFileName($objectlabel));
 		$filename=preg_replace('/\s/', '_', $filename);
 
 		// Save merged file
