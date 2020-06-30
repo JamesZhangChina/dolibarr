@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -96,12 +96,9 @@ class FormAdmin
 			if ($showcode == 1) $valuetoshow=$key.' - '.$value;
 			if ($showcode == 2) $valuetoshow=$value.' ('.$key.')';
 
-			if ($filter && is_array($filter))
+			if ($filter && is_array($filter) && array_key_exists($key, $filter))
 			{
-				if ( ! array_key_exists($key, $filter))
-				{
-					$out.= '<option value="'.$key.'">'.$valuetoshow.'</option>';
-				}
+				continue;
 			}
 			elseif ($selected == $key)
 			{

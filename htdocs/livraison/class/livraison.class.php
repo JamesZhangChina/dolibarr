@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -63,10 +63,24 @@ class Livraison extends CommonObject
 	public $socid;
 	public $ref_customer;
 
-	public $date_delivery;    // Date really received
+	/**
+	 * @var integer|string Date really received
+	 */
+	public $date_delivery;
+
+	/**
+     * @var integer|string date_creation
+     */
 	public $date_creation;
+
+	/**
+	 * @var integer|string date_valid
+	 */
 	public $date_valid;
+
+
 	public $model_pdf;
+
 
 	/**
 	 * Constructor
@@ -346,12 +360,13 @@ class Livraison extends CommonObject
 	}
 
 	/**
-	 *        Validate object and update stock if option enabled
+	 *  Validate object and update stock if option enabled
 	 *
-     *        @param 	User	$user        Object user that validate
-     *        @return   int
+     *  @param  User    $user       Object user that validate
+     *  @param  int     $notrigger  1=Does not execute triggers, 0= execute triggers
+     *  @return int
 	 */
-    public function valid($user)
+    public function valid($user, $notrigger = 0)
 	{
 		global $conf, $langs;
         require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
@@ -823,39 +838,32 @@ class Livraison extends CommonObject
 	/**
 	 *	Renvoi le libelle d'un statut donne
 	 *
-	 *  @param	int			$statut     Id statut
-	 *  @param  int			$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
+	 *  @param	int		$status     	Id status
+	 *  @param  int		$mode          	0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
 	 *  @return string					Label
 	 */
-    public function LibStatut($statut, $mode)
+    public function LibStatut($status, $mode)
 	{
         // phpcs:enable
 		global $langs;
 
-		if ($mode==0)
+		if (empty($this->labelStatus) || empty($this->labelStatusShort))
 		{
-			if ($statut==-1) return $langs->trans('StatusDeliveryCanceled');
-			elseif ($statut==0)  return $langs->trans('StatusDeliveryDraft');
-			elseif ($statut==1)  return $langs->trans('StatusDeliveryValidated');
+			global $langs;
+			//$langs->load("mymodule");
+			$this->labelStatus[-1] = $langs->trans('StatusDeliveryCanceled');
+			$this->labelStatus[0] = $langs->trans('StatusDeliveryDraft');
+			$this->labelStatus[1] = $langs->trans('StatusDeliveryValidated');
+			$this->labelStatusShort[-1] = $langs->trans('StatusDeliveryCanceled');
+			$this->labelStatusShort[0] = $langs->trans('StatusDeliveryDraft');
+			$this->labelStatusShort[1] = $langs->trans('StatusDeliveryValidated');
 		}
-		elseif ($mode==1)
-		{
-			if ($statut==-1) return $langs->trans($this->statuts[$statut]);
-			elseif ($statut==0)  return $langs->trans($this->statuts[$statut]);
-			elseif ($statut==1)  return $langs->trans($this->statuts[$statut]);
-		}
-		elseif ($mode == 4)
-		{
-			if ($statut==-1) return img_picto($langs->trans('StatusDeliveryCanceled'), 'statut5').' '.$langs->trans('StatusDeliveryCanceled');
-			elseif ($statut==0)  return img_picto($langs->trans('StatusDeliveryDraft'), 'statut0').' '.$langs->trans('StatusDeliveryDraft');
-			elseif ($statut==1)  return img_picto($langs->trans('StatusDeliveryValidated'), 'statut4').' '.$langs->trans('StatusDeliveryValidated');
-		}
-		elseif ($mode == 6)
-		{
-			if ($statut==-1) return $langs->trans('StatusDeliveryCanceled').' '.img_picto($langs->trans('StatusDeliveryCanceled'), 'statut5');
-			elseif ($statut==0)  return $langs->trans('StatusDeliveryDraft').' '.img_picto($langs->trans('StatusDeliveryDraft'), 'statut0');
-			elseif ($statut==1)  return $langs->trans('StatusDeliveryValidated').' '.img_picto($langs->trans('StatusDeliveryValidated'), 'statut4');
-		}
+
+		$statusType = 'status0';
+		if ($status == -1) $statusType = 'status5';
+		if ($status == 1) $statusType = 'status4';
+
+		return dolGetStatus($this->labelStatus[$status], $this->labelStatusShort[$status], '', $statusType, $mode);
 	}
 
 
@@ -1045,7 +1053,6 @@ class Livraison extends CommonObject
 		$langs->load("deliveries");
 
 		if (! dol_strlen($modele)) {
-
 			$modele = 'typhon';
 
 			if ($this->modelpdf) {

@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -28,9 +28,9 @@ require_once NUSOAP_PATH.'/nusoap.php';
 $langs->load("companies");
 
 //http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl
-$WS_DOL_URL='http://ec.europa.eu/taxation_customs/vies/services/checkVatService';
+$WS_DOL_URL='https://ec.europa.eu/taxation_customs/vies/services/checkVatService';
 //$WS_DOL_URL_WSDL=$WS_DOL_URL.'?wsdl';
-$WS_DOL_URL_WSDL='http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+$WS_DOL_URL_WSDL='https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 $WS_METHOD ='checkVat';
 
 

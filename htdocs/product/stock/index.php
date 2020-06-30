@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -45,6 +45,7 @@ $result=restrictedArea($user, 'stock');
  */
 
 $producttmp=new Product($db);
+$warehouse=new Entrepot($db);
 
 $help_url='EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
 llxHeader("", $langs->trans("Stocks"), $help_url);
@@ -60,22 +61,24 @@ print '<div class="fichecenter"><div class="fichethirdleft">';
 if (! empty($conf->global->MAIN_SEARCH_FORM_ON_HOME_AREAS))     // This is useless due to the global search combo
 {
     print '<form method="post" action="'.DOL_URL_ROOT.'/product/stock/list.php">';
-    print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-    print '<table class="noborder nohover" width="100%">';
+    print '<input type="hidden" name="token" value="'.newToken().'">';
+    print '<div class="div-table-responsive-no-min">';
+    print '<table class="noborder nohover centpercent">';
     print "<tr class=\"liste_titre\">";
     print '<td colspan="3">'.$langs->trans("Search").'</td></tr>';
     print "<tr ".$bc[false]."><td>";
     print $langs->trans("Warehouse").':</td><td><input class="flat" type="text" size="18" name="sall"></td><td rowspan="2"><input type="submit" value="'.$langs->trans("Search").'" class="button"></td></tr>';
-    print "</table></form><br>";
+    print "</table></div></form><br>";
 }
 
+$max = 15;
 
-$sql = "SELECT e.ref as label, e.rowid, e.statut";
+$sql = "SELECT e.rowid, e.ref as label, e.lieu, e.statut as status";
 $sql.= " FROM ".MAIN_DB_PREFIX."entrepot as e";
 $sql.= " WHERE e.statut in (0,1)";
 $sql.= " AND e.entity IN (".getEntity('stock').")";
 $sql.= $db->order('e.statut', 'DESC');
-$sql.= $db->plimit(15, 0);
+$sql.= $db->plimit($max + 1, 0);
 
 $result = $db->query($sql);
 
@@ -85,26 +88,39 @@ if ($result)
 
     $i = 0;
 
-    print '<table class="noborder" width="100%">';
+    print '<div class="div-table-responsive-no-min">';
+    print '<table class="noborder centpercent">';
     print '<tr class="liste_titre"><th colspan="2">'.$langs->trans("Warehouses").'</th></tr>';
 
     if ($num)
     {
-        $entrepot=new Entrepot($db);
-
-        while ($i < $num)
+        while ($i < min($max, $num))
         {
             $objp = $db->fetch_object($result);
 
+            $warehouse->id = $objp->rowid;
+            $warehouse->statut = $objp->status;
+            $warehouse->label = $objp->label;
+            $warehouse->lieu = $objp->lieu;
+
             print '<tr class="oddeven">';
-            print "<td><a href=\"card.php?id=$objp->rowid\">".img_object($langs->trans("ShowStock"), "stock")." ".$objp->label."</a></td>\n";
-            print '<td class="right">'.$entrepot->LibStatut($objp->statut, 5).'</td>';
+            print '<td>';
+            print $warehouse->getNomUrl(1);
+            print '</td>'."\n";
+            print '<td class="right">';
+            print $warehouse->getLibStatut(5);
+            print '</td>';
             print "</tr>\n";
             $i++;
         }
         $db->free($result);
     }
+    if ($num > $max) {
+    	print '<tr><td><span class="opacitymedium">'.$langs->trans("More").'...</span></td><td></td></tr>';
+    }
+
     print "</table>";
+    print '</div>';
 }
 else
 {
@@ -119,7 +135,7 @@ print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
 // Last movements
 $max=10;
 $sql = "SELECT p.rowid, p.label as produit, p.tobatch, p.tosell, p.tobuy,";
-$sql.= " e.ref as stock, e.rowid as entrepot_id,";
+$sql.= " e.ref as warehouse_ref, e.rowid as warehouse_id, e.ref as warehouse_label, e.lieu, e.statut as warehouse_status,";
 $sql.= " m.value as qty, m.datem, m.batch, m.eatby, m.sellby";
 $sql.= " FROM ".MAIN_DB_PREFIX."entrepot as e";
 $sql.= ", ".MAIN_DB_PREFIX."stock_mouvement as m";
@@ -137,7 +153,8 @@ if ($resql)
 {
 	$num = $db->num_rows($resql);
 
-	print '<table class="noborder" width="100%">';
+    print '<div class="div-table-responsive-no-min">';
+	print '<table class="noborder centpercent">';
 	print "<tr class=\"liste_titre\">";
 	print '<th>'.$langs->trans("LastMovements", min($num, $max)).'</th>';
 	print '<th>'.$langs->trans("Product").'</th>';
@@ -162,6 +179,12 @@ if ($resql)
 		$producttmp->status_sell = $objp->tosell;
 		$producttmp->status_buy = $objp->tobuy;
 
+		$warehouse->id = $objp->warehouse_id;
+		$warehouse->ref = $objp->warehouse_ref;
+		$warehouse->statut = $objp->warehouse_status;
+		$warehouse->label = $objp->warehouse_label;
+		$warehouse->lieu = $objp->lieu;
+
 		print '<tr class="oddeven">';
 		print '<td>'.dol_print_date($db->jdate($objp->datem), 'dayhour').'</td>';
 		print '<td class="tdoverflowmax200">';
@@ -173,9 +196,9 @@ if ($resql)
 			print '<td>'.dol_print_date($db->jdate($objp->sellby), 'day').'</td>';
 			print '<td>'.dol_print_date($db->jdate($objp->eatby), 'day').'</td>';
 		}
-		print '<td class="tdoverflowmax200"><a href="card.php?id='.$objp->entrepot_id.'">';
-		print img_object($langs->trans("ShowWarehouse"), "stock").' '.$objp->stock;
-		print "</a></td>\n";
+		print '<td class="tdoverflowmax200">';
+		print $warehouse->getNomUrl(1);
+		print "</td>\n";
 		print '<td class="right">';
 		if ($objp->qty > 0) print '+';
 		print $objp->qty.'</td>';
@@ -185,6 +208,9 @@ if ($resql)
 	$db->free($resql);
 
 	print "</table>";
+    print '</div>';
+} else {
+	dol_print_error($db);
 }
 
 //print '</td></tr></table>';

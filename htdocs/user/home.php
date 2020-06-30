@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -45,7 +45,7 @@ if (! empty($conf->global->MAIN_USE_ADVANCED_PERMS))
 
 // Security check (for external users)
 $socid=0;
-if ($user->societe_id > 0) $socid = $user->societe_id;
+if ($user->socid > 0) $socid = $user->socid;
 
 $companystatic = new Societe($db);
 $fuserstatic = new User($db);
@@ -64,14 +64,13 @@ llxHeader();
 print load_fiche_titre($langs->trans("MenuUsersAndGroups"));
 
 
-//print '<table class="noborder centpercent notopnoleftnoright">';
-//print '<tr><td valign="top" width="30%" class="notopnoleft">';
 print '<div class="fichecenter"><div class="fichethirdleft">';
 
 
 // Search User
 print '<form method="post" action="'.DOL_URL_ROOT.'/core/search.php">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="token" value="'.newToken().'">';
+
 print '<table class="noborder nohover centpercent">';
 print '<tr class="liste_titre"><td colspan="2">'.$langs->trans("Search").'</td></tr>';
 print '<tr><td>';
@@ -86,6 +85,7 @@ if ($canreadperms)
 
 print '<tr><td class="center" colspan="2"><input type="submit" value="'.$langs->trans("Search").'" class="button"></td></tr>';
 print "</table><br>\n";
+
 print '</form>';
 
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
@@ -124,6 +124,8 @@ $resql=$db->query($sql);
 if ($resql)
 {
 	$num = $db->num_rows($resql);
+
+	print '<div class="div-table-responsive-no-min">';
 	print '<table class="noborder centpercent">';
 	print '<tr class="liste_titre"><td colspan="3">'.$langs->trans("LastUsersCreated", min($num, $max)).'</td>';
 	print '<td class="right"><a class="commonlink" href="'.DOL_URL_ROOT.'/user/list.php?sortfield=u.datec&sortorder=DESC">'.$langs->trans("FullList").'</td>';
@@ -144,7 +146,7 @@ if ($resql)
 		$fuserstatic->admin = $obj->admin;
 		$fuserstatic->email = $obj->email;
 		$fuserstatic->skype = $obj->skype;
-		$fuserstatic->societe_id = $obj->fk_soc;
+		$fuserstatic->socid = $obj->fk_soc;
 
 		$companystatic->id=$obj->fk_soc;
 		$companystatic->name=$obj->name;
@@ -204,7 +206,8 @@ if ($resql)
 		print '</tr>';
 		$i++;
 	}
-	print "</table><br>";
+	print "</table>";
+	print "</div><br>";
 
 	$db->free($resql);
 }
@@ -240,6 +243,8 @@ if ($canreadperms)
 		$colspan=1;
 		if (! empty($conf->multicompany->enabled)) $colspan++;
 		$num = $db->num_rows($resql);
+
+		print '<div class="div-table-responsive-no-min">';
 		print '<table class="noborder centpercent">';
 		print '<tr class="liste_titre"><td colspan="'.$colspan.'">'.$langs->trans("LastGroupsCreated", ($num ? $num : $max)).'</td>';
 		print '<td class="right"><a class="commonlink" href="'.DOL_URL_ROOT.'/user/group/list.php?sortfield=g.datec&sortorder=DESC">'.$langs->trans("FullList").'</td>';
@@ -275,7 +280,8 @@ if ($canreadperms)
 			print "</tr>";
 			$i++;
 		}
-		print "</table><br>";
+		print "</table>";
+		print "</div><br>";
 
 		$db->free($resql);
 	}

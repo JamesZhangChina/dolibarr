@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -42,7 +42,7 @@ if (isset($_GET["account"]) || isset($_GET["ref"]))
 	$id = isset($_GET["account"])?$_GET["account"]:(isset($_GET["ref"])?$_GET["ref"]:'');
 }
 $fieldid = isset($_GET["ref"])?'ref':'rowid';
-if ($user->societe_id) $socid=$user->societe_id;
+if ($user->socid) $socid=$user->socid;
 $result=restrictedArea($user, 'banque', $id, 'bank_account&bank_account', '', '', $fieldid);
 
 
@@ -258,7 +258,7 @@ if ($_REQUEST["account"] || $_REQUEST["ref"])
 			{
 				$socialcontribstatic->ref=$obj->ref;
 				$socialcontribstatic->id=$obj->objid;
-				$socialcontribstatic->lib=$obj->type;
+				$socialcontribstatic->label=$obj->type;
 				$ref = $socialcontribstatic->getNomUrl(1, 24);
 
 				$totalpayment = -1*$socialcontribstatic->getSommePaiement();	// Payment already done
@@ -286,11 +286,14 @@ if ($_REQUEST["account"] || $_REQUEST["ref"])
     			else print $langs->trans("NotDefined");
     			print "</td>";
     			print "<td>".$ref."</td>";
-				if($conf->global->MULTICOMPANY_INVOICE_SHARING_ENABLED ){
+				if ($conf->global->MULTICOMPANY_INVOICE_SHARING_ENABLED) {
 					if($obj->family == 'invoice'){
 						$mc->getInfo($obj->entity);
 						print "<td>".$mc->label."</td>";
-					}else print "<td></td>";
+					}
+					else {
+						print "<td></td>";
+					}
 				}
     			print "<td>".$refcomp."</td>";
     			if ($obj->total_ttc < 0) { print '<td class="nowrap right">'.price(abs($total_ttc))."</td><td>&nbsp;</td>"; };
@@ -322,7 +325,7 @@ if ($_REQUEST["account"] || $_REQUEST["ref"])
 	print '</tr>';
 
 	print "</table>";
-  print "</div>";
+    print "</div>";
 }
 else
 {

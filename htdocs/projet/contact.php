@@ -13,13 +13,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
  *       \file       htdocs/projet/contact.php
  *       \ingroup    project
- *       \brief      Onglet de gestion des contacts du projet
+ *       \brief      List of all contacts of a project
  */
 
 require '../main.inc.php';
@@ -27,6 +27,7 @@ require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
 require_once DOL_DOCUMENT_ROOT.'/contact/class/contact.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/project.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
+if ($conf->categorie->enabled) { require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php'; }
 
 // Load translation files required by the page
 $langs->loadLangs(array('projects', 'companies'));
@@ -47,7 +48,7 @@ if(! empty($conf->global->PROJECT_ALLOW_COMMENT_ON_PROJECT) && method_exists($ob
 
 // Security check
 $socid=0;
-//if ($user->societe_id > 0) $socid = $user->societe_id;    // For external user, no check is done on company because readability is managed by public status of project and assignement.
+//if ($user->socid > 0) $socid = $user->socid;    // For external user, no check is done on company because readability is managed by public status of project and assignement.
 $result = restrictedArea($user, 'projet', $id, 'projet&project');
 
 $hookmanager->initHooks(array('projectcontactcard','globalcard'));
@@ -267,14 +268,6 @@ if ($id > 0 || ! empty($ref))
     print '<td class="titlefield tdtop">'.$langs->trans("Description").'</td><td>';
     print nl2br($object->description);
     print '</td></tr>';
-
-    // Bill time
-    if (empty($conf->global->PROJECT_HIDE_TASKS) && ! empty($conf->global->PROJECT_BILL_TIME_SPENT))
-    {
-    	print '<tr><td>'.$langs->trans("BillTime").'</td><td>';
-    	print yn($object->usage_bill_time);
-    	print '</td></tr>';
-    }
 
     // Categories
     if ($conf->categorie->enabled) {

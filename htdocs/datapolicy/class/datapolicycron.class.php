@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -470,16 +470,15 @@ class DataPolicyCron
             {
                 $sql = sprintf($params['sql'], (int) $conf->entity, (int) $conf->global->$key, (int) $conf->global->$key);
 
-                $resql = $db->query($sql);
+                $resql = $this->db->query($sql);
 
-                if ($resql && $db->num_rows($resql) > 0)
+                if ($resql && $this->db->num_rows($resql) > 0)
                 {
-
-                    $num = $db->num_rows($resql);
+                    $num = $this->db->num_rows($resql);
                     $i = 0;
 
                     require_once $params['file'];
-                    $object = new $params['class']($db);
+                    $object = new $params['class']($this->db);
 
                     while ($i < $num && ! $error)
                     {

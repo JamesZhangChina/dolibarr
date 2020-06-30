@@ -4,6 +4,7 @@
  * Copyright (C) 2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2005-2013 Laurent Destailleur <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2016 Regis Houssin <regis.houssin@inodbox.com>
+ * Copyright (C) 2019 		Nicolas ZABOURI	<info@inovea-conseil.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -89,6 +90,8 @@ if ($resql) {
 
 			$emailing = new Mailing($db);
 			$emailing->fetch($obj->rowid);
+
+			$upload_dir = $conf->mailing->dir_output . "/" . get_exdir($emailing->id, 2, 0, 1, $emailing, 'mailing');
 
 			$id = $emailing->id;
 			$subject = $emailing->sujet;
@@ -228,9 +231,25 @@ if ($resql) {
 
 						$substitutionisok = true;
 
+						$arr_file = array();
+						$arr_mime = array();
+						$arr_name = array();
+						$arr_css  = array();
+
+						$listofpaths=dol_dir_list($upload_dir, 'all', 0, '', '', 'name', SORT_ASC, 0);
+
+						if (count($listofpaths))
+						{
+							foreach($listofpaths as $key => $val)
+							{
+								$arr_file[]=$listofpaths[$key]['fullname'];
+								$arr_mime[]=dol_mimetype($listofpaths[$key]['name']);
+								$arr_name[]=$listofpaths[$key]['name'];
+							}
+						}
 						// Fabrication du mail
 						$trackid = 'emailing-' . $obj->fk_mailing . '-' . $obj->rowid;
-						$mail = new CMailFile($newsubject, $sendto, $from, $newmessage, array(), array(), array(), '', '', 0, $msgishtml, $errorsto, '', $trackid, '', 'emailing');
+						$mail = new CMailFile($newsubject, $sendto, $from, $newmessage, $arr_file, $arr_mime, $arr_name, '', '', 0, $msgishtml, $errorsto, $arr_css, $trackid, '', 'emailing');
 
 						if ($mail->error) {
 							$res = 0;
@@ -309,7 +328,7 @@ if ($resql) {
 							dol_syslog("error for emailing id " . $id . " #" . $i . ($mail->error ? ' - ' . $mail->error : ''), LOG_DEBUG);
 
 							$sqlerror = "UPDATE " . MAIN_DB_PREFIX . "mailing_cibles";
-							$sqlerror .= " SET statut=-1, date_envoi=" . $db->idate($now) . " WHERE rowid=" . $obj->rowid;
+							$sqlerror .= " SET statut=-1, date_envoi='" . $db->idate($now) . "' WHERE rowid=" . $obj->rowid;
 							$resqlerror = $db->query($sqlerror);
 							if (! $resqlerror) {
 								dol_print_error($db);

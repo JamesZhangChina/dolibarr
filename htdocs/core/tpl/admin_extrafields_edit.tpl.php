@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -139,7 +139,7 @@ $langs->load("modulebuilder");
 
 <!-- Form to edit an extra field -->
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>?attrname=<?php echo $attrname; ?>" id="formeditextrafield" method="post">
-<input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>">
+<input type="hidden" name="token" value="<?php echo newToken(); ?>">
 <input type="hidden" name="attrname" value="<?php echo $attrname; ?>">
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="rowid" value="<?php echo $rowid ?>">
@@ -193,14 +193,17 @@ elseif (($type== 'sellist') || ($type == 'chkbxlst') || ($type == 'link') || ($t
 // Define list of possible type transition
 $typewecanchangeinto=array(
 	'varchar'=>array('varchar', 'phone', 'mail', 'url', 'select', 'password', 'text', 'html'),
-	'text'=>array('text','html'),
-	'html'=>array('text','html'),
+	'double'=>array('double', 'price'),
+	'price'=>array('double', 'price'),
+	'text'=>array('text', 'html'),
+	'html'=>array('text', 'html'),
 	'password'=>array('password', 'varchar'),
 	'mail'=>array('varchar', 'phone', 'mail', 'url', 'select'),
     'url'=>array('varchar', 'phone', 'mail', 'url', 'select'),
     'phone'=>array('varchar', 'phone', 'mail', 'url', 'select'),
     'select'=>array('varchar', 'phone', 'mail', 'url', 'select')
 );
+
 if (in_array($type, array_keys($typewecanchangeinto)))
 {
     $newarray=array();

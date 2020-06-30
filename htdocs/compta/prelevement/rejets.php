@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -35,11 +35,12 @@ $langs->loadLangs(array('banks', 'categories', 'withdrawals', 'companies'));
 
 // Security check
 $socid = GETPOST('socid', 'int');
-if ($user->societe_id) $socid=$user->societe_id;
+if ($user->socid) $socid=$user->socid;
 $result = restrictedArea($user, 'prelevement', '', '', 'bons');
 
 // Get supervariables
 $page = GETPOST('page', 'int');
+if (empty($page) || $page == -1) { $page = 0; }     // If $page is not defined, or '' or -1
 $sortorder = GETPOST('sortorder', 'alpha');
 $sortfield = GETPOST('sortfield', 'alpha');
 
@@ -57,6 +58,7 @@ if ($sortorder == "") $sortorder="DESC";
 if ($sortfield == "") $sortfield="p.datec";
 
 $rej = new RejetPrelevement($db, $user);
+$hookmanager->initHooks(array('withdrawalsreceiptsrejectedlist'));
 $ligne = new LignePrelevement($db, $user);
 
 /*
@@ -85,7 +87,7 @@ if ($result)
 
 	print_barre_liste($langs->trans("WithdrawsRefused"), $page, $_SERVER["PHP_SELF"], $urladd, $sortfield, $sortorder, '', $num);
 	print"\n<!-- debut table -->\n";
-	print '<table class="noborder" width="100%" cellspacing="0" cellpadding="4">';
+	print '<table class="noborder tagtable liste" width="100%" cellspacing="0" cellpadding="4">';
 	print '<tr class="liste_titre">';
 	print_liste_field_titre("Line", $_SERVER["PHP_SELF"], "p.ref", '', $urladd);
 	print_liste_field_titre("ThirdParty", $_SERVER["PHP_SELF"], "s.nom", '', $urladd);
