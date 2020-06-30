@@ -1978,7 +1978,7 @@ elseif ($id || $ref)
 			{
 				// Get code using getLabelFromKey
 				$code = $langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
-				print $langs->trans("SendingMethod"($code));
+				print $langs->trans(strtoupper($code));
 			}
 		}
 		print '</td>';
